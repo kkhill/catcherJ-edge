@@ -1,11 +1,11 @@
 package com.kkhill.core.thing;
 
-public class Property<T> {
+public class Property {
 
     private String name;
     private String description;
     private String unitOfMeasurement;
-    private T value;
+    private Object value;
 
     public String getName() {
         return name;
@@ -23,11 +23,19 @@ public class Property<T> {
         this.unitOfMeasurement = unitOfMeasurement;
     }
 
-    public T getValue() {
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(T value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 }

@@ -1,38 +1,39 @@
 package com.kkhill.core.event;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class EventBus {
 
-    private Map<EventType, List<EventConsumer>> bus;
-    private ReentrantReadWriteLock lock;
+    private Map<EventType, Queue<EventConsumer>> bus;
 
-    public EventBus() {
+    private EventBus() {
+        this.bus = new ConcurrentHashMap<>();
+        EventType[] eventTypes =  EventType.values();
+        for(EventType eventType : eventTypes) {
+            this.bus.put(eventType, new ConcurrentLinkedQueue<>());
+        }
+    }
 
-        this.bus = new ConcurrentHashMap<EventType, List<EventConsumer>>();
-        this.bus.put(EventType.STATE_UPDATED, new CopyOnWriteArrayList<EventConsumer>());
-        this.bus.put(EventType.PROPERTY_UPDATED, new CopyOnWriteArrayList<EventConsumer>());
-        this.bus.put(EventType.SERVICE_UPDATED, new CopyOnWriteArrayList<EventConsumer>());
-        this.bus.put(EventType.PLATFORM, new CopyOnWriteArrayList<EventConsumer>());
-        this.bus.put(EventType.THING, new CopyOnWriteArrayList<EventConsumer>());
-        this.bus.put(EventType.ADDON, new CopyOnWriteArrayList<EventConsumer>());
-        this.bus.put(EventType.DRIVER, new CopyOnWriteArrayList<EventConsumer>());
-        this.bus.put(EventType.OTHERS, new CopyOnWriteArrayList<EventConsumer>());
+    private static class Holder {
+        private static EventBus instance = new EventBus();
+    }
+
+    public static EventBus getInstance() {
+        return Holder.instance;
     }
 
     public void listen(EventType type, EventConsumer consumer) {
 
-        List<EventConsumer> consumers = this.bus.get(type);
+        Queue<EventConsumer> consumers = this.bus.get(type);
         consumers.add(consumer);
     }
 
     public void fire(Event event) {
 
-        List<EventConsumer> consumers = this.bus.get(event.getType());
+        Queue<EventConsumer> consumers = this.bus.get(event.getType());
         for(EventConsumer consumer : consumers) {
             consumer.execute();
         }

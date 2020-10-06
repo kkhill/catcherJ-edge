@@ -6,17 +6,16 @@ import java.util.Map;
 public abstract class Thing {
 
     private String id;
-    private String friendlyName;
-    private boolean available;
-    private State state;
-    private Map<String, Property> properties;
-    private Map<String, Service> services;
+    protected String friendlyName;
+    protected boolean available;
+    protected State state;
+    protected Map<String, Property> properties;
+    protected Map<String, Service> services;
 
-    public Thing(String friendlyName, boolean available, State state) {
+    public Thing(String friendlyName, boolean available) {
 
         this.friendlyName = friendlyName;
         this.available = available;
-        this.state = state;
         this.properties = new HashMap<>();
         this.services = new HashMap<>();
     }
@@ -76,4 +75,8 @@ public abstract class Thing {
     public Service getService(String name) {
         return this.services.get(name);
     }
+
+//    public abstract void defineProperties();
+//
+//    public abstract void defineServices();
 }
