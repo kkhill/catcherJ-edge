@@ -2,8 +2,9 @@ package com.kkhill.core;
 
 import com.kkhill.core.event.EventBus;
 import com.kkhill.core.plugin.PluginRegistry;
-import com.kkhill.core.scheduler.Scheduler;
 import com.kkhill.core.thing.ThingMonitor;
+
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class Catcher {
 
@@ -13,7 +14,7 @@ public class Catcher {
         private static EventBus eventBus = EventBus.getInstance();
         private static ThingMonitor monitor = ThingMonitor.getInstance();
         private static PluginRegistry pluginRegistry = PluginRegistry.getInstance();
-        private static Scheduler scheduler = Scheduler.getInstance();
+        private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(10);
     }
 
     public static ThingMonitor getThingMonitor() {
@@ -28,7 +29,7 @@ public class Catcher {
         return Holder.pluginRegistry;
     }
 
-    public static Scheduler getScheduler() {
-        return Holder.scheduler;
+    public static ScheduledThreadPoolExecutor getExecutor() {
+        return Holder.executor;
     }
 }

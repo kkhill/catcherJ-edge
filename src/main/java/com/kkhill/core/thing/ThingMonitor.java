@@ -3,12 +3,13 @@ package com.kkhill.core.thing;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventBus;
 import com.kkhill.core.event.EventType;
-import com.kkhill.core.exception.PropertyNotFound;
-import com.kkhill.core.exception.ServiceNotFound;
-import com.kkhill.core.exception.ThingNotFound;
+import com.kkhill.core.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -32,76 +33,156 @@ public class ThingMonitor {
         return Holder.instance;
     }
 
-    public void removeThing(String thingID){
+    /**
+     * parse state, properties, services in a thing and register
+     *
+     * @param thing
+     * @return
+     * @throws IllegalThingException
+     */
+    public String registerThing(Thing thing) throws IllegalThingException {
+
+        String id = UUID.randomUUID().toString().replace("-", "");
+        thing.setID(id);
+        things.put(id, thing);
+
+        // extract state and properties of thing
+        Field[] fields = thing.getClass().getDeclaredFields();
+        int stateNum = 0;
+        for(Field field : fields) {
+            field.setAccessible(true);
+            com.kkhill.core.thing.annotation.State s = field.getAnnotation(com.kkhill.core.thing.annotation.State.class);
+            com.kkhill.core.thing.annotation.Property p = field.getAnnotation(com.kkhill.core.thing.annotation.Property.class);
+            if(s != null) {
+                stateNum ++;
+                if(stateNum > 1) throw new NotSingleStateException("a thing must have only one state field");
+                State state = new State(s.description(), field);
+                thing.setState(state);
+            }
+            if(p != null) {
+                Property property = new Property(p.name(), p.description(), p.unitOfMeasurement(), field);
+                thing.addProperty(property);
+            }
+        }
+        if(stateNum == 0) throw new NotSingleStateException("a thing must have one state field");
+
+        // extract services of thing
+        Method[] methods = thing.getClass().getDeclaredMethods();
+        for(Method method : methods) {
+            method.setAccessible(true);
+            com.kkhill.core.thing.annotation.Service s = method.getAnnotation(com.kkhill.core.thing.annotation.Service.class);
+            if(s != null) {
+                Service service = new Service(s.name(), s.description(), method);
+                thing.addService(service);
+            }
+        }
+
+        EventBus.getInstance().fire(new Event(EventType.THING, "registered", id));
+        logger.info("thing has been registered, id: {}", id);
+
+        return id;
+    }
+
+    public void removeThing(String thingID) {
 
         things.remove(thingID);
         EventBus.getInstance().fire(new Event(EventType.THING, "removed", thingID));
         logger.info("thing has been removed, id: {}", thingID);
     }
 
-    public void registerThing(Thing thing) {
-
-        String id = UUID.randomUUID().toString().replace("-", "");
-        thing.setID(id);
-        things.put(id, thing);
-        EventBus.getInstance().fire(new Event(EventType.THING, "registered", id));
-        logger.info("thing has been registered, id: {}", id);
-    }
-
     public Map<String, Thing> getThings() {
         return this.things;
     }
 
-    public Thing getThing(String thingID) throws ThingNotFound {
+    public Thing getThing(String thingID) throws ThingNotFoundException {
         Thing thing = this.things.get(thingID);
-        if(thing == null) throw new ThingNotFound();
+        if(thing == null) throw new ThingNotFoundException();
         return thing;
     }
 
-    public void updateState(String thingID, State state) throws ThingNotFound {
+    /**
+     * update and notify state of a thing
+     * usually used by thing implementation
+     * e.g. updateAndNotifyState(this, "on");
+     *
+     * @param id
+     * @param value
+     * @throws ThingNotFoundException
+     * @throws IllegalAccessException
+     */
+    public void updateAndNotifyState(String id, Object value) throws ThingNotFoundException, IllegalAccessException {
 
-        Thing thing = getThing(thingID);
-        if(thing.getState().getName() == state.getName()) return;
-        Map<String, String> data = new HashMap<>();
-        data.put("thingID", thing.getID());
-        data.put("old_state", thing.getState().getName());
-        data.put("new_state", state.getName());
-        thing.setState(state);
-        EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, thingID, data));
-        logger.info("update thing state, id: {}, from {} to {}", thingID, thing.getState().getName(), state.getName());
-    }
-
-    public void updateProperty(String thingID, Property property) throws ThingNotFound, PropertyNotFound {
-
-        Thing thing = getThing(thingID);
-        Property p = thing.getProperties().get(property.getName());
-        if(p == null) throw new PropertyNotFound();
-        if(p.getValue().equals(property.getValue())) return;
+        Thing thing = getThing(id);
         Map<String, Object> data = new HashMap<>();
         data.put("thingID", thing.getID());
-        data.put("property", p.getName());
-        data.put("old_value", p.getValue());
-        data.put("new_value", property.getValue());
-        thing.setProperty(property);
-        EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, thingID, data));
-        logger.info("update thing property, id: {}, from {} to {}", thingID, p.getValue(), property.getValue());
+        data.put("old_state", thing.getState().getValue(thing));
+        data.put("new_state", value);
+        thing.updateState(value);
+        EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, thing.getID(), data));
+        logger.info("update thing state, id: {}, from {} to {}",
+                thing.getID(), data.get("old_state"), data.get("new_state"));
     }
 
+    /**
+     * update property and fire event bus
+     * usually used by thing implementation
+     * e.g. updateAndNotifyProperty(this, "brightness", 50)
+     *
+     * @param id
+     * @param name
+     * @param value
+     * @throws ThingNotFoundException
+     * @throws PropertyNotFoundException
+     * @throws IllegalAccessException
+     */
+    public void updateAndNotifyProperty(String id, String name, Object value) throws ThingNotFoundException, PropertyNotFoundException, IllegalAccessException {
 
-    public void callService(String thingID, String service, Object args) throws ThingNotFound, ServiceNotFound {
+        Thing thing = getThing(id);
+        Property property = thing.getProperties().get(name);
+        if(property == null) throw new PropertyNotFoundException();
+        if(property.getValue(thing).equals(value)) return;
+        Map<String, Object> data = new HashMap<>();
+        data.put("thingID", thing.getID());
+        data.put("property", name);
+        data.put("old_value", property.getValue(thing));
+        data.put("new_value", value);
+        thing.updateProperty(name, value);
+        EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, thing.getID(), data));
+        logger.info("update thing property, id: {}, from {} to {}",
+                thing.getID(), data.get("old_value"), data.get("new_value"));
+
+    }
+
+    /**
+     * call service of thing
+     * usually used by other things rather than this.
+     * e.g. callService("some_id_from_UI", "set_brightness", new Object[]{50})
+     *
+     *
+     * @param thingID
+     * @param service
+     * @param args
+     * @throws ThingNotFoundException
+     * @throws ServiceNotFoundException
+     */
+    public void callService(String thingID, String service, Object[] args) throws ThingNotFoundException, ServiceNotFoundException {
 
         Thing thing = getThing(thingID);
         Service s = thing.getServices().get(service);
-        if (s == null) throw new ServiceNotFound();
+        if (s == null) throw new ServiceNotFoundException();
         Map<String, Object> data = new HashMap<>();
         data.put("thingID", thing.getID());
         data.put("service", service);
-        s.invoke();
+        try {
+            s.invoke(thing, args);
+        } catch (InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         EventBus.getInstance().fire(new Event(EventType.SERVICE_UPDATED, thingID, data));
         logger.info("call thing service, id: {}, service: {}", thingID, service);
     }
 
-    public void enableThing(String thingID) throws ThingNotFound {
+    public void enableThing(String thingID) throws ThingNotFoundException {
 
         Thing thing = getThing(thingID);
         if(!thing.isAvailable()) {
@@ -111,7 +192,7 @@ public class ThingMonitor {
         }
     }
 
-    public void disableThing(String thingID) throws ThingNotFound {
+    public void disableThing(String thingID) throws ThingNotFoundException {
 
         Thing thing = getThing(thingID);
         if(thing.isAvailable()) {

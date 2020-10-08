@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Service {
+
     String name();
-    String description() default "a service";
+    String description() default "";
 }

@@ -9,6 +9,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface State {
 
-    String name();
-    String description() default "state";
+    String description() default "";
 }
