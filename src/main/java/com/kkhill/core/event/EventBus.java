@@ -1,5 +1,7 @@
 package com.kkhill.core.event;
 
+import com.kkhill.core.Catcher;
+
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -7,14 +9,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class EventBus {
 
-    private Map<EventType, Queue<EventConsumer>> bus;
+    private Map<String, Queue<EventConsumer>> bus;
 
     private EventBus() {
         this.bus = new ConcurrentHashMap<>();
-        EventType[] eventTypes =  EventType.values();
-        for(EventType eventType : eventTypes) {
-            this.bus.put(eventType, new ConcurrentLinkedQueue<>());
-        }
     }
 
     private static class Holder {
@@ -25,9 +23,12 @@ public class EventBus {
         return Holder.instance;
     }
 
-    public void listen(EventType type, EventConsumer consumer) {
+    synchronized public void listen(String type, EventConsumer consumer) {
 
         Queue<EventConsumer> consumers = this.bus.get(type);
+        if(consumers == null) {
+            consumers = new ConcurrentLinkedQueue<>();
+        }
         consumers.add(consumer);
     }
 
@@ -35,7 +36,7 @@ public class EventBus {
 
         Queue<EventConsumer> consumers = this.bus.get(event.getType());
         for(EventConsumer consumer : consumers) {
-            consumer.execute();
+            Catcher.getExecutor().submit(() -> consumer.handle(event));
         }
     }
 }

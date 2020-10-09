@@ -32,4 +32,18 @@ public class Catcher {
     public static ScheduledThreadPoolExecutor getExecutor() {
         return Holder.executor;
     }
+
+    /**
+     * start up catcher
+     */
+    public void start() {
+
+        // load addons
+
+        // load drivers
+
+        // set up all poll method
+
+        //
+    }
 }

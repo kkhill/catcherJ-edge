@@ -1,9 +1,9 @@
 package com.kkhill.core.thing;
 
+import com.kkhill.common.convention.EventType;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventBus;
-import com.kkhill.core.event.EventType;
-import com.kkhill.core.exception.*;
+import com.kkhill.core.thing.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +72,7 @@ public class ThingMonitor {
             method.setAccessible(true);
             com.kkhill.core.thing.annotation.Service s = method.getAnnotation(com.kkhill.core.thing.annotation.Service.class);
             if(s != null) {
-                Service service = new Service(s.name(), s.description(), method);
+                Service service = new Service(s.name(), s.description(), thing, method);
                 thing.addService(service);
             }
         }
@@ -167,14 +167,13 @@ public class ThingMonitor {
      */
     public void callService(String thingID, String service, Object[] args) throws ThingNotFoundException, ServiceNotFoundException {
 
-        Thing thing = getThing(thingID);
-        Service s = thing.getServices().get(service);
+        Service s = getThing(thingID).getServices().get(service);
         if (s == null) throw new ServiceNotFoundException();
         Map<String, Object> data = new HashMap<>();
-        data.put("thingID", thing.getID());
+        data.put("thingID", thingID);
         data.put("service", service);
         try {
-            s.invoke(thing, args);
+            s.invoke(args);
         } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }

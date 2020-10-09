@@ -8,11 +8,13 @@ public class Service {
     private String name;
     private String description;
     private Method method;
+    private Object thing;
 
-    public Service(String name, String description, Method method) {
+    public Service(String name, String description, Object thing, Method method) {
         this.name = name;
         this.description = description;
         this.method = method;
+        this.thing = thing;
     }
 
     public String getName() {
@@ -27,7 +29,7 @@ public class Service {
         return method;
     }
 
-    public Object invoke(Object thing, Object... args) throws InvocationTargetException, IllegalAccessException {
+    public Object invoke(Object... args) throws InvocationTargetException, IllegalAccessException {
         return method.invoke(thing, args);
     }
 }

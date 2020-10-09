@@ -1,7 +1,7 @@
 package com.kkhill.core.thing;
 
-import com.kkhill.core.exception.DuplicatePropertyException;
-import com.kkhill.core.exception.DuplicateServiceException;
+import com.kkhill.core.thing.exception.DuplicatePropertyException;
+import com.kkhill.core.thing.exception.DuplicateServiceException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,8 +92,4 @@ public abstract class Thing {
     public Service getService(String name) {
         return this.services.get(name);
     }
-
-//    public abstract void defineProperties();
-//
-//    public abstract void defineServices();
 }

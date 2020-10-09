@@ -1,8 +1,10 @@
 package com.kkhill.driver.demo.thing;
 
+import com.kkhill.common.convention.PropertyName;
+import com.kkhill.common.convention.ServiceName;
 import com.kkhill.core.Catcher;
-import com.kkhill.core.exception.PropertyNotFoundException;
-import com.kkhill.core.exception.ThingNotFoundException;
+import com.kkhill.core.thing.exception.PropertyNotFoundException;
+import com.kkhill.core.thing.exception.ThingNotFoundException;
 import com.kkhill.core.thing.Thing;
 import com.kkhill.core.thing.annotation.Property;
 import com.kkhill.core.thing.annotation.Service;
@@ -16,10 +18,13 @@ public class Light extends Thing {
     @State(description = "state")
     private boolean state;
 
-    @Property(name="brightness", description = "brightness")
+    @Property(name="vendor", description = "vendor name")
+    private String vendor = "otcaix";
+
+    @Property(name= PropertyName.BRIGHTNESS, description = "brightness")
     private int brightness;
 
-    @Property(name="temperature", description = "brightness")
+    @Property(name=PropertyName.TEMPERATURE, description = "temperature")
     private int temperature;
 
     @Service(name="open", description = "open the light")
@@ -33,7 +38,7 @@ public class Light extends Thing {
         }
     }
 
-    @Service(name="close", description = "close the light")
+    @Service(name= ServiceName.CLOSE, description = "close the light")
     public void close() {
         if(this.client.close()) {
             try {
@@ -44,7 +49,7 @@ public class Light extends Thing {
         }
     }
 
-    @Service(name="toggle", description = "toggle the light")
+    @Service(name=ServiceName.TOGGLE, description = "toggle the light")
     public void toggle() {
         if(this.client.state()) {
             if(this.client.close()) {
@@ -103,5 +108,4 @@ public class Light extends Thing {
         super(friendlyName, available);
         this.client = client;
     }
-
 }

@@ -4,19 +4,19 @@ import java.util.Date;
 
 public class Event {
 
-    private EventType type;
+    private String type;
     private String topic;
     private Object data;
     private long timestamp;
 
-    public Event(EventType type, String topic, Object data) {
+    public Event(String type, String topic, Object data) {
         this.type = type;
         this.topic = topic;
         this.data = data;
         this.timestamp = new Date().getTime();
     }
 
-    public EventType getType() {
+    public String getType() {
         return type;
     }
 
