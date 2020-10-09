@@ -35,6 +35,7 @@ public class EventBus {
     public void fire(Event event) {
 
         Queue<EventConsumer> consumers = this.bus.get(event.getType());
+        if (consumers == null) return;
         for(EventConsumer consumer : consumers) {
             Catcher.getExecutor().submit(() -> consumer.handle(event));
         }

@@ -1,7 +1,6 @@
 package com.kkhill.core.thing;
 
-import com.kkhill.core.thing.exception.DuplicatePropertyException;
-import com.kkhill.core.thing.exception.DuplicateServiceException;
+import com.kkhill.core.thing.exception.IllegalThingException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,10 +46,6 @@ public abstract class Thing {
         this.state = state;
     }
 
-    void updateState(Object value) throws IllegalAccessException {
-        state.setValue(this, value);
-    }
-
     public boolean isAvailable() {
         return this.available;
     }
@@ -66,14 +61,12 @@ public abstract class Thing {
         return this.properties;
     }
 
-    void addProperty(Property property) throws DuplicatePropertyException {
-        if(properties.containsKey(property.getName())) throw new DuplicatePropertyException();
+    void addProperty(Property property) throws IllegalThingException {
+        if(properties.containsKey(property.getName())) {
+            throw new IllegalThingException(String.format(
+                    "property: %s is duplicate", property.getName()));
+        }
         this.properties.put(property.getName(), property);
-    }
-
-    void updateProperty(String name, Object object) throws IllegalAccessException {
-        Property property = getProperty(name);
-        property.setValue(this, object);
     }
 
     public Property getProperty(String name) {
@@ -84,8 +77,11 @@ public abstract class Thing {
         return this.services;
     }
 
-    public void addService(Service service) throws DuplicateServiceException {
-        if(services.containsKey(service.getName())) throw new DuplicateServiceException();
+    public void addService(Service service) throws IllegalThingException {
+        if(services.containsKey(service.getName())) {
+            throw new IllegalThingException(String.format(
+                    "service: %s is duplicate", service.getName()));
+        }
         this.services.put(service.getName(), service);
     }
 

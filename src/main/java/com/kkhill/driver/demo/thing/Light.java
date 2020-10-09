@@ -3,6 +3,8 @@ package com.kkhill.driver.demo.thing;
 import com.kkhill.common.convention.PropertyName;
 import com.kkhill.common.convention.ServiceName;
 import com.kkhill.core.Catcher;
+import com.kkhill.core.thing.annotation.Poll;
+import com.kkhill.core.thing.exception.IllegalThingException;
 import com.kkhill.core.thing.exception.PropertyNotFoundException;
 import com.kkhill.core.thing.exception.ThingNotFoundException;
 import com.kkhill.core.thing.Thing;
@@ -16,7 +18,7 @@ public class Light extends Thing {
     private Client client;
 
     @State(description = "state")
-    private boolean state;
+    private String state;
 
     @Property(name="vendor", description = "vendor name")
     private String vendor = "otcaix";
@@ -30,9 +32,10 @@ public class Light extends Thing {
     @Service(name="open", description = "open the light")
     public void open() {
         if(this.client.open()) {
+            this.state = "on";
             try {
-                Catcher.getThingMonitor().updateAndNotifyState(this.getID(), true);
-            } catch (ThingNotFoundException | IllegalAccessException e) {
+                Catcher.getThingMonitor().updateAndNotifyState(this.getID());
+            } catch (ThingNotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
@@ -41,9 +44,10 @@ public class Light extends Thing {
     @Service(name= ServiceName.CLOSE, description = "close the light")
     public void close() {
         if(this.client.close()) {
+            this.state = "off";
             try {
-                Catcher.getThingMonitor().updateAndNotifyState(this.getID(), false);
-            } catch (ThingNotFoundException | IllegalAccessException e) {
+                Catcher.getThingMonitor().updateAndNotifyState(this.getID());
+            } catch (ThingNotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
@@ -51,23 +55,23 @@ public class Light extends Thing {
 
     @Service(name=ServiceName.TOGGLE, description = "toggle the light")
     public void toggle() {
-        if(this.client.state()) {
-            if(this.client.close()) {
-                try {
-                    Catcher.getThingMonitor().updateAndNotifyState(this.getID(),false );
-                } catch (ThingNotFoundException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            if(this.client.open()) {
-                try {
-                    Catcher.getThingMonitor().updateAndNotifyState(this.getID(), true);
-                } catch (ThingNotFoundException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+//        if(this.client.state()) {
+//            if(this.client.close()) {
+//                try {
+//                    Catcher.getThingMonitor().updateAndNotifyState(this.getID(),false );
+//                } catch (ThingNotFoundException | IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        } else {
+//            if(this.client.open()) {
+//                try {
+//                    Catcher.getThingMonitor().updateAndNotifyState(this.getID(), true);
+//                } catch (ThingNotFoundException | IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
     }
 
@@ -76,8 +80,8 @@ public class Light extends Thing {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {
-                Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness", brightness);
-            } catch (ThingNotFoundException | PropertyNotFoundException | IllegalAccessException e) {
+                Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness");
+            } catch (ThingNotFoundException | PropertyNotFoundException  | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
@@ -88,8 +92,8 @@ public class Light extends Thing {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {
-                Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness", brightness);
-            } catch (ThingNotFoundException | PropertyNotFoundException | IllegalAccessException e) {
+                Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness");
+            } catch (ThingNotFoundException | PropertyNotFoundException  | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
@@ -97,11 +101,19 @@ public class Light extends Thing {
         if(this.client.setTemperature(temperature)) {
             this.temperature = temperature;
             try {
-                Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "temperature", temperature);
-            } catch (ThingNotFoundException | PropertyNotFoundException | IllegalAccessException e) {
+                Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "temperature");
+            } catch (ThingNotFoundException | PropertyNotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * TODO polling for new state and property
+     */
+    @Poll
+    public void update() {
+        this.client.getBrightness();
     }
 
     public Light(String friendlyName, boolean available, Client client) {

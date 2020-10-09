@@ -40,7 +40,7 @@ public class ThingMonitor {
      * @return
      * @throws IllegalThingException
      */
-    public String registerThing(Thing thing) throws IllegalThingException {
+    public String registerThing(Thing thing) throws IllegalThingException, IllegalThingException {
 
         String id = UUID.randomUUID().toString().replace("-", "");
         thing.setID(id);
@@ -55,16 +55,16 @@ public class ThingMonitor {
             com.kkhill.core.thing.annotation.Property p = field.getAnnotation(com.kkhill.core.thing.annotation.Property.class);
             if(s != null) {
                 stateNum ++;
-                if(stateNum > 1) throw new NotSingleStateException("a thing must have only one state field");
-                State state = new State(s.description(), field);
+                if(stateNum > 1) throw new IllegalThingException("a thing must have only one state field");
+                State state = new State(s.description(), thing, field);
                 thing.setState(state);
             }
             if(p != null) {
-                Property property = new Property(p.name(), p.description(), p.unitOfMeasurement(), field);
+                Property property = new Property(p.name(), p.description(), p.unitOfMeasurement(), thing, field);
                 thing.addProperty(property);
             }
         }
-        if(stateNum == 0) throw new NotSingleStateException("a thing must have one state field");
+        if(stateNum == 0) throw new IllegalThingException("a thing must have a state field");
 
         // extract services of thing
         Method[] methods = thing.getClass().getDeclaredMethods();
@@ -106,21 +106,24 @@ public class ThingMonitor {
      * e.g. updateAndNotifyState(this, "on");
      *
      * @param id
-     * @param value
      * @throws ThingNotFoundException
-     * @throws IllegalAccessException
+     * @throws IllegalThingException
      */
-    public void updateAndNotifyState(String id, Object value) throws ThingNotFoundException, IllegalAccessException {
+    public void updateAndNotifyState(String id) throws ThingNotFoundException, IllegalThingException {
 
-        Thing thing = getThing(id);
+        State state = getThing(id).getState();
+        String oldState = state.getValue();
+        state.updateValue();
+        String newState = state.getValue();
+        // do not notify if state is not changed
+        if(oldState.equals(newState)) return;
+
         Map<String, Object> data = new HashMap<>();
-        data.put("thingID", thing.getID());
-        data.put("old_state", thing.getState().getValue(thing));
-        data.put("new_state", value);
-        thing.updateState(value);
-        EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, thing.getID(), data));
-        logger.info("update thing state, id: {}, from {} to {}",
-                thing.getID(), data.get("old_state"), data.get("new_state"));
+        data.put("thingID", id);
+        data.put("old_state", oldState);
+        data.put("new_state", newState);
+        EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, id, data));
+        logger.info("update thing state, id: {}, from {} to {}", id, oldState, newState);
     }
 
     /**
@@ -130,26 +133,29 @@ public class ThingMonitor {
      *
      * @param id
      * @param name
-     * @param value
      * @throws ThingNotFoundException
      * @throws PropertyNotFoundException
      * @throws IllegalAccessException
      */
-    public void updateAndNotifyProperty(String id, String name, Object value) throws ThingNotFoundException, PropertyNotFoundException, IllegalAccessException {
+    public void updateAndNotifyProperty(String id, String name) throws ThingNotFoundException, PropertyNotFoundException, IllegalThingException {
 
-        Thing thing = getThing(id);
-        Property property = thing.getProperties().get(name);
+        Property property = getThing(id).getProperties().get(name);
         if(property == null) throw new PropertyNotFoundException();
-        if(property.getValue(thing).equals(value)) return;
+
+        Object oldValue = property.getValue();
+        property.updateValue();
+        Object newValue = property.getValue();
+        // do not notify if value is not changed
+        if(oldValue.equals(newValue)) return;
+
         Map<String, Object> data = new HashMap<>();
-        data.put("thingID", thing.getID());
+        data.put("thingID", id);
         data.put("property", name);
-        data.put("old_value", property.getValue(thing));
-        data.put("new_value", value);
-        thing.updateProperty(name, value);
-        EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, thing.getID(), data));
+        data.put("old_value", oldValue);
+        data.put("new_value", newValue);
+        EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, id, data));
         logger.info("update thing property, id: {}, from {} to {}",
-                thing.getID(), data.get("old_value"), data.get("new_value"));
+                id, oldValue, newValue);
 
     }
 

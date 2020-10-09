@@ -7,13 +7,13 @@ public class Event {
     private String type;
     private String topic;
     private Object data;
-    private long timestamp;
+    private Date timestamp;
 
     public Event(String type, String topic, Object data) {
         this.type = type;
         this.topic = topic;
         this.data = data;
-        this.timestamp = new Date().getTime();
+        this.timestamp = new Date();
     }
 
     public String getType() {
@@ -28,7 +28,7 @@ public class Event {
         return data;
     }
 
-    public long getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 }
