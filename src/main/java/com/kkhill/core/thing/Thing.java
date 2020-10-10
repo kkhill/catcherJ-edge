@@ -1,6 +1,6 @@
 package com.kkhill.core.thing;
 
-import com.kkhill.core.thing.exception.IllegalThingException;
+import com.kkhill.core.exception.IllegalThingException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ public abstract class Thing {
         return this.id;
     }
 
-    void setID(String id) {
+    public void setID(String id) {
         this.id = id;
     }
 
@@ -42,18 +42,19 @@ public abstract class Thing {
         return this.state;
     }
 
-    void setState(State state) {
+    public void setState(State state) {
         this.state = state;
     }
 
     public boolean isAvailable() {
         return this.available;
     }
-    void disable() {
+
+    public void disable() {
         this.available = false;
     }
 
-    void enable() {
+    public void enable() {
         this.available = true;
     }
 
@@ -61,7 +62,7 @@ public abstract class Thing {
         return this.properties;
     }
 
-    void addProperty(Property property) throws IllegalThingException {
+    public void addProperty(Property property) throws IllegalThingException {
         if(properties.containsKey(property.getName())) {
             throw new IllegalThingException(String.format(
                     "property: %s is duplicate", property.getName()));

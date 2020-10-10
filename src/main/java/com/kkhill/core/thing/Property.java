@@ -1,6 +1,6 @@
 package com.kkhill.core.thing;
 
-import com.kkhill.core.thing.exception.IllegalThingException;
+import com.kkhill.core.exception.IllegalThingException;
 
 import java.lang.reflect.Field;
 

@@ -3,14 +3,13 @@ package com.kkhill.driver.demo.thing;
 import com.kkhill.common.convention.PropertyName;
 import com.kkhill.common.convention.ServiceName;
 import com.kkhill.core.Catcher;
-import com.kkhill.core.thing.annotation.Poll;
-import com.kkhill.core.thing.exception.IllegalThingException;
-import com.kkhill.core.thing.exception.PropertyNotFoundException;
-import com.kkhill.core.thing.exception.ThingNotFoundException;
+import com.kkhill.core.exception.IllegalThingException;
+import com.kkhill.core.exception.PropertyNotFoundException;
+import com.kkhill.core.exception.ThingNotFoundException;
 import com.kkhill.core.thing.Thing;
-import com.kkhill.core.thing.annotation.Property;
-import com.kkhill.core.thing.annotation.Service;
-import com.kkhill.core.thing.annotation.State;
+import com.kkhill.core.annotation.Property;
+import com.kkhill.core.annotation.Service;
+import com.kkhill.core.annotation.State;
 import com.kkhill.driver.demo.lib.Client;
 
 public class Light extends Thing {
@@ -111,9 +110,10 @@ public class Light extends Thing {
     /**
      * TODO polling for new state and property
      */
-    @Poll
+    @Service(name="update", description = "update data", poll = true)
     public void update() {
         this.client.getBrightness();
+        System.out.println("i had been invoked...");
     }
 
     public Light(String friendlyName, boolean available, Client client) {

@@ -1,9 +1,9 @@
 package com.kkhill.core;
 
 import com.kkhill.core.scheduler.Scheduler;
-import com.kkhill.core.thing.exception.IllegalThingException;
-import com.kkhill.core.thing.exception.ServiceNotFoundException;
-import com.kkhill.core.thing.exception.ThingNotFoundException;
+import com.kkhill.core.exception.IllegalThingException;
+import com.kkhill.core.exception.ServiceNotFoundException;
+import com.kkhill.core.exception.ThingNotFoundException;
 import com.kkhill.driver.demo.lib.Client;
 import com.kkhill.driver.demo.thing.Light;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.kkhill.core.thing.exception;
+package com.kkhill.core.exception;
 
 public class PropertyNotFoundException extends Exception {
 

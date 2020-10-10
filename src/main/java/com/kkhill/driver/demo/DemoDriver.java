@@ -1,7 +1,7 @@
 package com.kkhill.driver.demo;
 
 import com.kkhill.core.Catcher;
-import com.kkhill.core.thing.exception.IllegalThingException;
+import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.driver.demo.lib.Client;
 import com.kkhill.driver.demo.thing.Light;
 

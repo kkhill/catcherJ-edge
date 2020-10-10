@@ -1,4 +1,4 @@
-package com.kkhill.core.thing.annotation;
+package com.kkhill.core.annotation;
 
 
 import java.lang.annotation.ElementType;
@@ -12,4 +12,6 @@ public @interface Service {
 
     String name();
     String description() default "";
+    boolean poll() default false;
+    boolean push() default false;
 }

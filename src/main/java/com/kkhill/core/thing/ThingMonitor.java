@@ -3,13 +3,12 @@ package com.kkhill.core.thing;
 import com.kkhill.common.convention.EventType;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventBus;
-import com.kkhill.core.thing.exception.*;
+import com.kkhill.core.exception.*;
+import com.kkhill.core.util.ThingUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -45,38 +44,7 @@ public class ThingMonitor {
         String id = UUID.randomUUID().toString().replace("-", "");
         thing.setID(id);
         things.put(id, thing);
-
-        // extract state and properties of thing
-        Field[] fields = thing.getClass().getDeclaredFields();
-        int stateNum = 0;
-        for(Field field : fields) {
-            field.setAccessible(true);
-            com.kkhill.core.thing.annotation.State s = field.getAnnotation(com.kkhill.core.thing.annotation.State.class);
-            com.kkhill.core.thing.annotation.Property p = field.getAnnotation(com.kkhill.core.thing.annotation.Property.class);
-            if(s != null) {
-                stateNum ++;
-                if(stateNum > 1) throw new IllegalThingException("a thing must have only one state field");
-                State state = new State(s.description(), thing, field);
-                thing.setState(state);
-            }
-            if(p != null) {
-                Property property = new Property(p.name(), p.description(), p.unitOfMeasurement(), thing, field);
-                thing.addProperty(property);
-            }
-        }
-        if(stateNum == 0) throw new IllegalThingException("a thing must have a state field");
-
-        // extract services of thing
-        Method[] methods = thing.getClass().getDeclaredMethods();
-        for(Method method : methods) {
-            method.setAccessible(true);
-            com.kkhill.core.thing.annotation.Service s = method.getAnnotation(com.kkhill.core.thing.annotation.Service.class);
-            if(s != null) {
-                Service service = new Service(s.name(), s.description(), thing, method);
-                thing.addService(service);
-            }
-        }
-
+        ThingUtil.buildThing(thing);
         EventBus.getInstance().fire(new Event(EventType.THING, "registered", id));
         logger.info("thing has been registered, id: {}", id);
 
