@@ -2,10 +2,10 @@ package com.kkhill.driver.demo.thing;
 
 import com.kkhill.common.convention.PropertyName;
 import com.kkhill.common.convention.ServiceName;
+import com.kkhill.common.convention.StateName;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
-import com.kkhill.core.exception.PropertyNotFoundException;
-import com.kkhill.core.exception.ThingNotFoundException;
+import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.thing.Thing;
 import com.kkhill.core.annotation.Property;
 import com.kkhill.core.annotation.Service;
@@ -34,7 +34,7 @@ public class Light extends Thing {
             this.state = "on";
             try {
                 Catcher.getThingMonitor().updateAndNotifyState(this.getID());
-            } catch (ThingNotFoundException | IllegalThingException e) {
+            } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
@@ -46,7 +46,7 @@ public class Light extends Thing {
             this.state = "off";
             try {
                 Catcher.getThingMonitor().updateAndNotifyState(this.getID());
-            } catch (ThingNotFoundException | IllegalThingException e) {
+            } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
@@ -80,7 +80,7 @@ public class Light extends Thing {
             this.brightness = brightness;
             try {
                 Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness");
-            } catch (ThingNotFoundException | PropertyNotFoundException  | IllegalThingException e) {
+            } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
@@ -92,7 +92,7 @@ public class Light extends Thing {
             this.brightness = brightness;
             try {
                 Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness");
-            } catch (ThingNotFoundException | PropertyNotFoundException  | IllegalThingException e) {
+            } catch (NotFoundException  | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
@@ -101,18 +101,28 @@ public class Light extends Thing {
             this.temperature = temperature;
             try {
                 Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "temperature");
-            } catch (ThingNotFoundException | PropertyNotFoundException | IllegalThingException e) {
+            } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
         }
     }
 
     /**
-     * TODO polling for new state and property
+     *  polling for new state and property
      */
     @Service(name="update", description = "update data", poll = true)
     public void update() {
-        this.client.getBrightness();
+        this.state = this.client.state() ? StateName.ON : StateName.OFF;
+        this.brightness = this.client.getBrightness();
+        this.temperature = this.client.getTemperature();
+        try {
+            Catcher.getThingMonitor().updateAndNotifyState(this.getID());
+            Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness");
+            Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "temperature");
+        } catch (NotFoundException | IllegalThingException  e) {
+            e.printStackTrace();
+        }
+
         System.out.println("i had been invoked...");
     }
 

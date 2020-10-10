@@ -1,12 +1,11 @@
 package com.kkhill.core;
 
 import com.kkhill.core.event.EventBus;
+import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.plugin.PluginRegistry;
 import com.kkhill.core.scheduler.Scheduler;
 import com.kkhill.core.thing.ThingMonitor;
 import com.kkhill.core.exception.IllegalThingException;
-import com.kkhill.core.exception.ServiceNotFoundException;
-import com.kkhill.core.exception.ThingNotFoundException;
 import com.kkhill.driver.demo.lib.Client;
 import com.kkhill.driver.demo.thing.Light;
 
@@ -61,7 +60,7 @@ public class Catcher {
             Catcher.getThingMonitor().registerThing(light);
             light.open();
             Catcher.getThingMonitor().callService(light.getID(), "set_brightness_and_temperature", new Object[]{50, 40});
-        } catch (IllegalThingException | ThingNotFoundException | ServiceNotFoundException e) {
+        } catch (IllegalThingException | NotFoundException e) {
             e.printStackTrace();
         }
     }

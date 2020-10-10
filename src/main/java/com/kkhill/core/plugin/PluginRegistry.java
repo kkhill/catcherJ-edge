@@ -5,10 +5,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PluginRegistry {
 
-    private Map<String, Plugin> registry;
+    private Map<String, Driver> driverRegistry;
+
+    private Map<String, Addon> addonRegistry;
 
     private PluginRegistry() {
-        this.registry = new ConcurrentHashMap<>();
+        this.driverRegistry = new ConcurrentHashMap<>();
+        this.addonRegistry = new ConcurrentHashMap<>();
     }
 
     private static class Holder {

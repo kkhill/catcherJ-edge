@@ -62,22 +62,23 @@ public class ThingMonitor {
         return this.things;
     }
 
-    public Thing getThing(String thingID) throws ThingNotFoundException {
-        Thing thing = this.things.get(thingID);
-        if(thing == null) throw new ThingNotFoundException();
+    public Thing getThing(String id) throws NotFoundException {
+        Thing thing = this.things.get(id);
+        if(thing == null) throw new NotFoundException(String.format("not found thing: %s", id));
         return thing;
     }
 
     /**
      * update and notify state of a thing
+     * do not fire event bus if not changed
      * usually used by thing implementation
      * e.g. updateAndNotifyState(this, "on");
      *
      * @param id
-     * @throws ThingNotFoundException
+     * @throws NotFoundException
      * @throws IllegalThingException
      */
-    public void updateAndNotifyState(String id) throws ThingNotFoundException, IllegalThingException {
+    public void updateAndNotifyState(String id) throws NotFoundException, IllegalThingException {
 
         State state = getThing(id).getState();
         String oldState = state.getValue();
@@ -95,20 +96,20 @@ public class ThingMonitor {
     }
 
     /**
-     * update property and fire event bus
+     * update property and notify
+     * do not fire event bus if not changed
      * usually used by thing implementation
      * e.g. updateAndNotifyProperty(this, "brightness", 50)
      *
      * @param id
      * @param name
-     * @throws ThingNotFoundException
-     * @throws PropertyNotFoundException
+     * @throws NotFoundException
      * @throws IllegalAccessException
      */
-    public void updateAndNotifyProperty(String id, String name) throws ThingNotFoundException, PropertyNotFoundException, IllegalThingException {
+    public void updateAndNotifyProperty(String id, String name) throws NotFoundException, IllegalThingException {
 
         Property property = getThing(id).getProperties().get(name);
-        if(property == null) throw new PropertyNotFoundException();
+        if(property == null) throw new NotFoundException(String.format("not found property: %s", name));
 
         Object oldValue = property.getValue();
         property.updateValue();
@@ -136,13 +137,12 @@ public class ThingMonitor {
      * @param thingID
      * @param service
      * @param args
-     * @throws ThingNotFoundException
-     * @throws ServiceNotFoundException
+     * @throws NotFoundException
      */
-    public void callService(String thingID, String service, Object[] args) throws ThingNotFoundException, ServiceNotFoundException {
+    public void callService(String thingID, String service, Object[] args) throws NotFoundException {
 
         Service s = getThing(thingID).getServices().get(service);
-        if (s == null) throw new ServiceNotFoundException();
+        if (s == null) throw new NotFoundException(String.format("service not found: %s", service));
         Map<String, Object> data = new HashMap<>();
         data.put("thingID", thingID);
         data.put("service", service);
@@ -155,7 +155,7 @@ public class ThingMonitor {
         logger.info("call thing service, id: {}, service: {}", thingID, service);
     }
 
-    public void enableThing(String thingID) throws ThingNotFoundException {
+    public void enableThing(String thingID) throws NotFoundException {
 
         Thing thing = getThing(thingID);
         if(!thing.isAvailable()) {
@@ -165,7 +165,7 @@ public class ThingMonitor {
         }
     }
 
-    public void disableThing(String thingID) throws ThingNotFoundException {
+    public void disableThing(String thingID) throws NotFoundException {
 
         Thing thing = getThing(thingID);
         if(thing.isAvailable()) {

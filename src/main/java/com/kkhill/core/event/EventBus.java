@@ -1,6 +1,5 @@
 package com.kkhill.core.event;
 
-import com.kkhill.core.Catcher;
 import com.kkhill.core.scheduler.Scheduler;
 
 import java.util.Map;

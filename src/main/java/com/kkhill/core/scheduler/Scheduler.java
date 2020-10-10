@@ -14,7 +14,7 @@ public class Scheduler {
 
     private final Logger logger = LoggerFactory.getLogger(Scheduler.class);
 
-    // TODO: do some reject policy for bad situations.
+    // TODO: do some reject policy
     private ScheduledThreadPoolExecutor executor;
     private ConcurrentLinkedQueue<Service> polledServices;
     private ConcurrentLinkedQueue<Service> pushedServices;
