@@ -3,7 +3,22 @@ package com.kkhill.core.plugin;
 /**
  * Driver has some specific stages of lifecycle about things
  */
-public interface Driver extends Plugin {
+public abstract class Driver implements Plugin {
 
-    // TODO explore the lifecycle of driver e.g. discovery
+    @Override
+    public final void load() {
+        discover();
+        initialize();
+    }
+
+    @Override
+    public final void unload() {
+        release();
+    }
+
+    public abstract void discover();
+
+    public abstract void initialize();
+
+    public abstract void release();
 }

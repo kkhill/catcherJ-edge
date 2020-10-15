@@ -6,7 +6,13 @@ import com.kkhill.core.plugin.Driver;
 import com.kkhill.driver.demo.lib.Client;
 import com.kkhill.driver.demo.thing.Light;
 
-public class DemoDriver implements Driver {
+public class DemoDriver extends Driver {
+
+
+    @Override
+    public void discover() {
+
+    }
 
     @Override
     public void initialize() {
@@ -21,7 +27,7 @@ public class DemoDriver implements Driver {
     }
 
     @Override
-    public void dispose() {
+    public void release() {
 
     }
 }

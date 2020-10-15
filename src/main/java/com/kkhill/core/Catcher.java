@@ -48,6 +48,7 @@ public class Catcher {
 
         // load addons
         testSingleDriver();
+        Catcher.getPluginRegistry().loadPlugin("demo");
         // load drivers
 
         // run scheduler to keep program going
