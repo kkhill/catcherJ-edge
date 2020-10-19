@@ -82,8 +82,7 @@ public class ThingMonitor {
 
         State state = getThing(id).getState();
         String oldState = state.getValue();
-        state.updateValue();
-        String newState = state.getValue();
+        String newState = state.updateValue();
         // do not notify if state is not changed
         if(oldState.equals(newState)) return;
 
@@ -112,8 +111,7 @@ public class ThingMonitor {
         if(property == null) throw new NotFoundException(String.format("not found property: %s", name));
 
         Object oldValue = property.getValue();
-        property.updateValue();
-        Object newValue = property.getValue();
+        Object newValue = property.updateValue();
         // do not notify if value is not changed
         if(oldValue.equals(newValue)) return;
 
@@ -139,20 +137,22 @@ public class ThingMonitor {
      * @param args
      * @throws NotFoundException
      */
-    public void callService(String thingID, String service, Object[] args) throws NotFoundException {
+    public Object callService(String thingID, String service, Object... args) throws NotFoundException {
 
         Service s = getThing(thingID).getServices().get(service);
         if (s == null) throw new NotFoundException(String.format("service not found: %s", service));
         Map<String, Object> data = new HashMap<>();
         data.put("thingID", thingID);
         data.put("service", service);
+        Object res = null;
         try {
-            s.invoke(args);
+            res = s.invoke(args);
         } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
         EventBus.getInstance().fire(new Event(EventType.SERVICE_UPDATED, thingID, data));
         logger.info("call thing service, id: {}, service: {}", thingID, service);
+        return res;
     }
 
     public void enableThing(String thingID) throws NotFoundException {

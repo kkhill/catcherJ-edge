@@ -126,8 +126,8 @@ public class Light extends Thing {
         System.out.println("i had been invoked...");
     }
 
-    public Light(String friendlyName, boolean available, Client client) {
+    public Light(String friendlyName, boolean available, String ip, String port) {
         super(friendlyName, available);
-        this.client = client;
+        this.client = new Client(ip, port);
     }
 }

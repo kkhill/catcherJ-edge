@@ -1,0 +1,4 @@
+
+rulengine:
+  pkg: rulengine
+  entry: RuleEngine

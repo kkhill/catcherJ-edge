@@ -8,11 +8,11 @@ public class Service {
     private String name;
     private String description;
     private Method method;
-    private Object thing;
+    private Thing thing;
     private boolean poll;
     private boolean push;
 
-    public Service(String name, String description, Object thing, Method method) {
+    public Service(String name, String description, Thing thing, Method method) {
         this.name = name;
         this.description = description;
         this.method = method;
@@ -20,18 +20,29 @@ public class Service {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public Method getMethod() {
-        return method;
+        return this.method;
     }
 
-    public Object invoke(Object... args) throws InvocationTargetException, IllegalAccessException {
+    public String getThingId() {
+        return this.thing.getID();
+    }
+
+    /**
+     * call service, this method must be invoked by ThingMonitor to notify event
+     * @param args
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
+    Object invoke(Object... args) throws InvocationTargetException, IllegalAccessException {
         return method.invoke(thing, args);
     }
 

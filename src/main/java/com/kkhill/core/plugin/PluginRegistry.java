@@ -1,19 +1,20 @@
 package com.kkhill.core.plugin;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import com.kkhill.core.exception.IllegalPluginConfig;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PluginRegistry {
 
-    private Map<String, Driver> driverRegistry;
+    private static String addonPkgPath = "com.kkhill.addon";
+    private static String driverPkgPath = "com.kkhill.driver";
 
-    private Map<String, Addon> addonRegistry;
+    private Map<String, Driver> drivers;
+    private Map<String, Addon> addons;
 
     private PluginRegistry() {
-        this.driverRegistry = new ConcurrentHashMap<>();
-        this.addonRegistry = new ConcurrentHashMap<>();
+        this.drivers = new ConcurrentHashMap<>();
+        this.addons = new ConcurrentHashMap<>();
     }
 
     private static class Holder {
@@ -24,26 +25,30 @@ public class PluginRegistry {
         return Holder.instance;
     }
 
-    public boolean loadPlugin(String plugin) {
+    public void registerDriver(String name, String pkg, String driver, Object config) throws IllegalPluginConfig {
 
         try {
-            Class a = Class.forName("com.kkhill.driver.demo." + plugin);
-            System.out.println(a.getCanonicalName());
-            Object p = a.newInstance();
-            Method m = a.getDeclaredMethod("initialize");
-            m.invoke(p);
-
-        } catch (ClassNotFoundException | InstantiationException | NoSuchMethodException
-                | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
+            Driver p = (Driver)loadPlugin(String.format("%s.%s.%s", driverPkgPath, pkg, driver));
+            p.load(config);
+            this.drivers.put(name, p);
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | ClassCastException e) {
+            throw new IllegalPluginConfig(String.format("can not find driver class: %s", driver));
         }
-
-
-        return true;
     }
 
-    public boolean registerPlugin(String name) {
+    public void registerAddon(String name, String pkg, String addon, Object config) throws IllegalPluginConfig {
+        try {
+            Addon p = (Addon)loadPlugin(String.format("%s.%s.%s", addonPkgPath, pkg, addon));
+            p.load(config);
+            this.addons.put(name, p);
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | ClassCastException e) {
+            throw new IllegalPluginConfig(String.format("can not find addon class: %s ", addon));
+        }
+    }
 
-        return true;
+    public Plugin loadPlugin(String name)
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        Class<?> c = Class.forName(name);
+        return (Plugin) c.newInstance();
     }
 }

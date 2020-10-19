@@ -1,0 +1,17 @@
+
+- name: rule1
+  event: state_changed
+  conditions:
+    states:
+      - thing: lovely
+        value: on
+    properties:
+      - thing: lovely
+        property: brightness
+        greater: 50 # equal: less: in:
+
+  actions: # service name
+    services:
+      - name: open
+        thing: lovely
+      - name:

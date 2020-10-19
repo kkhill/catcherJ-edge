@@ -28,13 +28,14 @@ public class State {
         return value;
     }
 
-    public void updateValue() throws IllegalThingException {
+    public String updateValue() throws IllegalThingException {
         try {
             this.value = (String)field.get(this.thing);
         } catch (IllegalAccessException e) {
             throw new IllegalThingException("wrong mapping in state");
         }
         if(this.value == null) this.value = StateName.UNKNOWN;
+        return this.value;
     }
 
 }

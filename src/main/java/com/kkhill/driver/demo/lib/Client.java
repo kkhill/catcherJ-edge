@@ -2,9 +2,16 @@ package com.kkhill.driver.demo.lib;
 
 public class Client {
 
+    private String ip;
+    private String port;
     private boolean state;
     private int brightness;
     private int temperature;
+
+    public Client(String ip, String port) {
+        this.ip = ip;
+        this.port = port;
+    }
 
     public boolean open() {
         System.out.println("open the light with client");
