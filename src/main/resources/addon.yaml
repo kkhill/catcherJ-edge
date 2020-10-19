@@ -1,0 +1,8 @@
+
+rulengine:
+  pkg: rulengine
+  entry: RuleEngine
+
+api:
+  pkg: api
+  entry: ApiAddon

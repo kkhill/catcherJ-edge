@@ -39,7 +39,7 @@ public class Property {
         return this.value;
     }
 
-    public void updateValue() throws IllegalThingException{
+    public Object updateValue() throws IllegalThingException{
         try {
             this.value = field.get(this.thing);
         } catch (IllegalAccessException e) {
@@ -47,5 +47,6 @@ public class Property {
                     "wrong mapping in property: %s", this.name));
         }
         if(this.value == null) this.value = 0;
+        return this.value;
     }
 }

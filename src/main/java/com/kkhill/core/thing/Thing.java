@@ -25,11 +25,11 @@ public abstract class Thing {
         this.services = new HashMap<>();
     }
 
-    public String getID() {
+    public String getId() {
         return this.id;
     }
 
-    public void setID(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 

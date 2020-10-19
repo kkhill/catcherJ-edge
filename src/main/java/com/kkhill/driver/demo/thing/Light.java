@@ -33,7 +33,7 @@ public class Light extends Thing {
         if(this.client.open()) {
             this.state = "on";
             try {
-                Catcher.getThingMonitor().updateAndNotifyState(this.getID());
+                Catcher.getThingMonitor().updateAndNotifyState(this.getId());
             } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -45,7 +45,7 @@ public class Light extends Thing {
         if(this.client.close()) {
             this.state = "off";
             try {
-                Catcher.getThingMonitor().updateAndNotifyState(this.getID());
+                Catcher.getThingMonitor().updateAndNotifyState(this.getId());
             } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -57,7 +57,7 @@ public class Light extends Thing {
 //        if(this.client.state()) {
 //            if(this.client.close()) {
 //                try {
-//                    Catcher.getThingMonitor().updateAndNotifyState(this.getID(),false );
+//                    Catcher.getThingMonitor().updateAndNotifyState(this.getId(),false );
 //                } catch (ThingNotFoundException | IllegalAccessException e) {
 //                    e.printStackTrace();
 //                }
@@ -65,7 +65,7 @@ public class Light extends Thing {
 //        } else {
 //            if(this.client.open()) {
 //                try {
-//                    Catcher.getThingMonitor().updateAndNotifyState(this.getID(), true);
+//                    Catcher.getThingMonitor().updateAndNotifyState(this.getId(), true);
 //                } catch (ThingNotFoundException | IllegalAccessException e) {
 //                    e.printStackTrace();
 //                }
@@ -79,7 +79,7 @@ public class Light extends Thing {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {
-                Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness");
+                Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "brightness");
             } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -91,7 +91,7 @@ public class Light extends Thing {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {
-                Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness");
+                Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "brightness");
             } catch (NotFoundException  | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -100,7 +100,7 @@ public class Light extends Thing {
         if(this.client.setTemperature(temperature)) {
             this.temperature = temperature;
             try {
-                Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "temperature");
+                Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "temperature");
             } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -116,9 +116,9 @@ public class Light extends Thing {
         this.brightness = this.client.getBrightness();
         this.temperature = this.client.getTemperature();
         try {
-            Catcher.getThingMonitor().updateAndNotifyState(this.getID());
-            Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "brightness");
-            Catcher.getThingMonitor().updateAndNotifyProperty(this.getID(), "temperature");
+            Catcher.getThingMonitor().updateAndNotifyState(this.getId());
+            Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "brightness");
+            Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "temperature");
         } catch (NotFoundException | IllegalThingException  e) {
             e.printStackTrace();
         }
@@ -126,8 +126,8 @@ public class Light extends Thing {
         System.out.println("i had been invoked...");
     }
 
-    public Light(String friendlyName, boolean available, Client client) {
+    public Light(String friendlyName, boolean available, String ip, String port) {
         super(friendlyName, available);
-        this.client = client;
+        this.client = new Client(ip, port);
     }
 }

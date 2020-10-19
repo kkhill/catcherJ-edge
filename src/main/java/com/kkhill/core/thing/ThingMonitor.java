@@ -42,7 +42,7 @@ public class ThingMonitor {
     public String registerThing(Thing thing) throws IllegalThingException, IllegalThingException {
 
         String id = UUID.randomUUID().toString().replace("-", "");
-        thing.setID(id);
+        thing.setId(id);
         things.put(id, thing);
         ThingUtil.buildThing(thing);
         EventBus.getInstance().fire(new Event(EventType.THING, "registered", id));
@@ -51,11 +51,11 @@ public class ThingMonitor {
         return id;
     }
 
-    public void removeThing(String thingID) {
+    public void removeThing(String thingId) {
 
-        things.remove(thingID);
-        EventBus.getInstance().fire(new Event(EventType.THING, "removed", thingID));
-        logger.info("thing has been removed, id: {}", thingID);
+        things.remove(thingId);
+        EventBus.getInstance().fire(new Event(EventType.THING, "removed", thingId));
+        logger.info("thing has been removed, id: {}", thingId);
     }
 
     public Map<String, Thing> getThings() {
@@ -82,13 +82,12 @@ public class ThingMonitor {
 
         State state = getThing(id).getState();
         String oldState = state.getValue();
-        state.updateValue();
-        String newState = state.getValue();
+        String newState = state.updateValue();
         // do not notify if state is not changed
         if(oldState.equals(newState)) return;
 
         Map<String, Object> data = new HashMap<>();
-        data.put("thingID", id);
+        data.put("thingId", id);
         data.put("old_state", oldState);
         data.put("new_state", newState);
         EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, id, data));
@@ -112,13 +111,12 @@ public class ThingMonitor {
         if(property == null) throw new NotFoundException(String.format("not found property: %s", name));
 
         Object oldValue = property.getValue();
-        property.updateValue();
-        Object newValue = property.getValue();
+        Object newValue = property.updateValue();
         // do not notify if value is not changed
         if(oldValue.equals(newValue)) return;
 
         Map<String, Object> data = new HashMap<>();
-        data.put("thingID", id);
+        data.put("thingId", id);
         data.put("property", name);
         data.put("old_value", oldValue);
         data.put("new_value", newValue);
@@ -134,44 +132,46 @@ public class ThingMonitor {
      * e.g. callService("some_id_from_UI", "set_brightness", new Object[]{50})
      *
      *
-     * @param thingID
+     * @param thingId
      * @param service
      * @param args
      * @throws NotFoundException
      */
-    public void callService(String thingID, String service, Object[] args) throws NotFoundException {
+    public Object callService(String thingId, String service, Object... args) throws NotFoundException {
 
-        Service s = getThing(thingID).getServices().get(service);
+        Service s = getThing(thingId).getServices().get(service);
         if (s == null) throw new NotFoundException(String.format("service not found: %s", service));
         Map<String, Object> data = new HashMap<>();
-        data.put("thingID", thingID);
+        data.put("thingId", thingId);
         data.put("service", service);
+        Object res = null;
         try {
-            s.invoke(args);
+            res = s.invoke(args);
         } catch (InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
-        EventBus.getInstance().fire(new Event(EventType.SERVICE_UPDATED, thingID, data));
-        logger.info("call thing service, id: {}, service: {}", thingID, service);
+        EventBus.getInstance().fire(new Event(EventType.SERVICE_UPDATED, thingId, data));
+        logger.info("call thing service, id: {}, service: {}", thingId, service);
+        return res;
     }
 
-    public void enableThing(String thingID) throws NotFoundException {
+    public void enableThing(String thingId) throws NotFoundException {
 
-        Thing thing = getThing(thingID);
+        Thing thing = getThing(thingId);
         if(!thing.isAvailable()) {
             thing.enable();
-            EventBus.getInstance().fire(new Event(EventType.THING, thingID, "enabled"));
-            logger.info("enable thing, id: {}", thingID);
+            EventBus.getInstance().fire(new Event(EventType.THING, thingId, "enabled"));
+            logger.info("enable thing, id: {}", thingId);
         }
     }
 
-    public void disableThing(String thingID) throws NotFoundException {
+    public void disableThing(String thingId) throws NotFoundException {
 
-        Thing thing = getThing(thingID);
+        Thing thing = getThing(thingId);
         if(thing.isAvailable()) {
             thing.disable();
-            EventBus.getInstance().fire(new Event(EventType.THING, thingID, "disabled"));
-            logger.info("disable thing, id: {}", thingID);
+            EventBus.getInstance().fire(new Event(EventType.THING, thingId, "disabled"));
+            logger.info("disable thing, id: {}", thingId);
         }
     }
 }

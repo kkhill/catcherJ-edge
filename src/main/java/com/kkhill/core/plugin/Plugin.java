@@ -2,6 +2,6 @@ package com.kkhill.core.plugin;
 
 public interface Plugin {
 
-    void load();
-    void unload();
+    boolean load(Object data);
+    boolean unload(Object data);
 }

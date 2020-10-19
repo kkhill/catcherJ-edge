@@ -3,10 +3,12 @@ package com.kkhill.core.scheduler;
 import com.kkhill.common.convention.EventType;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
+import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.thing.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.*;
 
@@ -25,9 +27,9 @@ public class Scheduler {
         pushedServices = new ConcurrentLinkedQueue<>();
     }
 
-    private static int poolSize = 5;
-    private static int pollingInternal = 10;
-    private static int heartbeat = 3;
+    private static int poolSize = 10;
+    private static int pollingInternal = 3;
+    private static int heartbeat = 2;
 
     private static class Holder {
         private final static Scheduler instance = new Scheduler();
@@ -61,7 +63,7 @@ public class Scheduler {
      */
     public void pollAll() {
         for(Service service : polledServices) {
-            executor.submit((Callable<Object>) service::invoke);
+            executor.submit(()->Catcher.getThingMonitor().callService(service.getThingId(), service.getName()));
         }
     }
 
