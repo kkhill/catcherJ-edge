@@ -4,7 +4,9 @@
   conditions:
     states:
       - thing: lovely
-        value: on
+#        on: on
+        from: "off"
+        to: "on"
     properties:
       - thing: lovely
         property: brightness
@@ -14,4 +16,3 @@
     services:
       - name: open
         thing: lovely
-      - name:

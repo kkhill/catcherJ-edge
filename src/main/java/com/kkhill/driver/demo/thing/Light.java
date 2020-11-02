@@ -110,7 +110,7 @@ public class Light extends Thing {
     /**
      *  polling for new state and property
      */
-    @Service(name="update", description = "update data", poll = true)
+    @Service(name="update", description = "update data", poll = true, internal = 30)
     public void update() {
         this.state = this.client.state() ? StateName.ON : StateName.OFF;
         this.brightness = this.client.getBrightness();

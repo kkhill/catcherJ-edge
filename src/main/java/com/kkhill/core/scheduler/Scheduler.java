@@ -8,7 +8,6 @@ import com.kkhill.core.thing.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.*;
 
@@ -18,26 +17,24 @@ public class Scheduler {
 
     // TODO: do some reject policy
     private ScheduledThreadPoolExecutor executor;
-    private ConcurrentLinkedQueue<Service> polledServices;
-    private ConcurrentLinkedQueue<Service> pushedServices;
+    private ConcurrentLinkedQueue<Service> pollServices;
+    private ConcurrentLinkedQueue<Service> pushServices;
 
     private Scheduler() {
         executor = new ScheduledThreadPoolExecutor(poolSize);
-        polledServices = new ConcurrentLinkedQueue<>();
-        pushedServices = new ConcurrentLinkedQueue<>();
+        pollServices = new ConcurrentLinkedQueue<>();
+        pushServices = new ConcurrentLinkedQueue<>();
     }
 
     private static int poolSize = 10;
-    private static int pollingInternal = 3;
     private static int heartbeat = 2;
 
     private static class Holder {
         private final static Scheduler instance = new Scheduler();
     }
 
-    public static void initialize(int poolSize, int pollingInternal, int heartbeat) {
+    public static void initialize(int poolSize, int heartbeat) {
         Scheduler.poolSize = poolSize;
-        Scheduler.pollingInternal = pollingInternal;
         Scheduler.heartbeat = heartbeat;
     }
 
@@ -55,14 +52,18 @@ public class Scheduler {
      */
     public void start() {
         executor.scheduleAtFixedRate(this::beat, 0, this.heartbeat, TimeUnit.SECONDS);
-        executor.scheduleAtFixedRate(this::pollAll, 0, this.pollingInternal, TimeUnit.SECONDS);
-    }
 
-    /**
-     * poll all services should be polled
-     */
-    public void pollAll() {
-        for(Service service : polledServices) {
+        // poll service
+        for(Service service : pollServices) {
+            if(!service.isPolled()) continue;
+            executor.scheduleAtFixedRate(()-> {
+                        try {
+                            Catcher.getThingMonitor().callService(service.getThingId(), service.getName());
+                        } catch (NotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    , 0, service.getInternal(), TimeUnit.SECONDS);
             executor.submit(()->Catcher.getThingMonitor().callService(service.getThingId(), service.getName()));
         }
     }
@@ -75,15 +76,15 @@ public class Scheduler {
         Event e = new Event(EventType.PLATFORM, "heartbeat", null);
         Catcher.getEventBus().fire(e);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        logger.info("heartbeat: {}", formatter.format(e.getTimestamp()));
+//        logger.info("heartbeat: {}", formatter.format(e.getTimestamp()));
     }
 
     public void addPolledService(Service s) {
-        this.polledServices.offer(s);
+        this.pollServices.offer(s);
     }
 
     public boolean removePolledService(Service s) {
-        return this.polledServices.remove(s);
+        return this.pollServices.remove(s);
     }
 
 

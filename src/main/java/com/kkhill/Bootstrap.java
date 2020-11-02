@@ -21,18 +21,17 @@ public class Bootstrap {
 
         try {
             start();
-        } catch (FileNotFoundException | IllegalPluginConfig e) {
+        } catch (FileNotFoundException  e) {
             e.printStackTrace();
         }
     }
 
-    public static void start() throws FileNotFoundException, IllegalPluginConfig {
+    public static void start() throws FileNotFoundException {
         // read configuration
         int threadNum = 5;
-        int pollingInternal = 2;
         int heartbeat = 1;
         // initialize system resources
-        Catcher.initialize(threadNum, pollingInternal, heartbeat);
+        Catcher.initialize(threadNum, heartbeat);
         // register addons and drivers
         registryAddons();
         registryDrivers();

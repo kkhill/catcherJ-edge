@@ -15,7 +15,7 @@ public class TestCore {
     public void testBootstrap() {
         try {
             Bootstrap.start();
-        } catch (FileNotFoundException | IllegalPluginConfig e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }

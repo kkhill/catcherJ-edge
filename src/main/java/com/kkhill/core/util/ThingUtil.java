@@ -50,6 +50,7 @@ public class ThingUtil {
                 Service service = new Service(s.name(), s.description(), thing, method);
                 if(s.poll()) {
                     service.enablePolling();
+                    service.setInternal(service.getInternal());
                     // add to scheduler
                     Catcher.getScheduler().addPolledService(service);
                 }

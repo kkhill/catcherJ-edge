@@ -32,8 +32,8 @@ public class Catcher {
         return Holder.scheduler;
     }
 
-    public static void initialize(int poolSize, int pollingInternal, int heartbeat) {
-        Scheduler.initialize(poolSize, pollingInternal, heartbeat);
+    public static void initialize(int poolSize, int heartbeat) {
+        Scheduler.initialize(poolSize, heartbeat);
     }
 
     /**

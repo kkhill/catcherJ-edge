@@ -39,14 +39,14 @@ public class ThingMonitor {
      * @return
      * @throws IllegalThingException
      */
-    public String registerThing(Thing thing) throws IllegalThingException, IllegalThingException {
+    public String registerThing(Thing thing) throws IllegalThingException {
 
         String id = UUID.randomUUID().toString().replace("-", "");
         thing.setId(id);
         things.put(id, thing);
         ThingUtil.buildThing(thing);
         EventBus.getInstance().fire(new Event(EventType.THING, "registered", id));
-        logger.info("thing has been registered, id: {}", id);
+        logger.info("thing has been registered, name: {}, id: {}", thing.getFriendlyName(), id);
 
         return id;
     }
@@ -108,7 +108,7 @@ public class ThingMonitor {
     public void updateAndNotifyProperty(String id, String name) throws NotFoundException, IllegalThingException {
 
         Property property = getThing(id).getProperties().get(name);
-        if(property == null) throw new NotFoundException(String.format("not found property: %s", name));
+        if(property == null) throw new NotFoundException(String.format("property not found: %s", name));
 
         Object oldValue = property.getValue();
         Object newValue = property.updateValue();

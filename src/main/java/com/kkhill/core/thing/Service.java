@@ -5,11 +5,14 @@ import java.lang.reflect.Method;
 
 public class Service {
 
+    public static final int DEFAULT_INTERNAL = 3;
+
     private String name;
     private String description;
     private Method method;
     private Thing thing;
     private boolean poll;
+    private int internal = DEFAULT_INTERNAL;
     private boolean push;
 
     public Service(String name, String description, Thing thing, Method method) {
@@ -56,6 +59,14 @@ public class Service {
 
     public void enablePolling() {
         this.poll = true;
+    }
+
+    public int getInternal() {
+        return internal;
+    }
+
+    public void setInternal(int internal) {
+        this.internal = internal;
     }
 
     public void enablePushing() {
