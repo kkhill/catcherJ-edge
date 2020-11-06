@@ -1,10 +1,9 @@
 package com.kkhill.core.thing;
 
-import com.kkhill.common.convention.EventType;
+import com.kkhill.utils.convention.EventType;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventBus;
 import com.kkhill.core.exception.*;
-import com.kkhill.core.util.ThingUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,13 +40,10 @@ public class ThingMonitor {
      */
     public String registerThing(Thing thing) throws IllegalThingException {
 
-        String id = UUID.randomUUID().toString().replace("-", "");
-        thing.setId(id);
+        String id = thing.build();
         things.put(id, thing);
-        ThingUtil.buildThing(thing);
         EventBus.getInstance().fire(new Event(EventType.THING, "registered", id));
         logger.info("thing has been registered, name: {}, id: {}", thing.getFriendlyName(), id);
-
         return id;
     }
 

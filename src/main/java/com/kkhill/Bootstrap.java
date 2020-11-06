@@ -1,6 +1,6 @@
 package com.kkhill;
 
-import com.kkhill.common.config.PluginConfig;
+import com.kkhill.utils.config.PluginConfig;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalPluginConfig;
 import org.slf4j.Logger;

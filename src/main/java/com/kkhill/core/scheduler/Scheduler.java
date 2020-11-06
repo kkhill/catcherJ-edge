@@ -1,6 +1,6 @@
 package com.kkhill.core.scheduler;
 
-import com.kkhill.common.convention.EventType;
+import com.kkhill.utils.convention.EventType;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.exception.NotFoundException;

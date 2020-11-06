@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PluginRegistry {
 
-    private static String addonPkgPath = "com.kkhill.addon";
-    private static String driverPkgPath = "com.kkhill.driver";
+    private static String addonPkgPath = "com.kkhill.addons";
+    private static String driverPkgPath = "com.kkhill.drivers";
 
     private Map<String, Driver> drivers;
     private Map<String, Addon> addons;
