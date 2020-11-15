@@ -1,16 +1,18 @@
 package com.kkhill.core.thing;
 
-import com.kkhill.utils.convention.EventType;
+import com.kkhill.utils.event.EventType;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventBus;
 import com.kkhill.core.exception.*;
+import com.kkhill.utils.event.PropertyUpdatedEventData;
+import com.kkhill.utils.event.ServiceCalledEventData;
+import com.kkhill.utils.event.StateUpdatedEventData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ThingMonitor {
@@ -74,7 +76,7 @@ public class ThingMonitor {
      * @throws NotFoundException
      * @throws IllegalThingException
      */
-    public void updateAndNotifyState(String id) throws NotFoundException, IllegalThingException {
+    public void updateStateAndNotify(String id) throws NotFoundException, IllegalThingException {
 
         State state = getThing(id).getState();
         String oldState = state.getValue();
@@ -82,10 +84,7 @@ public class ThingMonitor {
         // do not notify if state is not changed
         if(oldState.equals(newState)) return;
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("thingId", id);
-        data.put("old_state", oldState);
-        data.put("new_state", newState);
+        Object data = new StateUpdatedEventData(id, oldState, newState);
         EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, id, data));
         logger.info("update thing state, id: {}, from {} to {}", id, oldState, newState);
     }
@@ -101,7 +100,7 @@ public class ThingMonitor {
      * @throws NotFoundException
      * @throws IllegalAccessException
      */
-    public void updateAndNotifyProperty(String id, String name) throws NotFoundException, IllegalThingException {
+    public void updatePropertyAndNotify(String id, String name) throws NotFoundException, IllegalThingException {
 
         Property property = getThing(id).getProperties().get(name);
         if(property == null) throw new NotFoundException(String.format("property not found: %s", name));
@@ -111,15 +110,9 @@ public class ThingMonitor {
         // do not notify if value is not changed
         if(oldValue.equals(newValue)) return;
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("thingId", id);
-        data.put("property", name);
-        data.put("old_value", oldValue);
-        data.put("new_value", newValue);
+        Object data = new PropertyUpdatedEventData(id, name, oldValue, newValue);
         EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, id, data));
-        logger.info("update thing property, id: {}, from {} to {}",
-                id, oldValue, newValue);
-
+        logger.info("update thing property, id: {}, from {} to {}", id, oldValue, newValue);
     }
 
     /**
@@ -133,20 +126,19 @@ public class ThingMonitor {
      * @param args
      * @throws NotFoundException
      */
-    public Object callService(String thingId, String service, Object... args) throws NotFoundException {
+    public Object callServiceAndNotify(String thingId, String service, Object... args) throws NotFoundException {
 
         Service s = getThing(thingId).getServices().get(service);
         if (s == null) throw new NotFoundException(String.format("service not found: %s", service));
-        Map<String, Object> data = new HashMap<>();
-        data.put("thingId", thingId);
-        data.put("service", service);
+        Object data = new ServiceCalledEventData(thingId, service);
         Object res = null;
         try {
             res = s.invoke(args);
         } catch (InvocationTargetException | IllegalAccessException e) {
+            logger.error("error with calling thing service");
             e.printStackTrace();
         }
-        EventBus.getInstance().fire(new Event(EventType.SERVICE_UPDATED, thingId, data));
+        EventBus.getInstance().fire(new Event(EventType.SERVICE_CALLED, thingId, data));
         logger.info("call thing service, id: {}, service: {}", thingId, service);
         return res;
     }

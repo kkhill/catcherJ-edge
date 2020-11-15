@@ -33,7 +33,7 @@ public class Light extends Thing {
         if(this.client.open()) {
             this.state = "on";
             try {
-                Catcher.getThingMonitor().updateAndNotifyState(this.getId());
+                Catcher.getThingMonitor().updateStateAndNotify(this.getId());
             } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -45,7 +45,7 @@ public class Light extends Thing {
         if(this.client.close()) {
             this.state = "off";
             try {
-                Catcher.getThingMonitor().updateAndNotifyState(this.getId());
+                Catcher.getThingMonitor().updateStateAndNotify(this.getId());
             } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -57,7 +57,7 @@ public class Light extends Thing {
         if(this.client.state()) {
             if(this.client.close()) {
                 try {
-                    Catcher.getThingMonitor().updateAndNotifyState(this.getId());
+                    Catcher.getThingMonitor().updateStateAndNotify(this.getId());
                 } catch (NotFoundException | IllegalThingException e) {
                     e.printStackTrace();
                 }
@@ -65,7 +65,7 @@ public class Light extends Thing {
         } else {
             if(this.client.open()) {
                 try {
-                    Catcher.getThingMonitor().updateAndNotifyState(this.getId());
+                    Catcher.getThingMonitor().updateStateAndNotify(this.getId());
                 } catch (NotFoundException | IllegalThingException e) {
                     e.printStackTrace();
                 }
@@ -78,7 +78,7 @@ public class Light extends Thing {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {
-                Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "brightness");
+                Catcher.getThingMonitor().updatePropertyAndNotify(this.getId(), "brightness");
             } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -90,7 +90,7 @@ public class Light extends Thing {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {
-                Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "brightness");
+                Catcher.getThingMonitor().updatePropertyAndNotify(this.getId(), "brightness");
             } catch (NotFoundException  | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -99,7 +99,7 @@ public class Light extends Thing {
         if(this.client.setTemperature(temperature)) {
             this.temperature = temperature;
             try {
-                Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "temperature");
+                Catcher.getThingMonitor().updatePropertyAndNotify(this.getId(), "temperature");
             } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }
@@ -115,9 +115,9 @@ public class Light extends Thing {
         this.brightness = this.client.getBrightness();
         this.temperature = this.client.getTemperature();
         try {
-            Catcher.getThingMonitor().updateAndNotifyState(this.getId());
-            Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "brightness");
-            Catcher.getThingMonitor().updateAndNotifyProperty(this.getId(), "temperature");
+            Catcher.getThingMonitor().updateStateAndNotify(this.getId());
+            Catcher.getThingMonitor().updatePropertyAndNotify(this.getId(), "brightness");
+            Catcher.getThingMonitor().updatePropertyAndNotify(this.getId(), "temperature");
         } catch (NotFoundException | IllegalThingException  e) {
             e.printStackTrace();
         }

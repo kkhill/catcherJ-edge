@@ -1,6 +1,6 @@
 package com.kkhill.core.scheduler;
 
-import com.kkhill.utils.convention.EventType;
+import com.kkhill.utils.event.EventType;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.exception.NotFoundException;
@@ -58,13 +58,13 @@ public class Scheduler {
             if(!service.isPolled()) continue;
             executor.scheduleAtFixedRate(()-> {
                         try {
-                            Catcher.getThingMonitor().callService(service.getThingId(), service.getName());
+                            Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName());
                         } catch (NotFoundException e) {
                             e.printStackTrace();
                         }
                     }
                     , 0, service.getInternal(), TimeUnit.SECONDS);
-            executor.submit(()->Catcher.getThingMonitor().callService(service.getThingId(), service.getName()));
+            executor.submit(()->Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName()));
         }
     }
 

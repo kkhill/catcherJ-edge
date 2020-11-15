@@ -1,11 +1,14 @@
-package com.kkhill.addons.rulengine.helper;
+package com.kkhill.addons.rulengine.action;
+
+import com.kkhill.addons.rulengine.action.Action;
 
 public class ServiceAction extends Action {
 
     private String name;
     private String thing;
 
-    public ServiceAction(String name, String thing) {
+    public ServiceAction(String serviceType, String name, String thing) {
+        super(serviceType);
         this.name = name;
         this.thing = thing;
     }

@@ -10,7 +10,8 @@
     properties:
       - thing: lovely
         property: brightness
-        greater: 50 # equal: less: in:
+        operation: ">"  # > >= < <= in
+        value: 50
 
   actions: # service name
     services:

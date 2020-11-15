@@ -1,4 +1,4 @@
-package com.kkhill.addons.rulengine.helper;
+package com.kkhill.addons.rulengine.rule;
 
 public class IllegalRuleException extends Exception {
     public IllegalRuleException() {}

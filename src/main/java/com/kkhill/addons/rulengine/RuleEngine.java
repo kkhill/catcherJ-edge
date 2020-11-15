@@ -1,9 +1,21 @@
 package com.kkhill.addons.rulengine;
 
-import com.kkhill.addons.rulengine.helper.*;
+import com.kkhill.addons.rulengine.action.Action;
+import com.kkhill.addons.rulengine.action.ActionType;
+import com.kkhill.addons.rulengine.action.ServiceAction;
+import com.kkhill.addons.rulengine.condition.Condition;
+import com.kkhill.addons.rulengine.condition.ConditionType;
+import com.kkhill.addons.rulengine.condition.PropertyCondition;
+import com.kkhill.addons.rulengine.condition.StateCondition;
+import com.kkhill.addons.rulengine.rule.IllegalRuleException;
+import com.kkhill.addons.rulengine.rule.Rule;
+import com.kkhill.addons.rulengine.utils.RuleParser;
 import com.kkhill.core.Catcher;
+import com.kkhill.core.event.Event;
+import com.kkhill.core.event.EventConsumer;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.plugin.Addon;
+import com.kkhill.utils.event.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -13,7 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class RuleEngine implements Addon {
+public class RuleEngine implements Addon, EventConsumer {
 
     private final Logger logger = LoggerFactory.getLogger(RuleEngine.class);
 
@@ -38,8 +50,8 @@ public class RuleEngine implements Addon {
     public boolean load(Object data) {
         try {
             List<LinkedHashMap<String, Object>> rulesData = readRules();
-            this.rules = parseRules(rulesData);
-        }catch (FileNotFoundException e) {
+            this.rules = new RuleParser().parseRules(rulesData);
+        } catch (FileNotFoundException e) {
             logger.error("can not find rules.yaml");
             e.printStackTrace();
         } catch (IllegalRuleException e) {
@@ -49,6 +61,13 @@ public class RuleEngine implements Addon {
             logger.error("illegal thing");
             e.printStackTrace();
         }
+
+
+        // listen events
+        Catcher.getEventBus().listen(EventType.STATE_UPDATED, this);
+        Catcher.getEventBus().listen(EventType.PROPERTY_UPDATED, this);
+        Catcher.getEventBus().listen(EventType.SERVICE_CALLED, this);
+
         return true;
     }
 
@@ -77,71 +96,25 @@ public class RuleEngine implements Addon {
     }
 
     /**
-     * Parse event, conditions(states, properties) and actions(services)
-     * @param data origin data read from rules.yaml by snakeyaml
-     * @return rule object list
+     * check conditions and execute actions
+     * @param event
      */
-    @SuppressWarnings("unchecked")
-    private List<Rule> parseRules(List<LinkedHashMap<String, Object>> data) throws IllegalRuleException, IllegalThingException {
-        List<Rule> rules = new ArrayList<>();
-        for (LinkedHashMap<String, Object> entry : data) {
+    @Override
+    public void handle(Event event) {
 
-            if(!entry.containsKey("name")) throw new IllegalRuleException("no rule name");
-            if(!entry.containsKey("event")) throw new IllegalRuleException("no event");
-            if(!entry.containsKey("conditions")) throw new IllegalRuleException("no conditions");
-            if(!entry.containsKey("actions")) throw new IllegalRuleException("no actions");
+        for(Rule rule : this.rules) {
+            if(!rule.getEvent().equals(event.getType())) continue;
+            if(event.getType().equals(EventType.STATE_UPDATED)) {
 
-            String name = (String) entry.get("name");
-            String event = (String) entry.get("event");
-            // parse conditions
-            LinkedHashMap<String, Object> conditionData = (LinkedHashMap<String, Object>) entry.get("conditions");
-            if(conditionData == null) {
-                throw new IllegalRuleException("empty conditions");
             }
-            List<Condition> conditions = new ArrayList<>();
-            for(String key: conditionData.keySet()) {
-                List<LinkedHashMap<String, Object>> c =  (List<LinkedHashMap<String, Object>>) conditionData.get(key);
-                for(LinkedHashMap<String, Object> cc : c) {
-                    Condition condition = null;
-                    if("states".equals(key)) {
-                        // state condition item
-                        if(cc.containsKey("on")) {
-                            condition = new StateCondition((String)cc.get("thing"), (String)cc.get("on"));
-                        } else {
-                            condition = new StateCondition((String)cc.get("thing"), (String)cc.get("from"), (String)cc.get("to"));
-                        }
+            // check conditions
+            boolean satisfied = true;
+            for(Condition condition : rule.getConditions()) {
+//                condition.
+                Object data = event.getData();
 
-                    } else if("properties".equals(key)) {
-                        // property condition item
-                        String op = cc.containsKey("equal") ? "equal" : cc.containsKey("greater") ? "greater" : cc.containsKey("less") ? "less" : null;
-                        if(op == null) continue;
-                        condition = new PropertyCondition((String)cc.get("thing"), (String)cc.get("property"),
-                                op, cc.get("value"));
-                    }
-                    if(condition != null) conditions.add(condition);
-                }
+
             }
-            // parse actions
-            LinkedHashMap<String, Map<String, Object>> actionData = (LinkedHashMap<String, Map<String, Object>>) entry.get("actions");
-            if(conditionData == null) {
-                throw new IllegalRuleException("empty actions");
-            }
-            List<Action> actions = new ArrayList<>();
-            for(String key: actionData.keySet()) {
-                List<LinkedHashMap<String, Object>> a =  (List<LinkedHashMap<String, Object>>) actionData.get(key);
-                for(LinkedHashMap<String, Object> aa : a) {
-                    Action action = null;
-                    if("services".equals(key)) {
-                        action = new ServiceAction((String)aa.get("name"), (String)aa.get("thing"));
-                    }
-                    actions.add(action);
-                }
-            }
-            Rule rule = new Rule(name, true, event, conditions, actions);
-            // utilize ThingMonitor to manage rule
-            Catcher.getThingMonitor().registerThing(rule);
-            rules.add(rule);
         }
-        return rules;
     }
 }

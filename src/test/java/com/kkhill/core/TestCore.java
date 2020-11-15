@@ -26,7 +26,7 @@ public class TestCore {
         try {
             Catcher.getThingMonitor().registerThing(light);
             light.open();
-            Catcher.getThingMonitor().callService(light.getId(), "set_brightness_and_temperature", new Object[]{50, 40});
+            Catcher.getThingMonitor().callServiceAndNotify(light.getId(), "set_brightness_and_temperature", new Object[]{50, 40});
         } catch (IllegalThingException | NotFoundException e) {
             e.printStackTrace();
         }
@@ -38,7 +38,7 @@ public class TestCore {
         try {
             Catcher.getThingMonitor().registerThing(light);
             light.open();
-            Catcher.getThingMonitor().callService(light.getId(), "set_brightness_and_temperature", new Object[]{50, 40});
+            Catcher.getThingMonitor().callServiceAndNotify(light.getId(), "set_brightness_and_temperature", new Object[]{50, 40});
         } catch (IllegalThingException | NotFoundException e) {
             e.printStackTrace();
         }

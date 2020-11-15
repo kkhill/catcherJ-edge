@@ -1,4 +1,4 @@
-package com.kkhill.addons.rulengine.helper;
+package com.kkhill.addons.rulengine.condition;
 
 public class StateCondition extends Condition{
 
@@ -7,13 +7,15 @@ public class StateCondition extends Condition{
     private String to;
     private String on;
 
-    public StateCondition(String thing, String from, String to) {
+    public StateCondition(String conditionType, String thing, String from, String to) {
+        super(conditionType);
         this.thing = thing;
         this.from = from;
         this.to = to;
     }
 
-    public StateCondition(String thing, String on) {
+    public StateCondition(String conditionType, String thing, String on) {
+        super(conditionType);
         this.thing = thing;
         this.on = on;
     }
@@ -32,5 +34,10 @@ public class StateCondition extends Condition{
 
     public String getOn() {
         return on;
+    }
+
+    @Override
+    public boolean check() {
+        return false;
     }
 }
