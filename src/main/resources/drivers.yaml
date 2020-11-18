@@ -5,7 +5,7 @@ Demo: # driver name
   config:
     ip: 127.0.0.1
     port: 8080
-    name: hello
+    name: lovely
 
 Demo1:
   pkg: demo1

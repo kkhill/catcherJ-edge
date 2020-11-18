@@ -7,15 +7,13 @@ public class StateCondition extends Condition{
     private String to;
     private String on;
 
-    public StateCondition(String conditionType, String thing, String from, String to) {
-        super(conditionType);
+    public StateCondition(String thing, String from, String to) {
         this.thing = thing;
         this.from = from;
         this.to = to;
     }
 
-    public StateCondition(String conditionType, String thing, String on) {
-        super(conditionType);
+    public StateCondition(String thing, String on) {
         this.thing = thing;
         this.on = on;
     }
@@ -38,6 +36,6 @@ public class StateCondition extends Condition{
 
     @Override
     public boolean check() {
-        return false;
+        return true;
     }
 }

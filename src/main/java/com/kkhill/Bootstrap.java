@@ -17,6 +17,9 @@ public class Bootstrap {
 
     private static final Logger logger = LoggerFactory.getLogger(Bootstrap.class);
 
+    public static void test() {
+    }
+
     public static void main(String[] args) {
 
         try {
@@ -37,6 +40,9 @@ public class Bootstrap {
         registryDrivers();
         // run catcher
         Catcher.start();
+
+        // test code
+        test();
     }
 
     private static void registryAddons() throws FileNotFoundException {

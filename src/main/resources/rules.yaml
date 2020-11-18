@@ -1,6 +1,6 @@
 
 - name: rule1
-  event: state_changed
+  event: state_updated
   conditions:
     states:
       - thing: lovely

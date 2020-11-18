@@ -1,10 +1,8 @@
 package com.kkhill.addons.rulengine.condition;
 
-import com.kkhill.addons.rulengine.utils.RuleElement;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.thing.Property;
-import com.kkhill.core.thing.Thing;
 
 public class PropertyCondition<T> extends Condition {
 
@@ -13,8 +11,7 @@ public class PropertyCondition<T> extends Condition {
     private String operation;
     private Comparable<T> value;
 
-    public PropertyCondition(String conditionType, String thing, String property, String operation, Comparable<T> value) {
-        super(conditionType);
+    public PropertyCondition(String thing, String property, String operation, Comparable<T> value) {
         this.thing = thing;
         this.property = property;
         this.operation = operation;
@@ -29,27 +26,19 @@ public class PropertyCondition<T> extends Condition {
         return property;
     }
 
-    public String getOperation() {
-        return operation;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
     @Override
+    @SuppressWarnings("unchecked")
     public boolean check() {
 
         boolean res = false;
         try {
-            Thing thing = Catcher.getThingMonitor().getThing(this.thing);
-            Property property = thing.getProperty(this.property);
+            Property<T> property = Catcher.getThingMonitor().getThing(this.thing).getProperty(this.property);
             if(
                 (this.operation.equals("==") && this.value.compareTo((T) property.getValue()) == 0) ||
-                (this.operation.equals(">=") && this.value.compareTo((T) property.getValue()) >= 0) ||
-                (this.operation.equals(">") && this.value.compareTo((T) property.getValue()) > 0) ||
-                (this.operation.equals("<=") && this.value.compareTo((T) property.getValue()) <= 0) ||
-                (this.operation.equals("<") && this.value.compareTo((T) property.getValue()) < 0)
+                (this.operation.equals(">=") && this.value.compareTo((T) property.getValue()) <= 0) ||
+                (this.operation.equals(">") && this.value.compareTo((T) property.getValue()) < 0) ||
+                (this.operation.equals("<=") && this.value.compareTo((T) property.getValue()) >= 0) ||
+                (this.operation.equals("<") && this.value.compareTo((T) property.getValue()) > 0)
             ) res = true;
 
         } catch (NotFoundException e) {

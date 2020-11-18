@@ -64,7 +64,7 @@ public class Scheduler {
                         }
                     }
                     , 0, service.getInternal(), TimeUnit.SECONDS);
-            executor.submit(()->Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName()));
+//            executor.submit(()->Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName()));
         }
     }
 
@@ -73,8 +73,8 @@ public class Scheduler {
      */
     public void beat() {
 
-        Event e = new Event(EventType.PLATFORM, "heartbeat", null);
-        Catcher.getEventBus().fire(e);
+//        Event e = new Event(EventType.PLATFORM, "heartbeat", null);
+//        Catcher.getEventBus().fire(e);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 //        logger.info("heartbeat: {}", formatter.format(e.getTimestamp()));
     }

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -81,6 +80,7 @@ public class ThingMonitor {
         State state = getThing(id).getState();
         String oldState = state.getValue();
         String newState = state.updateValue();
+        System.out.println(id+"!!!test!!!!!"+oldState+"---"+newState);
         // do not notify if state is not changed
         if(oldState.equals(newState)) return;
 

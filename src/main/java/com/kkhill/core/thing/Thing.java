@@ -101,10 +101,10 @@ public abstract class Thing {
      */
     public String build() throws IllegalThingException {
 
-        // TODO: generate unique Id
+        // TODO: generate unique Id, use friendlyName instead
         // Id is
-        String id = UUID.randomUUID().toString().replace("-", "");
-        this.setId(id);
+//        String id = UUID.randomUUID().toString().replace("-", "");
+        this.setId(this.friendlyName);
 
         // extract state and properties of thing
         Field[] fields = this.getClass().getDeclaredFields();

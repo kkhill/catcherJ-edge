@@ -12,6 +12,8 @@ import com.kkhill.core.annotation.Service;
 import com.kkhill.core.annotation.State;
 import com.kkhill.drivers.demo.lib.Client;
 
+import java.util.concurrent.TimeUnit;
+
 public class Light extends Thing {
 
     private Client client;
@@ -23,7 +25,7 @@ public class Light extends Thing {
     private String vendor = "otcaix";
 
     @Property(name= PropertyName.BRIGHTNESS, description = "brightness")
-    private int brightness;
+    private int brightness = 20;
 
     @Property(name=PropertyName.TEMPERATURE, description = "temperature")
     private int temperature;
@@ -110,7 +112,7 @@ public class Light extends Thing {
     /**
      *  polling for new state and property
      */
-    @Service(name="update", description = "update data", poll = true, internal = 30)
+    @Service(name="update", description = "update data", poll = true, internal = 5)
     public void update() {
         this.state = this.client.state() ? StateName.ON : StateName.OFF;
         this.brightness = this.client.getBrightness();
@@ -129,5 +131,9 @@ public class Light extends Thing {
     public Light(String friendlyName, boolean available, String ip, String port) {
         super(friendlyName, available);
         this.client = new Client(ip, port);
+
+        // TODO: test rule engine
+        Catcher.getScheduler().schedule(this::open, 6, TimeUnit.SECONDS);
+
     }
 }

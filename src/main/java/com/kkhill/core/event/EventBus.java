@@ -30,10 +30,10 @@ public class EventBus {
             consumers = new ConcurrentLinkedQueue<>();
         }
         consumers.add(consumer);
+        this.bus.put(type, consumers);
     }
 
     public void fire(Event event) {
-
         Queue<EventConsumer> consumers = this.bus.get(event.getType());
         if (consumers == null) return;
         for(EventConsumer consumer : consumers) {

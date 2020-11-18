@@ -1,12 +1,7 @@
 package com.kkhill.addons.rulengine;
 
 import com.kkhill.addons.rulengine.action.Action;
-import com.kkhill.addons.rulengine.action.ActionType;
-import com.kkhill.addons.rulengine.action.ServiceAction;
 import com.kkhill.addons.rulengine.condition.Condition;
-import com.kkhill.addons.rulengine.condition.ConditionType;
-import com.kkhill.addons.rulengine.condition.PropertyCondition;
-import com.kkhill.addons.rulengine.condition.StateCondition;
 import com.kkhill.addons.rulengine.rule.IllegalRuleException;
 import com.kkhill.addons.rulengine.rule.Rule;
 import com.kkhill.addons.rulengine.utils.RuleParser;
@@ -54,12 +49,6 @@ public class RuleEngine implements Addon, EventConsumer {
         } catch (FileNotFoundException e) {
             logger.error("can not find rules.yaml");
             e.printStackTrace();
-        } catch (IllegalRuleException e) {
-            logger.error("illegal rule");
-            e.printStackTrace();
-        } catch (IllegalThingException e) {
-            logger.error("illegal thing");
-            e.printStackTrace();
         }
 
 
@@ -104,16 +93,20 @@ public class RuleEngine implements Addon, EventConsumer {
 
         for(Rule rule : this.rules) {
             if(!rule.getEvent().equals(event.getType())) continue;
-            if(event.getType().equals(EventType.STATE_UPDATED)) {
-
-            }
             // check conditions
             boolean satisfied = true;
             for(Condition condition : rule.getConditions()) {
-//                condition.
-                Object data = event.getData();
-
-
+                if(!condition.check()) {
+                    satisfied = false;
+                    break;
+                }
+            }
+            // if satisfied, execute actions
+            if(satisfied) {
+                logger.info("rule conditions satisfied: {}", rule.getFriendlyName());
+                for(Action action : rule.getActions()) {
+                    action.execute();
+                }
             }
         }
     }

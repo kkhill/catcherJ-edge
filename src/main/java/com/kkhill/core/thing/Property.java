@@ -4,13 +4,13 @@ import com.kkhill.core.exception.IllegalThingException;
 
 import java.lang.reflect.Field;
 
-public class Property {
+public class Property<T> {
 
     /** name is unique **/
     private String name;
     private String description;
     private String unitOfMeasurement;
-    private Object value;
+    private Comparable<T> value;
     private Thing thing;
     private Field field;
 
@@ -39,14 +39,15 @@ public class Property {
         return this.value;
     }
 
-    public Object updateValue() throws IllegalThingException{
+    @SuppressWarnings("unchecked")
+    public Object updateValue() throws IllegalThingException {
         try {
-            this.value = field.get(this.thing);
+            this.value = (Comparable<T>) field.get(this.thing);
         } catch (IllegalAccessException e) {
             throw new IllegalThingException(String.format(
                     "wrong mapping in property: %s", this.name));
         }
-        if(this.value == null) this.value = 0;
+        if(this.value == null) this.value = null;
         return this.value;
     }
 }
