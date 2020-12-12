@@ -102,7 +102,6 @@ public abstract class Thing {
     public String build() throws IllegalThingException {
 
         // TODO: generate unique Id, use friendlyName instead
-        // Id is
 //        String id = UUID.randomUUID().toString().replace("-", "");
         this.setId(this.friendlyName);
 
@@ -135,7 +134,7 @@ public abstract class Thing {
             com.kkhill.core.annotation.Service s = method.getAnnotation(com.kkhill.core.annotation.Service.class);
             // build service
             if(s != null) {
-                Service service = new Service(s.name(), s.description(), this, method);
+                Service service = new Service(s.name(), s.description(), this, method, s.internal());
                 if(s.poll()) {
                     service.enablePolling();
                     service.setInternal(service.getInternal());

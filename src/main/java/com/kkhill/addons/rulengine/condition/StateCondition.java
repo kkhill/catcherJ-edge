@@ -1,5 +1,9 @@
 package com.kkhill.addons.rulengine.condition;
 
+import com.kkhill.core.Catcher;
+import com.kkhill.core.exception.NotFoundException;
+import com.kkhill.core.event.dto.StateUpdatedEventData;
+
 public class StateCondition extends Condition{
 
     private String thing;
@@ -35,7 +39,17 @@ public class StateCondition extends Condition{
     }
 
     @Override
-    public boolean check() {
-        return true;
+    public boolean check(Object data) {
+
+        StateUpdatedEventData d = (StateUpdatedEventData)data;
+        if(d.getThingId().equals(this.thing)) {
+            try {
+                if(Catcher.getThingMonitor().getThing(this.thing).getState().getValue().equals(this.on)) return true;
+                if(d.getOldState().equals(this.from) && d.getNewState().equals(this.to)) return true;
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }

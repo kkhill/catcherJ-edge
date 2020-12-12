@@ -1,8 +1,8 @@
-package com.kkhill.drivers.demo.thing;
+package com.kkhill.drivers.demolight1.thing;
 
-import com.kkhill.utils.convention.PropertyName;
-import com.kkhill.utils.convention.ServiceName;
-import com.kkhill.utils.convention.StateName;
+import com.kkhill.utils.thing.PropertyName;
+import com.kkhill.utils.thing.ServiceName;
+import com.kkhill.utils.thing.StateName;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.exception.NotFoundException;
@@ -10,7 +10,7 @@ import com.kkhill.core.thing.Thing;
 import com.kkhill.core.annotation.Property;
 import com.kkhill.core.annotation.Service;
 import com.kkhill.core.annotation.State;
-import com.kkhill.drivers.demo.lib.Client;
+import com.kkhill.drivers.demolight1.lib.Client;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +25,7 @@ public class Light extends Thing {
     private String vendor = "otcaix";
 
     @Property(name= PropertyName.BRIGHTNESS, description = "brightness")
-    private int brightness = 20;
+    private int brightness = 60;
 
     @Property(name=PropertyName.TEMPERATURE, description = "temperature")
     private int temperature;
@@ -112,7 +112,7 @@ public class Light extends Thing {
     /**
      *  polling for new state and property
      */
-    @Service(name="update", description = "update data", poll = true, internal = 5)
+    @Service(name="update", description = "update data", poll = true, internal = 10)
     public void update() {
         this.state = this.client.state() ? StateName.ON : StateName.OFF;
         this.brightness = this.client.getBrightness();
@@ -124,8 +124,6 @@ public class Light extends Thing {
         } catch (NotFoundException | IllegalThingException  e) {
             e.printStackTrace();
         }
-
-        System.out.println("i had been invoked...");
     }
 
     public Light(String friendlyName, boolean available, String ip, String port) {
@@ -133,7 +131,7 @@ public class Light extends Thing {
         this.client = new Client(ip, port);
 
         // TODO: test rule engine
-        Catcher.getScheduler().schedule(this::open, 6, TimeUnit.SECONDS);
+        Catcher.getScheduler().schedule(this::open, 5, TimeUnit.SECONDS);
 
     }
 }

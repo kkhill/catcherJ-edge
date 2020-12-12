@@ -2,7 +2,8 @@ package com.kkhill.addons.rulengine.rule;
 
 import com.kkhill.addons.rulengine.action.Action;
 import com.kkhill.addons.rulengine.condition.Condition;
-import com.kkhill.utils.convention.StateName;
+import com.kkhill.core.event.Event;
+import com.kkhill.utils.thing.StateName;
 import com.kkhill.core.annotation.State;
 import com.kkhill.core.thing.Thing;
 
@@ -25,13 +26,19 @@ public class Rule extends Thing {
         this.state = StateName.ON;
     }
 
-    public boolean checkConditions() {
-
+    public boolean checkConditions(Event event) {
+        for(Condition condition : this.getConditions()) {
+            if(!condition.check(event.getData())) {
+                return false;
+            }
+        }
         return true;
     }
 
     public void executeActions() {
-
+        for(Action action : this.getActions()) {
+            action.execute();
+        }
     }
 
     public String getEvent() {

@@ -1,4 +1,4 @@
-package com.kkhill.drivers.demolight.lib;
+package com.kkhill.drivers.demolight2.lib;
 
 public class Client {
 

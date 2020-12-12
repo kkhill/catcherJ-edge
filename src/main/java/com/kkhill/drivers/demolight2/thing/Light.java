@@ -1,4 +1,4 @@
-package com.kkhill.drivers.demolight.thing;
+package com.kkhill.drivers.demolight2.thing;
 
 import com.kkhill.core.Catcher;
 import com.kkhill.core.annotation.Property;
@@ -7,10 +7,10 @@ import com.kkhill.core.annotation.State;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.thing.Thing;
-import com.kkhill.drivers.demolight.lib.Client;
-import com.kkhill.utils.convention.PropertyName;
-import com.kkhill.utils.convention.ServiceName;
-import com.kkhill.utils.convention.StateName;
+import com.kkhill.drivers.demolight2.lib.Client;
+import com.kkhill.utils.thing.PropertyName;
+import com.kkhill.utils.thing.ServiceName;
+import com.kkhill.utils.thing.StateName;
 
 public class Light extends Thing {
 
@@ -109,7 +109,7 @@ public class Light extends Thing {
     /**
      *  polling for new state and property
      */
-    @Service(name="update", description = "update data", poll = true, internal = 30)
+    @Service(name="update", description = "update data", poll = true, internal = 10)
     public void update() {
         this.state = this.client.state() ? StateName.ON : StateName.OFF;
         this.brightness = this.client.getBrightness();
@@ -121,8 +121,6 @@ public class Light extends Thing {
         } catch (NotFoundException | IllegalThingException  e) {
             e.printStackTrace();
         }
-
-        System.out.println("i had been invoked...");
     }
 
     public Light(String friendlyName, boolean available, String ip, String port) {

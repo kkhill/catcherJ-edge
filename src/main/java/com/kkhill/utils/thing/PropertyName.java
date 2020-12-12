@@ -1,4 +1,4 @@
-package com.kkhill.utils.convention;
+package com.kkhill.utils.thing;
 
 public final class PropertyName {
 

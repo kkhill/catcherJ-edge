@@ -4,9 +4,9 @@ import com.kkhill.utils.event.EventType;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventBus;
 import com.kkhill.core.exception.*;
-import com.kkhill.utils.event.PropertyUpdatedEventData;
-import com.kkhill.utils.event.ServiceCalledEventData;
-import com.kkhill.utils.event.StateUpdatedEventData;
+import com.kkhill.core.event.dto.PropertyUpdatedEventData;
+import com.kkhill.core.event.dto.ServiceCalledEventData;
+import com.kkhill.core.event.dto.StateUpdatedEventData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ public class ThingMonitor {
         String id = thing.build();
         things.put(id, thing);
         EventBus.getInstance().fire(new Event(EventType.THING, "registered", id));
-        logger.info("thing has been registered, name: {}, id: {}", thing.getFriendlyName(), id);
+        logger.debug("thing has been registered, name: {}, id: {}", thing.getFriendlyName(), id);
         return id;
     }
 
@@ -80,13 +80,12 @@ public class ThingMonitor {
         State state = getThing(id).getState();
         String oldState = state.getValue();
         String newState = state.updateValue();
-        System.out.println(id+"!!!test!!!!!"+oldState+"---"+newState);
         // do not notify if state is not changed
         if(oldState.equals(newState)) return;
 
         Object data = new StateUpdatedEventData(id, oldState, newState);
         EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, id, data));
-        logger.info("update thing state, id: {}, from {} to {}", id, oldState, newState);
+        logger.debug("update thing state, id: {}, from {} to {}", id, oldState, newState);
     }
 
     /**
@@ -112,7 +111,7 @@ public class ThingMonitor {
 
         Object data = new PropertyUpdatedEventData(id, name, oldValue, newValue);
         EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, id, data));
-        logger.info("update thing property, id: {}, from {} to {}", id, oldValue, newValue);
+        logger.info("update thing property, id: {}, property: {}, from {} to {}", id, name, oldValue, newValue);
     }
 
     /**
@@ -139,7 +138,7 @@ public class ThingMonitor {
             e.printStackTrace();
         }
         EventBus.getInstance().fire(new Event(EventType.SERVICE_CALLED, thingId, data));
-        logger.info("call thing service, id: {}, service: {}", thingId, service);
+        logger.debug("call thing service, id: {}, service: {}", thingId, service);
         return res;
     }
 

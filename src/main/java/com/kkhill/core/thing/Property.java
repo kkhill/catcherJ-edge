@@ -47,7 +47,6 @@ public class Property<T> {
             throw new IllegalThingException(String.format(
                     "wrong mapping in property: %s", this.name));
         }
-        if(this.value == null) this.value = null;
         return this.value;
     }
 }

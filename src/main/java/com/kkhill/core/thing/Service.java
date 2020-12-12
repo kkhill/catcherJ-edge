@@ -22,6 +22,11 @@ public class Service {
         this.thing = thing;
     }
 
+    public Service(String name, String description, Thing thing, Method method, int internal) {
+        this(name, description, thing, method);
+        this.internal = internal;
+    }
+
     public String getName() {
         return this.name;
     }

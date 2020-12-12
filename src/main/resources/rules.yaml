@@ -3,17 +3,16 @@
   event: state_updated
   conditions:
     states:
-      - thing: lovely
-#        on: on
+      - thing: demolight1
         from: "off"
         to: "on"
     properties:
-      - thing: lovely
+      - thing: demolight1
         property: brightness
-        operation: ">"  # > >= < <= in
+        operation: ">="  # > >= < <= in
         value: 50
 
   actions: # service name
     services:
-      - name: open
-        thing: lovely
+      - thing: demolight2
+        name: open

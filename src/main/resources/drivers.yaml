@@ -1,24 +1,17 @@
 
-Demo: # driver name
-  pkg: demo # pkg in com.kkhill.driver
+Demolight1: # driver name
+  pkg: demolight1 # pkg in com.kkhill.driver
   entry: DemoDriver # class name which extends plugin / addon / driver
   config:
     ip: 127.0.0.1
     port: 8080
-    name: lovely
+    name: hello
 
-Demo1:
-  pkg: demo1
-  entry: Demo1Driver
-  config:
-    ip: 127.0.0.1
-    port: 8080
-    name: word
-
-DemoLight:
-  pkg: demolight
-  entry: DemoLightDriver
+Demolight2:
+  pkg: demolight2
+  entry: DemoDriver
   config:
     ip: 127.0.0.1
     port: 8081
     name: word
+

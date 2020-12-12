@@ -1,14 +1,10 @@
 package com.kkhill.addons.rulengine;
 
-import com.kkhill.addons.rulengine.action.Action;
-import com.kkhill.addons.rulengine.condition.Condition;
-import com.kkhill.addons.rulengine.rule.IllegalRuleException;
 import com.kkhill.addons.rulengine.rule.Rule;
 import com.kkhill.addons.rulengine.utils.RuleParser;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventConsumer;
-import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.plugin.Addon;
 import com.kkhill.utils.event.EventType;
 import org.slf4j.Logger;
@@ -93,20 +89,9 @@ public class RuleEngine implements Addon, EventConsumer {
 
         for(Rule rule : this.rules) {
             if(!rule.getEvent().equals(event.getType())) continue;
-            // check conditions
-            boolean satisfied = true;
-            for(Condition condition : rule.getConditions()) {
-                if(!condition.check()) {
-                    satisfied = false;
-                    break;
-                }
-            }
-            // if satisfied, execute actions
-            if(satisfied) {
+            if(rule.checkConditions(event)) {
                 logger.info("rule conditions satisfied: {}", rule.getFriendlyName());
-                for(Action action : rule.getActions()) {
-                    action.execute();
-                }
+                rule.executeActions();
             }
         }
     }

@@ -1,13 +1,13 @@
-package com.kkhill.drivers.demolight;
+package com.kkhill.drivers.demolight2;
 
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.plugin.Driver;
-import com.kkhill.drivers.demolight.thing.Light;
+import com.kkhill.drivers.demolight2.thing.Light;
 
 import java.util.Map;
 
-public class DemoLightDriver extends Driver {
+public class DemoDriver extends Driver {
 
     /**
      *
@@ -33,7 +33,7 @@ public class DemoLightDriver extends Driver {
         int port = (int)configData.get("port");
 
         // add things to core system.
-        Light light = new Light("lovely1", true, ip, String.valueOf(port));
+        Light light = new Light("demolight2", true, ip, String.valueOf(port));
         try {
             Catcher.getThingMonitor().registerThing(light);
         } catch (IllegalThingException e) {

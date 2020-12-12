@@ -3,7 +3,7 @@ package com.kkhill.core;
 import com.kkhill.Bootstrap;
 import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.exception.IllegalThingException;
-import com.kkhill.drivers.demo.thing.Light;
+import com.kkhill.drivers.demolight1.thing.Light;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;

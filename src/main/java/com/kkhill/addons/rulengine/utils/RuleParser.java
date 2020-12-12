@@ -13,13 +13,11 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RuleParser {
 
     private final Logger logger = LoggerFactory.getLogger(RuleParser.class);
 
-    @SuppressWarnings("unchecked")
     public List<Rule> parseRules(List<LinkedHashMap<String, Object>> data) {
         List<Rule> rules = new ArrayList<>();
         for (LinkedHashMap<String, Object> entry : data) {
@@ -34,7 +32,6 @@ public class RuleParser {
         return rules;
     }
 
-    // TODO 类型推断
     @SuppressWarnings("unchecked")
     public Rule parseRule(LinkedHashMap<String, Object> data) throws IllegalRuleException {
 
@@ -45,13 +42,20 @@ public class RuleParser {
 
         String name = (String) data.get("name");
         String event = (String) data.get("event");
-        // parse conditions
-        LinkedHashMap<String, Object> conditionData = (LinkedHashMap<String, Object>) data.get("conditions");
-        if(conditionData == null) throw new IllegalRuleException("empty conditions");
+        List<Condition> conditions = parseConditions((LinkedHashMap<String, Object>) data.get("conditions"));
+        List<Action> actions = parseActions((LinkedHashMap<String, Object>) data.get("actions"));
+
+        return new Rule(name, true, event, conditions, actions);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Condition> parseConditions(LinkedHashMap<String, Object> data) throws IllegalRuleException {
+
+        if(data == null) throw new IllegalRuleException("empty conditions");
         List<Condition> conditions = new ArrayList<>();
 
-        for(String key: conditionData.keySet()) {
-            List<LinkedHashMap<String, Object>> c =  (List<LinkedHashMap<String, Object>>) conditionData.get(key);
+        for(String key: data.keySet()) {
+            List<LinkedHashMap<String, Object>> c =  (List<LinkedHashMap<String, Object>>) data.get(key);
             for(LinkedHashMap<String, Object> cc : c) {
                 Condition condition = null;
                 if(RuleElement.STATES.equals(key)) {
@@ -66,23 +70,23 @@ public class RuleParser {
                     // property condition item
                     String op = (String) cc.get(RuleElement.OPERATION);
                     if(op == null) throw new IllegalRuleException("missing property comparable operation");
-
-
-
-                    condition = new PropertyCondition((String)cc.get("thing"), (String)cc.get("property"),
-                            op, (Comparable) cc.get("value"));
+                    condition = new PropertyCondition<>((String)cc.get("thing"), (String)cc.get("property"),
+                            op, (Comparable<Object>) cc.get("value"));
                 }
                 if(condition != null) conditions.add(condition);
             }
         }
-        // parse actions
-        LinkedHashMap<String, Map<String, Object>> actionData = (LinkedHashMap<String, Map<String, Object>>) data.get("actions");
-        if(conditionData == null) {
-            throw new IllegalRuleException("empty actions");
-        }
+
+        return conditions;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Action> parseActions(LinkedHashMap<String, Object> data) throws IllegalRuleException {
+
+        if(data == null) { throw new IllegalRuleException("empty actions"); }
         List<Action> actions = new ArrayList<>();
-        for(String key: actionData.keySet()) {
-            List<LinkedHashMap<String, Object>> a =  (List<LinkedHashMap<String, Object>>) actionData.get(key);
+        for(String key: data.keySet()) {
+            List<LinkedHashMap<String, Object>> a =  (List<LinkedHashMap<String, Object>>) data.get(key);
             for(LinkedHashMap<String, Object> aa : a) {
                 Action action = null;
                 if("services".equals(key)) {
@@ -91,6 +95,6 @@ public class RuleParser {
                 actions.add(action);
             }
         }
-        return new Rule(name, true, event, conditions, actions);
+        return actions;
     }
 }

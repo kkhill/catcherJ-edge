@@ -64,7 +64,6 @@ public class Scheduler {
                         }
                     }
                     , 0, service.getInternal(), TimeUnit.SECONDS);
-//            executor.submit(()->Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName()));
         }
     }
 

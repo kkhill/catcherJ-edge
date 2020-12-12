@@ -28,7 +28,7 @@ public class PropertyCondition<T> extends Condition {
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean check() {
+    public boolean check(Object data) {
 
         boolean res = false;
         try {

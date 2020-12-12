@@ -1,11 +1,11 @@
-package com.kkhill.drivers.demo.lib;
+package com.kkhill.drivers.demolight1.lib;
 
 public class Client {
 
     private String ip;
     private String port;
     private boolean state;
-    private int brightness;
+    private int brightness = 70;
     private int temperature;
 
     public Client(String ip, String port) {
