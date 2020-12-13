@@ -4,5 +4,5 @@ rulengine:
   entry: RuleEngine
 
 api:
-  pkg: api
-  entry: ApiAddon
+  pkg: http
+  entry: HttpAddon

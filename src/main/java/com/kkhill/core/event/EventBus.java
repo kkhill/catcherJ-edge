@@ -1,6 +1,6 @@
 package com.kkhill.core.event;
 
-import com.kkhill.core.scheduler.Scheduler;
+import com.kkhill.core.Catcher;
 
 import java.util.Map;
 import java.util.Queue;
@@ -37,7 +37,7 @@ public class EventBus {
         Queue<EventConsumer> consumers = this.bus.get(event.getType());
         if (consumers == null) return;
         for(EventConsumer consumer : consumers) {
-            Scheduler.getServiceExecutor().submit(() -> consumer.handle(event));
+            Catcher.getScheduler().getExecutor().submit(() -> consumer.handle(event));
         }
     }
 }

@@ -131,7 +131,7 @@ public class Light extends Thing {
         this.client = new Client(ip, port);
 
         // TODO: test rule engine
-        Catcher.getScheduler().schedule(this::open, 5, TimeUnit.SECONDS);
+        Catcher.getScheduler().getExecutor().schedule(this::open, 5, TimeUnit.SECONDS);
 
     }
 }
