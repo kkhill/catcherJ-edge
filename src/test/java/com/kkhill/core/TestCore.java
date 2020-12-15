@@ -4,6 +4,7 @@ import com.kkhill.Bootstrap;
 import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.drivers.demolight1.thing.Light;
+import com.kkhill.utils.thing.ThingType;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -22,7 +23,7 @@ public class TestCore {
 
     @Test
     public void testDemoDriver() {
-        Light light = new Light("lovely", true, "127", "8000");
+        Light light = new Light(ThingType.LIGHT, "lovely", "a test light", "127", "8000");
         try {
             Catcher.getThingMonitor().registerThing(light);
             light.open();
@@ -34,7 +35,7 @@ public class TestCore {
     }
 
     public static void testSingleDriver() {
-        Light light = new Light("lovely", true, "127", "8000");
+        Light light = new Light(ThingType.LIGHT, "lovely", "a test light", "127", "8000");
         try {
             Catcher.getThingMonitor().registerThing(light);
             light.open();

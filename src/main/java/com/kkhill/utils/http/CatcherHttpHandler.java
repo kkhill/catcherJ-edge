@@ -1,13 +1,11 @@
 package com.kkhill.utils.http;
 
-import com.kkhill.addons.rulengine.RuleEngine;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class CatcherHttpHandler implements HttpHandler {
 
@@ -28,15 +26,15 @@ public class CatcherHttpHandler implements HttpHandler {
     }
 
     public void get(HttpExchange httpExchange) throws IOException {
-        logger.error("GET method is not implemented");
+        logger.debug("GET method is not implemented");
     }
     public void post(HttpExchange httpExchange) throws IOException {
-        logger.error("POST method is not implemented");
+        logger.debug("POST method is not implemented");
     }
     public void delete(HttpExchange httpExchange) throws IOException {
-        logger.error("DELETE method is not implemented");
+        logger.debug("DELETE method is not implemented");
     }
     public void put(HttpExchange httpExchange) throws IOException {
-        logger.error("PUT method is not implemented");
+        logger.debug("PUT method is not implemented");
     }
 }

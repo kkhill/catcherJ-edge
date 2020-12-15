@@ -7,12 +7,13 @@ public class Service {
 
     public static final int DEFAULT_POLL_INTERNAL = 30;
 
+    // TODO: service parameters
     private String name;
     private String description;
     private Method method;
     private Thing thing;
     private boolean poll;
-    private int internal = DEFAULT_POLL_INTERNAL;
+    private int pollingInternal = DEFAULT_POLL_INTERNAL;
     private boolean push;
 
     public Service(String name, String description, Thing thing, Method method) {
@@ -24,7 +25,7 @@ public class Service {
 
     public Service(String name, String description, Thing thing, Method method, int internal) {
         this(name, description, thing, method);
-        this.internal = internal;
+        this.pollingInternal = internal;
     }
 
     public String getName() {
@@ -66,12 +67,12 @@ public class Service {
         this.poll = true;
     }
 
-    public int getInternal() {
-        return internal;
+    public int getPollingInternal() {
+        return pollingInternal;
     }
 
-    public void setInternal(int internal) {
-        this.internal = internal;
+    public void setPollingInternal(int internal) {
+        this.pollingInternal = internal;
     }
 
     public void enablePushing() {

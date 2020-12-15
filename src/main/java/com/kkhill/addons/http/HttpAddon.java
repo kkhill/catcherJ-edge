@@ -1,7 +1,6 @@
 package com.kkhill.addons.http;
 
 import com.kkhill.addons.http.handler.TestHandler;
-import com.kkhill.addons.http.handler.ThingHandler;
 import com.kkhill.addons.http.handler.ThingsHandler;
 import com.kkhill.addons.http.server.CatcherHttpServer;
 import com.kkhill.core.Catcher;
@@ -16,7 +15,7 @@ public class HttpAddon implements Addon {
     public boolean load(Object data) {
 
         try {
-            CatcherHttpServer server = new CatcherHttpServer("httpserver", true);
+            CatcherHttpServer server = new CatcherHttpServer();
             Catcher.getThingMonitor().registerThing(server);
             registryHttpApi();
         } catch (IllegalThingException | IOException | NotFoundException e) {

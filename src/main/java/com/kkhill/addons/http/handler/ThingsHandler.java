@@ -24,10 +24,13 @@ public class ThingsHandler extends CatcherHttpHandler {
             Map<String, Object> t = new HashMap<>();
             t.put("id", thing.getId());
             t.put("name", thing.getFriendlyName());
+            t.put("type", thing.getType());
+            t.put("state", thing.getState().getValue());
+
             List<Map<String, String>> props = new ArrayList<>();
             for(String p : thing.getProperties().keySet()) {
                 Map<String, String> prop = new HashMap<>();
-                prop.put("name", thing.getProperties().get(p).getName());
+                prop.put("name", p);
                 prop.put("description", thing.getProperties().get(p).getDescription());
                 prop.put("value", String.valueOf(thing.getProperties().get(p).getValue()));
                 prop.put("unitOfMeasurement", thing.getProperties().get(p).getUnitOfMeasurement());
@@ -35,13 +38,23 @@ public class ThingsHandler extends CatcherHttpHandler {
             }
             t.put("properties", props);
 
+            List<Map<String, String>> services = new ArrayList<>();
+            for(String s : thing.getServices().keySet()) {
+                Map<String, String> service = new HashMap<>();
+                service.put("name", s);
+                service.put("description", thing.getService(s).getDescription());
+                services.add(service);
+            }
+            t.put("services", services);
+
             data.add(t);
         }
-        ObjectMapper mapper = new ObjectMapper();
-        OutputStream response = httpExchange.getResponseBody();
-        response.write(mapper.writeValueAsBytes(data));
 
         httpExchange.sendResponseHeaders(200, 0);
+        OutputStream response = httpExchange.getResponseBody();
+        ObjectMapper mapper = new ObjectMapper();
+        response.write(mapper.writeValueAsBytes(data));
+
         response.close();
     }
 }

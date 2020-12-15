@@ -4,6 +4,7 @@ import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.plugin.Driver;
 import com.kkhill.drivers.demolight2.thing.Light;
+import com.kkhill.utils.thing.ThingType;
 
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class DemoDriver extends Driver {
         int port = (int)configData.get("port");
 
         // add things to core system.
-        Light light = new Light("demolight2", true, ip, String.valueOf(port));
+        Light light = new Light(ThingType.LIGHT, "demolight2", "a light", ip, String.valueOf(port));
         try {
             Catcher.getThingMonitor().registerThing(light);
         } catch (IllegalThingException e) {

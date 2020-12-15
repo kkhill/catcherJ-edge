@@ -49,12 +49,8 @@ public class Light extends Thing {
      */
 
 
-    public Light(String friendlyName, boolean available, String ip, String port) {
-        super(friendlyName, available);
+    public Light(String type, String friendlyName, String description, String ip, String port) {
+        super(type, friendlyName, description);
         this.client = new Client(ip, port);
-
-        // TODO: test rule engine
-
-
     }
 }

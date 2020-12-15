@@ -1,5 +1,6 @@
 
 - name: rule1
+  description: a simple rule
   event: state_updated
   conditions:
     states:

@@ -18,8 +18,9 @@ public class Rule extends Thing {
     @State(description = "state")
     private String state;
 
-    public Rule(String friendlyName, boolean available, String event, List<Condition> conditions, List<Action> actions) {
-        super(friendlyName, available);
+    public Rule(String type, String friendlyName, String description,
+                String event, List<Condition> conditions, List<Action> actions) {
+        super(type, friendlyName, description);
         this.event = event;
         this.conditions = conditions;
         this.actions = actions;

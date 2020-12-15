@@ -7,6 +7,7 @@ import com.kkhill.addons.rulengine.condition.PropertyCondition;
 import com.kkhill.addons.rulengine.condition.StateCondition;
 import com.kkhill.addons.rulengine.rule.IllegalRuleException;
 import com.kkhill.addons.rulengine.rule.Rule;
+import com.kkhill.utils.thing.ThingType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,16 +37,18 @@ public class RuleParser {
     public Rule parseRule(LinkedHashMap<String, Object> data) throws IllegalRuleException {
 
         if(!data.containsKey("name")) throw new IllegalRuleException("no rule name");
+        if(!data.containsKey("description")) throw new IllegalRuleException("no description");
         if(!data.containsKey("event")) throw new IllegalRuleException("no event");
         if(!data.containsKey("conditions")) throw new IllegalRuleException("no conditions");
         if(!data.containsKey("actions")) throw new IllegalRuleException("no actions");
 
         String name = (String) data.get("name");
         String event = (String) data.get("event");
+        String description = (String) data.get("description");
         List<Condition> conditions = parseConditions((LinkedHashMap<String, Object>) data.get("conditions"));
         List<Action> actions = parseActions((LinkedHashMap<String, Object>) data.get("actions"));
 
-        return new Rule(name, true, event, conditions, actions);
+        return new Rule(ThingType.RULE, name, description, event, conditions, actions);
     }
 
     @SuppressWarnings("unchecked")
