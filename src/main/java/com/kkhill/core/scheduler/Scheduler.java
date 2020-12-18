@@ -61,7 +61,7 @@ public class Scheduler {
                             e.printStackTrace();
                         }
                     }
-                    , 0, service.getPollingInternal(), TimeUnit.SECONDS);
+                    , 0, service.getPollInternal(), TimeUnit.SECONDS);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.kkhill.drivers.demolight1.thing;
 
+import com.kkhill.core.annotation.ServiceParam;
 import com.kkhill.utils.thing.PropertyName;
 import com.kkhill.utils.thing.ServiceName;
 import com.kkhill.utils.thing.StateName;
@@ -77,7 +78,7 @@ public class Light extends Thing {
     }
 
     @Service(name="set_brightness", description = "decease brightness")
-    public void setBrightness(int brightness) {
+    public void setBrightness(@ServiceParam(name="brightness") int brightness) {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {
@@ -112,7 +113,7 @@ public class Light extends Thing {
     /**
      *  polling for new state and property
      */
-    @Service(name="update", description = "update data", poll = true, pollingInternal = 10)
+    @Service(name="update", description = "update data", poll = true, pollInternal = 10)
     public void update() {
         this.state = this.client.state() ? StateName.ON : StateName.OFF;
         this.brightness = this.client.getBrightness();
@@ -126,8 +127,8 @@ public class Light extends Thing {
         }
     }
 
-    public Light(String type, String friendlyName, String description, String ip, String port) {
-        super(type, friendlyName, description);
+    public Light(String type, String name, String description, String ip, String port) {
+        super(type, name, description);
         this.client = new Client(ip, port);
         // TODO: test rule engine
 //        Catcher.getScheduler().getExecutor().schedule(this::open, 5, TimeUnit.SECONDS);

@@ -2,18 +2,27 @@ package com.kkhill.core.thing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class Service {
 
     public static final int DEFAULT_POLL_INTERNAL = 30;
 
-    // TODO: service parameters
+
+    /** human-readable **/
     private String name;
+    /** human-readable **/
     private String description;
+    /** real executor **/
     private Method method;
+    /** identity who's method **/
     private Thing thing;
+    /** parameters **/
+    private List<ServiceParam> parameters;
+    /** poll service **/
     private boolean poll;
-    private int pollingInternal = DEFAULT_POLL_INTERNAL;
+    private int pollInternal = DEFAULT_POLL_INTERNAL;
+    /** push service **/
     private boolean push;
 
     public Service(String name, String description, Thing thing, Method method) {
@@ -25,7 +34,7 @@ public class Service {
 
     public Service(String name, String description, Thing thing, Method method, int internal) {
         this(name, description, thing, method);
-        this.pollingInternal = internal;
+        this.pollInternal = internal;
     }
 
     public String getName() {
@@ -42,6 +51,14 @@ public class Service {
 
     public String getThingId() {
         return this.thing.getId();
+    }
+
+    public List<ServiceParam> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(List<ServiceParam> parameters) {
+        this.parameters = parameters;
     }
 
     /**
@@ -67,12 +84,12 @@ public class Service {
         this.poll = true;
     }
 
-    public int getPollingInternal() {
-        return pollingInternal;
+    public int getPollInternal() {
+        return pollInternal;
     }
 
-    public void setPollingInternal(int internal) {
-        this.pollingInternal = internal;
+    public void setPollInternal(int internal) {
+        this.pollInternal = internal;
     }
 
     public void enablePushing() {

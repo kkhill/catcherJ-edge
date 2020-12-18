@@ -49,8 +49,8 @@ public class Light extends Thing {
      */
 
 
-    public Light(String type, String friendlyName, String description, String ip, String port) {
-        super(type, friendlyName, description);
+    public Light(String type, String name, String description, String ip, String port) {
+        super(type, name, description);
         this.client = new Client(ip, port);
     }
 }

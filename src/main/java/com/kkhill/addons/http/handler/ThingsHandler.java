@@ -2,12 +2,15 @@ package com.kkhill.addons.http.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkhill.core.Catcher;
+import com.kkhill.core.thing.Service;
+import com.kkhill.core.thing.ServiceParam;
 import com.kkhill.core.thing.Thing;
 import com.kkhill.utils.http.CatcherHttpHandler;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,11 +41,20 @@ public class ThingsHandler extends CatcherHttpHandler {
             }
             t.put("properties", props);
 
-            List<Map<String, String>> services = new ArrayList<>();
+            List<Map<String, Object>> services = new ArrayList<>();
             for(String s : thing.getServices().keySet()) {
-                Map<String, String> service = new HashMap<>();
+                Map<String, Object> service = new HashMap<>();
                 service.put("name", s);
                 service.put("description", thing.getService(s).getDescription());
+                List<Map<String, String>> parameters = new ArrayList<>();
+                for(ServiceParam sp : thing.getService(s).getParameters()) {
+                    Map<String, String> m = new HashMap<>();
+                    m.put("name", sp.getName());
+                    m.put("type", sp.getType());
+                    m.put("description", sp.getDescription());
+                    parameters.add(m);
+                }
+                service.put("parameters", parameters);
                 services.add(service);
             }
             t.put("services", services);

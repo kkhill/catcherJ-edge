@@ -5,9 +5,8 @@ import com.kkhill.core.exception.IllegalThingException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.lang.reflect.Parameter;
+import java.util.*;
 
 public abstract class Thing {
 
@@ -18,7 +17,7 @@ public abstract class Thing {
     /** services of unavailable things will not be called **/
     private boolean available;
     /** human-readable **/
-    private String friendlyName;
+    private String name;
     /** human-readable **/
     private String description;
     /** basic elements of thing, state, property and service **/
@@ -26,9 +25,9 @@ public abstract class Thing {
     private Map<String, Property> properties;
     private Map<String, Service> services;
 
-    public Thing(String type, String friendlyName, String description) {
+    public Thing(String type, String name, String description) {
         this.type = type;
-        this.friendlyName = friendlyName;
+        this.name = name;
         this.description = description;
     }
 
@@ -41,7 +40,7 @@ public abstract class Thing {
     }
 
     public String getFriendlyName() {
-        return this.friendlyName;
+        return this.name;
     }
 
     public String getType() {
@@ -142,7 +141,7 @@ public abstract class Thing {
                 this.addProperty(property);
             }
         }
-        if(stateNum == 0) throw new IllegalThingException("a thing must have a state field");
+        if(stateNum == 0) throw new IllegalThingException("a thing must have one state field");
 
         // extract services and polling method of a thing
         Method[] methods = this.getClass().getDeclaredMethods();
@@ -151,13 +150,21 @@ public abstract class Thing {
             com.kkhill.core.annotation.Service s = method.getAnnotation(com.kkhill.core.annotation.Service.class);
             // build service
             if(s != null) {
-                Service service = new Service(s.name(), s.description(), this, method, s.pollingInternal());
+                Service service = new Service(s.name(), s.description(), this, method, s.pollInternal());
                 if(s.poll()) {
                     service.enablePolling();
-                    service.setPollingInternal(s.pollingInternal());
+                    service.setPollInternal(s.pollInternal());
                     // add to scheduler
                     Catcher.getScheduler().addPolledService(service);
                 }
+                List<ServiceParam> sps = new ArrayList<>();
+                for(Parameter p : method.getParameters()) {
+                    com.kkhill.core.annotation.ServiceParam sp = p.getAnnotation(com.kkhill.core.annotation.ServiceParam.class);
+                    if(sp != null) {
+                        sps.add(new ServiceParam(sp.name(), sp.type(), sp.description()));
+                    }
+                }
+                service.setParameters(sps);
                 this.addService(service);
             }
         }

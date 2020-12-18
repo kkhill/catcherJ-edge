@@ -1,18 +1,15 @@
 package com.kkhill.core.annotation;
 
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Service {
+public @interface ServiceParam {
 
     String name();
     String description() default "";
-    boolean poll() default false;
-    boolean push() default false;
-    int pollInternal() default com.kkhill.core.thing.Service.DEFAULT_POLL_INTERNAL;
+    String type() default "";
 }
