@@ -11,6 +11,6 @@ import java.lang.annotation.Target;
 public @interface Property {
 
     String name();
-    String description() default "";
-    String unitOfMeasurement() default "";
+    String description() default "unknown";
+    String unitOfMeasurement() default "unknown";
 }

@@ -161,7 +161,7 @@ public abstract class Thing {
                 for(Parameter p : method.getParameters()) {
                     com.kkhill.core.annotation.ServiceParam sp = p.getAnnotation(com.kkhill.core.annotation.ServiceParam.class);
                     if(sp != null) {
-                        sps.add(new ServiceParam(sp.name(), sp.type(), sp.description()));
+                        sps.add(new ServiceParam(sp.name(), p.getType().getSimpleName(), sp.description()));
                     }
                 }
                 service.setParameters(sps);

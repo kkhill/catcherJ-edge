@@ -10,6 +10,5 @@ import java.lang.annotation.Target;
 public @interface ServiceParam {
 
     String name();
-    String description() default "";
-    String type() default "";
+    String description() default "unknown";
 }

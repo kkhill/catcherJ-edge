@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 public @interface Service {
 
     String name();
-    String description() default "";
+    String description() default "unknown";
     boolean poll() default false;
     boolean push() default false;
     int pollInternal() default com.kkhill.core.thing.Service.DEFAULT_POLL_INTERNAL;
