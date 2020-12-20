@@ -1,7 +1,5 @@
 package com.kkhill.addons.http.resources;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkhill.addons.http.utils.ThingUtil;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.thing.Thing;
@@ -19,15 +17,13 @@ public class ThingsResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public byte[] things() throws JsonProcessingException {
+    public List<Object> things() {
 
         Map<String, Thing> things = Catcher.getThingMonitor().getThings();
         List<Object> data = new ArrayList<>();
         for(String key : things.keySet()) {
-            data.add(ThingUtil.extractThing(things.get(key)));
+            data.add(ThingUtil.extractThingDTO(things.get(key)));
         }
-
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsBytes(data);
+        return data;
     }
 }

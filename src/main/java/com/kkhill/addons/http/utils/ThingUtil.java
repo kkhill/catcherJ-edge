@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class ThingUtil {
 
-    public static Object extractThing(Thing thing) {
+    public static Map<String, Object> extractThingDTO(Thing thing) {
 
         Map<String, Object> t = new HashMap<>();
         t.put("id", thing.getId());

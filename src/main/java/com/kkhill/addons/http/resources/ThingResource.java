@@ -1,8 +1,5 @@
 package com.kkhill.addons.http.resources;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.kkhill.addons.http.utils.ThingUtil;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.NotFoundException;
@@ -16,19 +13,16 @@ import javax.ws.rs.core.MediaType;
 public class ThingResource {
 
     @GET
-//    @Path("{id}")
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public TestPOJO thing(String id) throws JsonProcessingException {
+    public Object thing(String id) {
 
-//        Object data;
-//        try {
-//            data = ThingUtil.extractThing(Catcher.getThingMonitor().getThing(id));
-//        } catch (NotFoundException e) {
-//            data = "no such thing";
-//        }
-//        ObjectMapper mapper = new ObjectMapper();
-//        return mapper.writeValueAsBytes(data);
-        return new TestPOJO("123");
+        Object data;
+        try {
+            data = ThingUtil.extractThingDTO(Catcher.getThingMonitor().getThing(id));
+        } catch (NotFoundException e) {
+            data = "no such thing";
+        }
+        return data;
     }
-
 }

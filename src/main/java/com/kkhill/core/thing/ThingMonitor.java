@@ -4,9 +4,9 @@ import com.kkhill.utils.event.EventType;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventBus;
 import com.kkhill.core.exception.*;
-import com.kkhill.core.event.dto.PropertyUpdatedEventData;
-import com.kkhill.core.event.dto.ServiceCalledEventData;
-import com.kkhill.core.event.dto.StateUpdatedEventData;
+import com.kkhill.utils.event.dto.PropertyUpdatedEventData;
+import com.kkhill.utils.event.dto.ServiceCalledEventData;
+import com.kkhill.utils.event.dto.StateUpdatedEventData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
