@@ -16,7 +16,7 @@ public class Rule extends Thing {
     private List<Action> actions;
 
     @State(description = "state")
-    private String state;
+    public String state;
 
     public Rule(String type, String name, String description,
                 String event, List<Condition> conditions, List<Action> actions) {

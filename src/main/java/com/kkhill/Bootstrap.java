@@ -23,13 +23,11 @@ public class Bootstrap {
 
     public static void main(String[] args) {
 
-//        Addon p = (Addon)loadPlugin(String.format("%s.%s.%s", addonPkgPath, pkg, addon));
-
-//        try {
-//            start();
-//        } catch (FileNotFoundException  e) {
-//            e.printStackTrace();
-//        }
+        try {
+            start();
+        } catch (FileNotFoundException  e) {
+            e.printStackTrace();
+        }
     }
 
     public static void start() throws FileNotFoundException {

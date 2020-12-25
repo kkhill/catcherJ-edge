@@ -20,16 +20,16 @@ public class Light extends Thing {
     private Client client;
 
     @State(description = "state")
-    private String state;
+    public String state;
 
     @Property(name="vendor", description = "vendor name")
-    private String vendor = "otcaix";
+    public String vendor = "otcaix";
 
     @Property(name= PropertyName.BRIGHTNESS, description = "brightness")
-    private int brightness = 60;
+    public int brightness = 60;
 
     @Property(name=PropertyName.TEMPERATURE, description = "temperature")
-    private int temperature;
+    public int temperature;
 
     @Service(name="open", description = "open the light")
     public void open() {

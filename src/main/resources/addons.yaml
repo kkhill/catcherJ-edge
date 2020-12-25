@@ -3,6 +3,6 @@ automation:
   pkg: automation
   entry: Automation
 
-#api:
-#  pkg: http
-#  entry: HttpAddon
+api:
+  pkg: http
+  entry: HttpAddon
