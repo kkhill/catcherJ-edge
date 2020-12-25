@@ -13,14 +13,10 @@ public class HttpAddon implements Addon {
     @Override
     public boolean load(Object data) {
 
-        try {
-            server = new CatcherHttpServer();
-            server.resourceConfig.packages("com.kkhill.addons.http.resources");
-            server.start();
-            Catcher.getThingMonitor().registerThing(server);
-        } catch (IllegalThingException e) {
-            e.printStackTrace();
-        }
+        server = new CatcherHttpServer();
+        server.resourceConfig.packages("com.kkhill.addons.http.resources");
+        server.start();
+//            Catcher.getThingMonitor().registerThing(server);
 
         System.out.println("http server had been started");
         return false;

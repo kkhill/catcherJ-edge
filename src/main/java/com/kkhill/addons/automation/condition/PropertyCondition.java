@@ -1,4 +1,4 @@
-package com.kkhill.addons.rulengine.condition;
+package com.kkhill.addons.automation.condition;
 
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.NotFoundException;

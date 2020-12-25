@@ -1,7 +1,7 @@
-package com.kkhill.addons.rulengine.rule;
+package com.kkhill.addons.automation.rule;
 
-import com.kkhill.addons.rulengine.action.Action;
-import com.kkhill.addons.rulengine.condition.Condition;
+import com.kkhill.addons.automation.action.Action;
+import com.kkhill.addons.automation.condition.Condition;
 import com.kkhill.core.event.Event;
 import com.kkhill.utils.thing.StateName;
 import com.kkhill.core.annotation.State;

@@ -126,7 +126,7 @@ public abstract class Thing {
         Field[] fields = this.getClass().getDeclaredFields();
         int stateNum = 0;
         for(Field field : fields) {
-            field.setAccessible(true);
+//            field.setAccessible(true);
             com.kkhill.core.annotation.State s = field.getAnnotation(com.kkhill.core.annotation.State.class);
             com.kkhill.core.annotation.Property p = field.getAnnotation(com.kkhill.core.annotation.Property.class);
             // build state

@@ -1,12 +1,12 @@
-package com.kkhill.addons.rulengine.utils;
+package com.kkhill.addons.automation.utils;
 
-import com.kkhill.addons.rulengine.action.Action;
-import com.kkhill.addons.rulengine.action.ServiceAction;
-import com.kkhill.addons.rulengine.condition.Condition;
-import com.kkhill.addons.rulengine.condition.PropertyCondition;
-import com.kkhill.addons.rulengine.condition.StateCondition;
-import com.kkhill.addons.rulengine.rule.IllegalRuleException;
-import com.kkhill.addons.rulengine.rule.Rule;
+import com.kkhill.addons.automation.action.Action;
+import com.kkhill.addons.automation.action.ServiceAction;
+import com.kkhill.addons.automation.condition.Condition;
+import com.kkhill.addons.automation.condition.PropertyCondition;
+import com.kkhill.addons.automation.condition.StateCondition;
+import com.kkhill.addons.automation.rule.IllegalRuleException;
+import com.kkhill.addons.automation.rule.Rule;
 import com.kkhill.utils.thing.ThingType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

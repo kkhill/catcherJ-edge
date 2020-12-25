@@ -1,5 +1,6 @@
 package com.kkhill;
 
+import com.kkhill.core.plugin.Addon;
 import com.kkhill.utils.config.PluginConfig;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalPluginConfig;
@@ -22,11 +23,13 @@ public class Bootstrap {
 
     public static void main(String[] args) {
 
-        try {
-            start();
-        } catch (FileNotFoundException  e) {
-            e.printStackTrace();
-        }
+//        Addon p = (Addon)loadPlugin(String.format("%s.%s.%s", addonPkgPath, pkg, addon));
+
+//        try {
+//            start();
+//        } catch (FileNotFoundException  e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void start() throws FileNotFoundException {

@@ -1,4 +1,4 @@
-package com.kkhill.addons.rulengine.action;
+package com.kkhill.addons.automation.action;
 
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.NotFoundException;

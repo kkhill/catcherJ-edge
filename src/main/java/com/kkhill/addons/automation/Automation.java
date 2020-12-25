@@ -1,7 +1,7 @@
-package com.kkhill.addons.rulengine;
+package com.kkhill.addons.automation;
 
-import com.kkhill.addons.rulengine.rule.Rule;
-import com.kkhill.addons.rulengine.utils.RuleParser;
+import com.kkhill.addons.automation.rule.Rule;
+import com.kkhill.addons.automation.utils.RuleParser;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventConsumer;
@@ -16,9 +16,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class RuleEngine implements Addon, EventConsumer {
+public class Automation implements Addon, EventConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(RuleEngine.class);
+    private final Logger logger = LoggerFactory.getLogger(Automation.class);
 
     /**
      * Default path of rules.yaml

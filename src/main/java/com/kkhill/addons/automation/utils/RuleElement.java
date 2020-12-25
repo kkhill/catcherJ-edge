@@ -1,4 +1,4 @@
-package com.kkhill.addons.rulengine.utils;
+package com.kkhill.addons.automation.utils;
 
 public class RuleElement {
     public static final String NAME = "name";
