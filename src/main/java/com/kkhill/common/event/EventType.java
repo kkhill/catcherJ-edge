@@ -1,4 +1,4 @@
-package com.kkhill.utils.event;
+package com.kkhill.common.event;
 
 public final class EventType {
 

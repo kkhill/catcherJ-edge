@@ -1,4 +1,4 @@
-package com.kkhill.utils.config;
+package com.kkhill.common.config;
 
 public class PluginConfig {
 

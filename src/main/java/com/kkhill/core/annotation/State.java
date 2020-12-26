@@ -1,6 +1,6 @@
 package com.kkhill.core.annotation;
 
-import com.kkhill.utils.thing.StateName;
+import com.kkhill.common.thing.StateName;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

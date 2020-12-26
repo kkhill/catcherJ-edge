@@ -1,4 +1,4 @@
-package com.kkhill.utils.http;
+package com.kkhill.common.http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;

@@ -1,4 +1,4 @@
-package com.kkhill.utils.thing;
+package com.kkhill.common.thing;
 
 public final class ServiceName {
 

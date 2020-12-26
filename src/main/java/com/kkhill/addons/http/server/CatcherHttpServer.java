@@ -2,8 +2,8 @@ package com.kkhill.addons.http.server;
 
 import com.kkhill.core.annotation.State;
 import com.kkhill.core.thing.Thing;
-import com.kkhill.utils.thing.StateName;
-import com.kkhill.utils.thing.ThingType;
+import com.kkhill.common.thing.StateName;
+import com.kkhill.common.thing.ThingType;
 import io.netty.channel.Channel;
 import org.glassfish.jersey.netty.httpserver.NettyHttpContainerProvider;
 import org.glassfish.jersey.server.ResourceConfig;

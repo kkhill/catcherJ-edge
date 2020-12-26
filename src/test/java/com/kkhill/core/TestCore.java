@@ -4,7 +4,7 @@ import com.kkhill.Bootstrap;
 import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.drivers.demolight1.thing.Light;
-import com.kkhill.utils.thing.ThingType;
+import com.kkhill.common.thing.ThingType;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;

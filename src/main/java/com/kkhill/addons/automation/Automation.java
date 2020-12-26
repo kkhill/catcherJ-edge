@@ -6,7 +6,7 @@ import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventConsumer;
 import com.kkhill.core.plugin.Addon;
-import com.kkhill.utils.event.EventType;
+import com.kkhill.common.event.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;

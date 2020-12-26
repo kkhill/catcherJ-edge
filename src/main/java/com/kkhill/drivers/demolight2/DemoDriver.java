@@ -4,7 +4,7 @@ import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.plugin.Driver;
 import com.kkhill.drivers.demolight2.thing.Light;
-import com.kkhill.utils.thing.ThingType;
+import com.kkhill.common.thing.ThingType;
 
 import java.util.Map;
 

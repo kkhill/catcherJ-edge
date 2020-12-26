@@ -2,7 +2,7 @@ package com.kkhill.addons.automation.condition;
 
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.NotFoundException;
-import com.kkhill.utils.event.dto.StateUpdatedEventData;
+import com.kkhill.common.event.dto.StateUpdatedEventData;
 
 public class StateCondition extends Condition{
 

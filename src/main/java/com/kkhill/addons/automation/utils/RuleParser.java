@@ -7,7 +7,7 @@ import com.kkhill.addons.automation.condition.PropertyCondition;
 import com.kkhill.addons.automation.condition.StateCondition;
 import com.kkhill.addons.automation.rule.IllegalRuleException;
 import com.kkhill.addons.automation.rule.Rule;
-import com.kkhill.utils.thing.ThingType;
+import com.kkhill.common.thing.ThingType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package com.kkhill.utils.event.dto;
+package com.kkhill.common.event.dto;
 
 public class PropertyUpdatedEventData {
     private String thingId;

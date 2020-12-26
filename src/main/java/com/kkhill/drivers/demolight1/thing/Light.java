@@ -1,9 +1,9 @@
 package com.kkhill.drivers.demolight1.thing;
 
 import com.kkhill.core.annotation.ServiceParam;
-import com.kkhill.utils.thing.PropertyName;
-import com.kkhill.utils.thing.ServiceName;
-import com.kkhill.utils.thing.StateName;
+import com.kkhill.common.thing.PropertyName;
+import com.kkhill.common.thing.ServiceName;
+import com.kkhill.common.thing.StateName;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.exception.NotFoundException;

@@ -8,7 +8,7 @@ import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.thing.Thing;
 import com.kkhill.drivers.demolight1.lib.Client;
-import com.kkhill.utils.thing.ServiceName;
+import com.kkhill.common.thing.ServiceName;
 
 public class Light extends Thing {
 
