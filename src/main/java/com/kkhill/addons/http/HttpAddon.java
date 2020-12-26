@@ -16,7 +16,12 @@ public class HttpAddon implements Addon {
         server = new CatcherHttpServer();
         server.resourceConfig.packages("com.kkhill.addons.http.resources");
         server.start();
-//            Catcher.getThingMonitor().registerThing(server);
+
+        try {
+            Catcher.getThingMonitor().registerThing(server);
+        } catch (IllegalThingException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("http server had been started");
         return false;
