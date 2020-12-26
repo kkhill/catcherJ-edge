@@ -10,16 +10,18 @@ import java.util.*;
 
 public abstract class Thing {
 
-    /** id is unique and repeatable **/
+    /** id = plugin.pkg.name e.g. drivers.demolight1.hello
+     * plugin.pkg is unique, and name should be unique in one plugin **/
     private String id;
     /** type can be used to group things **/
     private String type;
     /** services of unavailable things will not be called **/
     private boolean available;
-    /** human-readable **/
+    /** human-readable, make sure name is unique in a driver **/
     private String name;
     /** human-readable **/
     private String description;
+    private String plugin;
     /** basic elements of thing, state, property and service **/
     private State state;
     private Map<String, Property> properties;
@@ -29,6 +31,12 @@ public abstract class Thing {
         this.type = type;
         this.name = name;
         this.description = description;
+        this.available = true;
+    }
+
+    public Thing(String type, String name, String description, boolean available) {
+        this(type, name, description);
+        this.available = available;
     }
 
     public String getId() {
@@ -119,14 +127,13 @@ public abstract class Thing {
 
         this.properties = new HashMap<>();
         this.services = new HashMap<>();
-        // TODO: thing id should be unique and repeatable
-        if(this.id == null) this.setId(UUID.randomUUID().toString().replace("-", ""));
+        String[] tmp = this.getClass().getName().split("\\.");
+        this.id = tmp[2] + "." + tmp[3] + "." + this.name;
 
         // extract state and properties of thing
         Field[] fields = this.getClass().getDeclaredFields();
         int stateNum = 0;
         for(Field field : fields) {
-//            field.setAccessible(true);
             com.kkhill.core.annotation.State s = field.getAnnotation(com.kkhill.core.annotation.State.class);
             com.kkhill.core.annotation.Property p = field.getAnnotation(com.kkhill.core.annotation.Property.class);
             // build state

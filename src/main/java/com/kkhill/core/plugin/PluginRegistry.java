@@ -1,9 +1,6 @@
 package com.kkhill.core.plugin;
 
 import com.kkhill.core.exception.IllegalPluginConfig;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,16 +25,16 @@ public class PluginRegistry {
         return Holder.instance;
     }
 
-    public void registerDriver(String name, String pkg, String driver, Object config) throws IllegalPluginConfig {
-        Driver p = (Driver)loadPlugin(String.format("%s.%s.%s", driverPkgPath, pkg, driver));
+    public void registerDriver(String entry, Object config) throws IllegalPluginConfig {
+        Driver p = (Driver)loadPlugin(String.format("%s.%s", driverPkgPath, entry));
         p.load(config);
-        this.drivers.put(name, p);
+        this.drivers.put(entry, p);
     }
 
-    public void registerAddon(String name, String pkg, String addon, Object config) throws IllegalPluginConfig {
-        Addon p = (Addon)loadPlugin(String.format("%s.%s.%s", addonPkgPath, pkg, addon));
+    public void registerAddon(String entry, Object config) throws IllegalPluginConfig {
+        Addon p = (Addon)loadPlugin(String.format("%s.%s", addonPkgPath, entry));
         p.load(config);
-        this.addons.put(name, p);
+        this.addons.put(entry, p);
     }
 
     public Plugin loadPlugin(String name) throws IllegalPluginConfig {

@@ -1,8 +1,14 @@
 
-automation:
-  pkg: automation
-  entry: Automation
+automation.Automation:
 
-api:
-  pkg: http
-  entry: HttpAddon
+http.HttpAddon:
+
+
+
+#automation:
+#  pkg: automation
+#  entry: Automation
+#
+#api:
+#  pkg: http
+#  entry: HttpAddon

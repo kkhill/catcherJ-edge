@@ -31,9 +31,10 @@ public class DemoDriver extends Driver {
         Map<String, Object> configData = (Map<String, Object>) config;
         String ip = (String)configData.get("ip");
         int port = (int)configData.get("port");
+        String name = (String) configData.get("name");
 
         // add things to core system.
-        Light light = new Light(ThingType.LIGHT, "demolight1", "a light", ip, String.valueOf(port));
+        Light light = new Light(ThingType.LIGHT, name, "a light", ip, String.valueOf(port));
         try {
             Catcher.getThingMonitor().registerThing(light);
         } catch (IllegalThingException e) {

@@ -13,7 +13,6 @@ import com.kkhill.core.annotation.Service;
 import com.kkhill.core.annotation.State;
 import com.kkhill.drivers.demolight1.lib.Client;
 
-import java.util.concurrent.TimeUnit;
 
 public class Light extends Thing {
 

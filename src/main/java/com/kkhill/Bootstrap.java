@@ -1,6 +1,5 @@
 package com.kkhill;
 
-import com.kkhill.core.plugin.Addon;
 import com.kkhill.utils.config.PluginConfig;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalPluginConfig;
@@ -12,7 +11,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class Bootstrap {
 
@@ -22,6 +20,7 @@ public class Bootstrap {
     }
 
     public static void main(String[] args) {
+
 
         try {
             start();
@@ -48,19 +47,14 @@ public class Bootstrap {
 
     private static void registryAddons() throws FileNotFoundException {
 
-        LinkedHashMap<String, Map<String, Object>> addons = readAddonConfig();
-        for(String name : addons.keySet()) {
-            Map<String, Object> addon = addons.get(name);
-            if(!addon.containsKey(PluginConfig.PKG) || !addon.containsKey(PluginConfig.ENTRY)) {
-                logger.error(String.format("register addon error: %s. configuration must has 'pkg' and 'entry' ", name));
-                continue;
-            }
+        LinkedHashMap<String, Object> addons = readAddonConfig();
+        for(String entry : addons.keySet()) {
+            Object config = addons.get(entry);
             try{
-                Catcher.getPluginRegistry().registerAddon(name, (String)addon.get(PluginConfig.PKG),
-                        (String)addon.get(PluginConfig.ENTRY), addon.get(PluginConfig.CONFIG));
-                logger.info(String.format("register addon: %s", name));
+                Catcher.getPluginRegistry().registerAddon(entry, config);
+                logger.info(String.format("register addon: %s", entry));
             } catch (IllegalPluginConfig e) {
-                logger.error(String.format("register addon error: %s", name));
+                logger.error(String.format("register addon error: %s", entry));
                 e.printStackTrace();
             }
 
@@ -70,35 +64,30 @@ public class Bootstrap {
 
     private static void registryDrivers() throws FileNotFoundException {
 
-        LinkedHashMap<String, Map<String, Object>> drivers = readDriverConfig();
-        for(String name : drivers.keySet()) {
-            Map<String, Object> addon = drivers.get(name);
-            if(!addon.containsKey(PluginConfig.PKG) || !addon.containsKey(PluginConfig.ENTRY)) {
-                logger.error(String.format("register driver error: %s. configuration must has 'pkg' and 'entry' ", name));
-                continue;
-            }
+        LinkedHashMap<String, Object> drivers = readDriverConfig();
+        for(String entry : drivers.keySet()) {
+            Object config = drivers.get(entry);
             try{
-                Catcher.getPluginRegistry().registerDriver(name, (String)addon.get(PluginConfig.PKG),
-                        (String)addon.get(PluginConfig.ENTRY), addon.get(PluginConfig.CONFIG));
-                logger.info(String.format("register driver: %s", name));
+                Catcher.getPluginRegistry().registerDriver(entry, config);
+                logger.info(String.format("register driver: %s", entry));
             } catch (IllegalPluginConfig e) {
-                logger.error(String.format("register driver error: %s", name));
+                logger.error(String.format("register driver error: %s", entry));
                 e.printStackTrace();
             }
         }
     }
 
-    private static LinkedHashMap<String, Map<String, Object>> readAddonConfig() throws FileNotFoundException {
-        LinkedHashMap<String, Map<String, Object>> res = readPluginConfig(PluginConfig.getAddonConfigPath());
+    private static LinkedHashMap<String, Object> readAddonConfig() throws FileNotFoundException {
+        LinkedHashMap<String, Object> res = readPluginConfig(PluginConfig.getAddonConfigPath());
         return res == null ? new LinkedHashMap<>() : res;
     }
 
-    private static LinkedHashMap<String, Map<String, Object>> readDriverConfig() throws FileNotFoundException {
-        LinkedHashMap<String, Map<String, Object>> res = readPluginConfig(PluginConfig.getDriverConfigPath());
+    private static LinkedHashMap<String, Object> readDriverConfig() throws FileNotFoundException {
+        LinkedHashMap<String, Object> res = readPluginConfig(PluginConfig.getDriverConfigPath());
         return res == null ? new LinkedHashMap<>() : res;
     }
 
-    private static LinkedHashMap<String, Map<String, Object>> readPluginConfig(String file) throws FileNotFoundException {
+    private static LinkedHashMap<String, Object> readPluginConfig(String file) throws FileNotFoundException {
         return new Yaml().load(new FileInputStream(new File(file)));
     }
 }
