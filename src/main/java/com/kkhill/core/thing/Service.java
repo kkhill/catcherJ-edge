@@ -68,7 +68,8 @@ public class Service {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    Object invoke(Object... args) throws InvocationTargetException, IllegalAccessException {
+    // TODO call service with parameter
+    Object call(Object... args) throws InvocationTargetException, IllegalAccessException {
         return method.invoke(thing, args);
     }
 

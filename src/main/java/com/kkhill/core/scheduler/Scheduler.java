@@ -52,17 +52,17 @@ public class Scheduler {
         executor.scheduleAtFixedRate(this::beat, 0, this.heartbeat, TimeUnit.SECONDS);
 
         // poll service
-        for(Service service : pollServices) {
-            if(!service.isPolled()) continue;
-            executor.scheduleAtFixedRate(()-> {
-                        try {
-                            Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName());
-                        } catch (NotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    , 0, service.getPollInternal(), TimeUnit.SECONDS);
-        }
+//        for(Service service : pollServices) {
+//            if(!service.isPolled()) continue;
+//            executor.scheduleAtFixedRate(()-> {
+//                        try {
+//                            Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName());
+//                        } catch (NotFoundException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    , 0, service.getPollInternal(), TimeUnit.SECONDS);
+//        }
     }
 
     /**

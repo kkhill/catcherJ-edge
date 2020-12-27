@@ -23,7 +23,7 @@ public class CatcherHttpServer extends Thing {
     private int port = 8000;
 
     @State
-    private String state = StateName.ON;
+    public String state = StateName.ON;
 
     public CatcherHttpServer() {
         super(ThingType.ADDON_HTTP, "catcher http server", "http server");

@@ -132,7 +132,7 @@ public class ThingMonitor {
         Object data = new ServiceCalledEventData(thingId, service);
         Object res = null;
         try {
-            res = s.invoke(args);
+            res = s.call(args);
         } catch (InvocationTargetException | IllegalAccessException e) {
             logger.error("error with calling thing service");
             e.printStackTrace();

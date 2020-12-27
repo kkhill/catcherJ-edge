@@ -1,7 +1,7 @@
-# catcherJ-edge let's do it!
+# catcherJ-edge
+
+This project is inspired by HomeAssistant and OpenHAB
 
 ## overview
 
-## Plugin
-1. exploit event bus to get data notified
-2. treat plugin as a thing to use state, properties and services
+
