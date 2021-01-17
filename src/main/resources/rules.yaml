@@ -1,19 +1,19 @@
 
-- name: rule1
+- name: if hello is opened, and brightness greater than 50, open world
   description: a simple rule
   event: state_updated
   conditions:
     states:
-      - thing: demolight1
+      - thing: drivers.demolight1.hello
         from: "off"
         to: "on"
     properties:
-      - thing: demolight1
+      - thing: drivers.demolight1.hello
         property: brightness
         operation: ">="  # > >= < <= in
         value: 50
 
   actions: # service name
     services:
-      - thing: demolight2
+      - thing: drivers.demolight2.world
         name: open

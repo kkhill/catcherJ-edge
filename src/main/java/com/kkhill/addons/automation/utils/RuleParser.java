@@ -91,11 +91,11 @@ public class RuleParser {
         for(String key: data.keySet()) {
             List<LinkedHashMap<String, Object>> a =  (List<LinkedHashMap<String, Object>>) data.get(key);
             for(LinkedHashMap<String, Object> aa : a) {
-                Action action = null;
                 if("services".equals(key)) {
-                    action = new ServiceAction((String)aa.get("name"), (String)aa.get("thing"));
+                    Action action = new ServiceAction((String)aa.get("name"), (String)aa.get("thing"));
+                    actions.add(action);
                 }
-                actions.add(action);
+
             }
         }
         return actions;

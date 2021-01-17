@@ -26,7 +26,7 @@ public class CatcherHttpServer extends Thing {
     public String state = StateName.ON;
 
     public CatcherHttpServer() {
-        super(ThingType.ADDON_HTTP, "catcher http server", "http server");
+        super(ThingType.ADDON_HTTP, "http_server", "http server");
 
         this.setId("httpserver"); // to be used by other plugin
         resourceConfig = new ResourceConfig();

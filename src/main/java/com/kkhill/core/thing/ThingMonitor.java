@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -57,6 +58,14 @@ public class ThingMonitor {
 
     public Map<String, Thing> getThings() {
         return this.things;
+    }
+
+    public Map<String, Thing> getThings(String type) {
+        Map<String, Thing> res = new HashMap<>();
+        for(Thing thing : this.things.values()) {
+            if(thing.getType().equals(type)) res.put(thing.getId(), thing);
+        }
+        return res;
     }
 
     public Thing getThing(String id) throws NotFoundException {

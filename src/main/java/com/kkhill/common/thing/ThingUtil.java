@@ -1,4 +1,4 @@
-package com.kkhill.addons.http.utils;
+package com.kkhill.common.thing;
 
 import com.kkhill.core.thing.ServiceParam;
 import com.kkhill.core.thing.Thing;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class ThingUtil {
 
-    public static Map<String, Object> extractThingDTO(Thing thing) {
+    public static Map<String, Object> buildThingDTO(Thing thing) {
 
         Map<String, Object> t = new HashMap<>();
         t.put("id", thing.getId());

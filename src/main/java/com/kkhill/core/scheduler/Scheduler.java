@@ -1,7 +1,5 @@
 package com.kkhill.core.scheduler;
 
-import com.kkhill.core.Catcher;
-import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.thing.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

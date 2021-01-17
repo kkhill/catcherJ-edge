@@ -5,8 +5,10 @@ import com.kkhill.addons.automation.utils.RuleParser;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventConsumer;
+import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.plugin.Addon;
 import com.kkhill.common.event.EventType;
+import com.kkhill.core.thing.Thing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -17,6 +19,9 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Automation implements Addon, EventConsumer {
+    /**
+     * Automation listens event, checks conditions and execute actions as an event consumer
+     */
 
     private final Logger logger = LoggerFactory.getLogger(Automation.class);
 
@@ -42,8 +47,11 @@ public class Automation implements Addon, EventConsumer {
         try {
             List<LinkedHashMap<String, Object>> rulesData = readRules();
             this.rules = new RuleParser().parseRules(rulesData);
+            for(Thing rule : rules) Catcher.getThingMonitor().registerThing(rule);
         } catch (FileNotFoundException e) {
             logger.error("can not find rules.yaml");
+            e.printStackTrace();
+        } catch (IllegalThingException e) {
             e.printStackTrace();
         }
 

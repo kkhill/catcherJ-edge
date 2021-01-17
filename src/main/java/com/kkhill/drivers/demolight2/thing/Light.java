@@ -17,7 +17,7 @@ public class Light extends Thing {
     private Client client;
 
     @State(description = "state")
-    public String state;
+    public String state = StateName.OFF;
 
     @Property(name="vendor", description = "vendor name")
     public String vendor = "otcaix";

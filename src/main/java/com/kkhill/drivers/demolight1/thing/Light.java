@@ -19,7 +19,7 @@ public class Light extends Thing {
     private Client client;
 
     @State(description = "state")
-    public String state;
+    public String state = StateName.OFF;
 
     @Property(name="vendor", description = "vendor name")
     public String vendor = "otcaix";
@@ -30,7 +30,7 @@ public class Light extends Thing {
     @Property(name=PropertyName.TEMPERATURE, description = "temperature")
     public int temperature;
 
-    @Service(name="open", description = "open the light")
+    @Service(name=ServiceName.OPEN, description = "open the light")
     public void open() {
         if(this.client.open()) {
             this.state = "on";
