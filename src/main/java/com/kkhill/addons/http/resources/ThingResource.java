@@ -14,7 +14,7 @@ public class ThingResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Object thing(@PathParam("id") String id) {
+    public Object getThing(@PathParam("id") String id) {
 
         Object res;
         try {

@@ -1,6 +1,6 @@
 
-- name: if hello is opened, and brightness greater than 50, open world
-  description: a simple rule
+- name: simple_rule
+  description: if hello is opened, and brightness greater than 50, open world
   event: state_updated
   conditions:
     states:

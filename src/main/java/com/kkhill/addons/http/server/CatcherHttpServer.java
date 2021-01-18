@@ -19,15 +19,16 @@ public class CatcherHttpServer extends Thing {
 
     private Channel server;
     public ResourceConfig resourceConfig;
-    private String host = "localhost";
-    private int port = 8000;
+    private String host;
+    private int port;
 
     @State
     public String state = StateName.ON;
 
-    public CatcherHttpServer() {
+    public CatcherHttpServer(String host, int port) {
         super(ThingType.ADDON_HTTP, "http_server", "http server");
-
+        this.host = host;
+        this.port = port;
         this.setId("httpserver"); // to be used by other plugin
         resourceConfig = new ResourceConfig();
     }

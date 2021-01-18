@@ -55,6 +55,9 @@ public class Automation implements Addon, EventConsumer {
             e.printStackTrace();
         }
 
+        // registry rule api
+
+
 
         // listen events
         Catcher.getEventBus().listen(EventType.STATE_UPDATED, this);
