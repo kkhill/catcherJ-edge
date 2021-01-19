@@ -17,7 +17,9 @@ public class ThingUtil {
         t.put("name", thing.getFriendlyName());
         t.put("type", thing.getType());
         t.put("state", thing.getState().getValue());
+        t.put("description", thing.getDescription());
 
+        // construct properties
         List<Map<String, String>> props = new ArrayList<>();
         for(String p : thing.getProperties().keySet()) {
             Map<String, String> prop = new HashMap<>();
@@ -29,6 +31,7 @@ public class ThingUtil {
         }
         t.put("properties", props);
 
+        // construct services
         List<Map<String, Object>> services = new ArrayList<>();
         for(String s : thing.getServices().keySet()) {
             Map<String, Object> service = new HashMap<>();

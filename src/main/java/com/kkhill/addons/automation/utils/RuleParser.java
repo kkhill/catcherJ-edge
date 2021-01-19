@@ -48,7 +48,7 @@ public class RuleParser {
         List<Condition> conditions = parseConditions((LinkedHashMap<String, Object>) data.get("conditions"));
         List<Action> actions = parseActions((LinkedHashMap<String, Object>) data.get("actions"));
 
-        return new Rule(ThingType.RULE, name, description, event, conditions, actions);
+        return new Rule(name, description, event, conditions, actions);
     }
 
     @SuppressWarnings("unchecked")

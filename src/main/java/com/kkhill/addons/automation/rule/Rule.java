@@ -2,6 +2,7 @@ package com.kkhill.addons.automation.rule;
 
 import com.kkhill.addons.automation.action.Action;
 import com.kkhill.addons.automation.condition.Condition;
+import com.kkhill.common.thing.ThingType;
 import com.kkhill.core.event.Event;
 import com.kkhill.common.thing.StateName;
 import com.kkhill.core.annotation.State;
@@ -18,9 +19,9 @@ public class Rule extends Thing {
     @State(description = "state")
     public String state;
 
-    public Rule(String type, String name, String description,
+    public Rule(String name, String description,
                 String event, List<Condition> conditions, List<Action> actions) {
-        super(type, name, description);
+        super(ThingType.RULE, name, description);
         this.event = event;
         this.conditions = conditions;
         this.actions = actions;
