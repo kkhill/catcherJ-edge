@@ -56,30 +56,8 @@ public class Light extends Thing {
         }
     }
 
-    @Service(name=ServiceName.TOGGLE, description = "toggle the light")
-    public void toggle() {
-//        if(this.client.state()) {
-//            if(this.client.close()) {
-//                try {
-//                    Catcher.getThingMonitor().updateAndNotifyState(this.getId(),false );
-//                } catch (ThingNotFoundException | IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        } else {
-//            if(this.client.open()) {
-//                try {
-//                    Catcher.getThingMonitor().updateAndNotifyState(this.getId(), true);
-//                } catch (ThingNotFoundException | IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-
-    }
-
     @Service(name="set_brightness", description = "decease brightness")
-    public void setBrightness(@ServiceParam(name="brightness") int brightness) {
+    public void setBrightness(@ServiceParam(name="brightness", description="brightness") int brightness) {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {
@@ -91,7 +69,8 @@ public class Light extends Thing {
     }
 
     @Service(name="set_brightness_and_temperature", description = "decease brightness")
-    public void setBandT(int brightness, int temperature) {
+    public void setBandT(@ServiceParam(name="brightness", description="brightness") int brightness,
+                         @ServiceParam(name="temperature", description="temperature") int temperature) {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {

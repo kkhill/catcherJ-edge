@@ -8,6 +8,8 @@ import com.kkhill.common.thing.ThingType;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestCore {
 
@@ -27,7 +29,12 @@ public class TestCore {
         try {
             Catcher.getThingMonitor().registerThing(light);
             light.open();
-            Catcher.getThingMonitor().callServiceAndNotify(light.getId(), "set_brightness_and_temperature", new Object[]{50, 40});
+            Map<String, Object> args = new HashMap<>();
+            args.put("wrong", 20);
+            args.put("temperature", 30);
+            args.put("brightness", 50);
+
+            Catcher.getThingMonitor().callServiceAndNotify(light.getId(), "set_brightness_and_temperature", args);
         } catch (IllegalThingException | NotFoundException e) {
             e.printStackTrace();
         }
@@ -39,7 +46,10 @@ public class TestCore {
         try {
             Catcher.getThingMonitor().registerThing(light);
             light.open();
-            Catcher.getThingMonitor().callServiceAndNotify(light.getId(), "set_brightness_and_temperature", new Object[]{50, 40});
+            Map<String, Object> args = new HashMap<>();
+            args.put("brightness", 50);
+            args.put("temperature", 30);
+            Catcher.getThingMonitor().callServiceAndNotify(light.getId(), "set_brightness_and_temperature", args);
         } catch (IllegalThingException | NotFoundException e) {
             e.printStackTrace();
         }

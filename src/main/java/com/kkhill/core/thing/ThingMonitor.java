@@ -134,11 +134,10 @@ public class ThingMonitor {
      * @param args
      * @throws NotFoundException
      */
-    public Object callServiceAndNotify(String thingId, String service, Object... args) throws NotFoundException {
+    public Object callServiceAndNotify(String thingId, String service, Map<String, Object> args) throws NotFoundException {
 
         Service s = getThing(thingId).getServices().get(service);
         if (s == null) throw new NotFoundException(String.format("service not found: %s", service));
-        Object data = new ServiceCalledEventData(thingId, service);
         Object res = null;
         try {
             res = s.call(args);
@@ -146,6 +145,7 @@ public class ThingMonitor {
             logger.error("error with calling thing service");
             e.printStackTrace();
         }
+        Object data = new ServiceCalledEventData(thingId, service);
         EventBus.getInstance().fire(new Event(EventType.SERVICE_CALLED, thingId, data));
         logger.debug("call thing service, id: {}, service: {}", thingId, service);
         return res;

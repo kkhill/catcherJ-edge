@@ -3,6 +3,7 @@ package com.kkhill.common.thing;
 import com.kkhill.core.thing.ServiceParam;
 import com.kkhill.core.thing.Thing;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 public class ThingUtil {
 
-    public static Map<String, Object> buildThingDTO(Thing thing) {
+    public static Map<String, Object> serializeThing(Thing thing) {
 
         Map<String, Object> t = new HashMap<>();
         t.put("id", thing.getId());
@@ -51,6 +52,23 @@ public class ThingUtil {
         t.put("services", services);
 
         return t;
+    }
+
+    public static Object deserializeServiceParams(byte[] value, String type) throws UnsupportedEncodingException {
+        String s = new String(value, "UTF-8");
+        if("int".equals(type) || "Integer".equals(type)) {
+            return Integer.valueOf(s);
+        } else if("short".equals(type) || "Short".equals(type)) {
+            return Short.valueOf(s);
+        } else if("long".equals(type) || "Long".equals(type)) {
+            return Long.valueOf(s);
+        } else if("double".equals(type) || "Double".equals(type)) {
+            return Double.valueOf(s);
+        } else if("boolean".equals(type) || "Boolean".equals(type)) {
+            return Boolean.valueOf(s);
+        } else {
+            return s;
+        }
     }
 
 

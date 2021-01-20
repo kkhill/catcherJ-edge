@@ -61,7 +61,7 @@ public class WebSocketAddon implements Addon, EventConsumer {
         try {
             byte[] data = new ObjectMapper().writeValueAsBytes(event.getData());
             server.broadcast(data);
-            System.out.println(Arrays.toString(data));
+            System.out.println(event.getData());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

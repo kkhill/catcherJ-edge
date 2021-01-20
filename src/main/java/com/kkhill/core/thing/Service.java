@@ -3,6 +3,7 @@ package com.kkhill.core.thing;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 
 public class Service {
 
@@ -63,13 +64,20 @@ public class Service {
 
     /**
      * call service, this method must be invoked by ThingMonitor to notify event
-     * @param args
+     * @param params
      * @return
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
     // TODO call service with parameter
-    Object call(Object... args) throws InvocationTargetException, IllegalAccessException {
+    Object call(Map<String, Object> params) throws InvocationTargetException, IllegalAccessException {
+
+        // reorder args based on parameter name that defined in @Service method
+        Object[] args = new Object[parameters.size()];
+        for(int i=0; i<parameters.size(); i++) {
+            args[i] = params.get(parameters.get(i).getName());
+        }
+
         return method.invoke(thing, args);
     }
 

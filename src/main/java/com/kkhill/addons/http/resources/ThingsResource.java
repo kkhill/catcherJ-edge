@@ -23,7 +23,7 @@ public class ThingsResource {
         Map<String, Thing> things = Catcher.getThingMonitor().getThings();
         List<Object> data = new ArrayList<>();
         for(String key : things.keySet()) {
-            data.add(ThingUtil.buildThingDTO(things.get(key)));
+            data.add(ThingUtil.serializeThing(things.get(key)));
         }
         return data;
     }
@@ -36,7 +36,7 @@ public class ThingsResource {
         Map<String, Thing> things = Catcher.getThingMonitor().getThings(type);
         List<Object> data = new ArrayList<>();
         for(String key : things.keySet()) {
-            data.add(ThingUtil.buildThingDTO(things.get(key)));
+            data.add(ThingUtil.serializeThing(things.get(key)));
         }
         return data;
     }

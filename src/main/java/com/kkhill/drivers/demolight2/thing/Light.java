@@ -3,6 +3,7 @@ package com.kkhill.drivers.demolight2.thing;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.annotation.Property;
 import com.kkhill.core.annotation.Service;
+import com.kkhill.core.annotation.ServiceParam;
 import com.kkhill.core.annotation.State;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.exception.NotFoundException;
@@ -74,32 +75,11 @@ public class Light extends Thing {
     }
 
     @Service(name="set_brightness", description = "decease brightness")
-    public void setBrightness(int brightness) {
+    public void setBrightness(@ServiceParam(name="brightness", description="brightness") int brightness) {
         if(this.client.setBrightness(brightness)) {
             this.brightness = brightness;
             try {
                 Catcher.getThingMonitor().updatePropertyAndNotify(this.getId(), "brightness");
-            } catch (NotFoundException | IllegalThingException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Service(name="set_brightness_and_temperature", description = "decease brightness")
-    public void setBandT(int brightness, int temperature) {
-        if(this.client.setBrightness(brightness)) {
-            this.brightness = brightness;
-            try {
-                Catcher.getThingMonitor().updatePropertyAndNotify(this.getId(), "brightness");
-            } catch (NotFoundException  | IllegalThingException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if(this.client.setTemperature(temperature)) {
-            this.temperature = temperature;
-            try {
-                Catcher.getThingMonitor().updatePropertyAndNotify(this.getId(), "temperature");
             } catch (NotFoundException | IllegalThingException e) {
                 e.printStackTrace();
             }

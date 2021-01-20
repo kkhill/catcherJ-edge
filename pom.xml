@@ -102,7 +102,11 @@
             <artifactId>Java-WebSocket</artifactId>
             <version>1.5.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.11</version>
+        </dependency>
 
     </dependencies>
 
