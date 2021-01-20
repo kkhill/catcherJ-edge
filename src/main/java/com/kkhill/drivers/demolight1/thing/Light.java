@@ -13,6 +13,8 @@ import com.kkhill.core.annotation.Service;
 import com.kkhill.core.annotation.State;
 import com.kkhill.drivers.demolight1.lib.Client;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class Light extends Thing {
 
@@ -130,6 +132,6 @@ public class Light extends Thing {
         super(type, name, description);
         this.client = new Client(ip, port);
         // TODO: test rule engine
-//        Catcher.getScheduler().getExecutor().schedule(this::open, 5, TimeUnit.SECONDS);
+        Catcher.getScheduler().getExecutor().schedule(this::open, 10, TimeUnit.SECONDS);
     }
 }

@@ -5,6 +5,9 @@ http.HttpAddon:
   host: 127.0.0.1
   port: 8000
 
+websocket.WebSocketAddon:
+  host: 127.0.0.1
+  port: 8001
 
 
 #automation:
