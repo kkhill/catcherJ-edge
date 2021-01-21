@@ -14,14 +14,12 @@ public class Client {
     }
 
     public boolean open() {
-        System.out.println("wow! i had been opened");
-        if(!state) state = true;
+        state = true;
         return true;
     }
 
     public boolean close() {
-        System.out.println("wow! i had been closed");
-        if(state) state = false;
+        state = false;
         return true;
     }
 

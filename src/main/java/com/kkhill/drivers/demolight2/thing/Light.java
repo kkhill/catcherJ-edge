@@ -55,23 +55,8 @@ public class Light extends Thing {
 
     @Service(name= CommonService.TOGGLE, description = "toggle the light")
     public void toggle() {
-        if(this.client.state()) {
-            if(this.client.close()) {
-                try {
-                    Catcher.getThingMonitor().updateStateAndNotify(this.getId());
-                } catch (NotFoundException | IllegalThingException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            if(this.client.open()) {
-                try {
-                    Catcher.getThingMonitor().updateStateAndNotify(this.getId());
-                } catch (NotFoundException | IllegalThingException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        if(this.client.state()) this.close();
+        else this.open();
     }
 
     @Service(name="set_brightness", description = "decease brightness")

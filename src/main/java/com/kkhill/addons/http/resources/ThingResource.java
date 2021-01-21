@@ -44,8 +44,11 @@ public class ThingResource {
         try {
             // deserialize service args based on field 'type' in data
             Map<String, Object> args = new HashMap<>();
-            for(Map<String, Object> d : data) {
-                args.put((String)d.get("name"), ThingUtil.deserializeServiceParams(d.get("value"), (String)d.get("type")));
+            if(data!=null&&data.size()!=0) {
+                for(Map<String, Object> d : data) {
+                    args.put((String)d.get("name"),
+                            ThingUtil.deserializeServiceParams(d.get("value"), (String)d.get("type")));
+                }
             }
             Object res = Catcher.getThingMonitor().callServiceAndNotify(id, service, args);
             return Response.status(Response.Status.OK).entity(res).build();
