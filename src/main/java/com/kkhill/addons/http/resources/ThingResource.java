@@ -1,5 +1,6 @@
 package com.kkhill.addons.http.resources;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkhill.common.http.ServiceParamsDTO;
 import com.kkhill.common.thing.ThingUtil;
 import com.kkhill.core.Catcher;
@@ -8,6 +9,7 @@ import com.kkhill.core.exception.NotFoundException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
@@ -43,20 +45,13 @@ public class ThingResource {
             // deserialize service args based on field 'type' in data
             Map<String, Object> args = new HashMap<>();
             for(Map<String, Object> d : data) {
-                byte[] t = (byte[])d.get("name");
-
-//                String name = (String)ThingUtil.deserializeServiceParams((byte[])d.get("name"), "String");
-//                String type = (String)ThingUtil.deserializeServiceParams((byte[])d.get("type"), "String");
-//                Object value = ThingUtil.deserializeServiceParams((byte[])d.get("value"), type);
-//                args.put(name, value);
+                args.put((String)d.get("name"), ThingUtil.deserializeServiceParams(d.get("value"), (String)d.get("type")));
             }
-            System.out.println("test");
-            Object res = Catcher.getThingMonitor().callServiceAndNotify(id, service, null);
+            Object res = Catcher.getThingMonitor().callServiceAndNotify(id, service, args);
             return Response.status(Response.Status.OK).entity(res).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).build();
         } catch (Exception e) {
-            e.printStackTrace();
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 

@@ -1,5 +1,6 @@
 package com.kkhill.common.thing;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkhill.core.thing.ServiceParam;
 import com.kkhill.core.thing.Thing;
 
@@ -54,20 +55,27 @@ public class ThingUtil {
         return t;
     }
 
-    public static Object deserializeServiceParams(byte[] value, String type) throws UnsupportedEncodingException {
-        String s = new String(value, "UTF-8");
+    /**
+     * deserialize dynamic java basic type based on type(String)
+     * @param value
+     * @param type
+     * @return
+     */
+    public static Object deserializeServiceParams(Object value, String type) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
         if("int".equals(type) || "Integer".equals(type)) {
-            return Integer.valueOf(s);
+            return objectMapper.convertValue(value, Integer.class);
         } else if("short".equals(type) || "Short".equals(type)) {
-            return Short.valueOf(s);
+            return objectMapper.convertValue(value, Short.class);
         } else if("long".equals(type) || "Long".equals(type)) {
-            return Long.valueOf(s);
+            return objectMapper.convertValue(value, Long.class);
         } else if("double".equals(type) || "Double".equals(type)) {
-            return Double.valueOf(s);
+            return objectMapper.convertValue(value, Double.class);
         } else if("boolean".equals(type) || "Boolean".equals(type)) {
-            return Boolean.valueOf(s);
+            return objectMapper.convertValue(value, Boolean.class);
         } else {
-            return s;
+            return objectMapper.convertValue(value, String.class);
         }
     }
 
