@@ -21,14 +21,17 @@ public abstract class Driver implements Plugin {
     }
 
     @Override
-    public final boolean unload(Object data) {
+    public final boolean unload() {
         release();
         return true;
     }
 
+    /** get information from file/UI/discovery protocol, etc. **/
     public abstract Object discover(Object data);
 
+    /** registry things, define tasks, etc **/
     public abstract void initialize(Object data);
 
+    /** clean up **/
     public abstract void release();
 }

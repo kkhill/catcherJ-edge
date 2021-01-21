@@ -1,6 +1,6 @@
 package com.kkhill.common.thing;
 
-public final class ServiceName {
+public final class CommonService {
 
     public static final String update = "update";
     public static final String OPEN = "open";

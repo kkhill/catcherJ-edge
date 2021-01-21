@@ -1,5 +1,9 @@
 package com.kkhill.core.scheduler;
 
+import com.kkhill.common.event.EventType;
+import com.kkhill.core.Catcher;
+import com.kkhill.core.event.Event;
+import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.thing.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +27,7 @@ public class Scheduler {
     }
 
     private static int poolSize = 10;
-    private static int heartbeat = 2;
+    private static int heartbeat = 5;
 
     private static class Holder {
         private final static Scheduler instance = new Scheduler();
@@ -42,25 +46,26 @@ public class Scheduler {
         return Holder.instance.executor;
     }
 
-
-    /**
-     * run all scheduled task
-     */
     public void start() {
-        executor.scheduleAtFixedRate(this::beat, 0, this.heartbeat, TimeUnit.SECONDS);
 
-        // poll service
-//        for(Service service : pollServices) {
-//            if(!service.isPolled()) continue;
-//            executor.scheduleAtFixedRate(()-> {
-//                        try {
-//                            Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName());
-//                        } catch (NotFoundException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    , 0, service.getPollInternal(), TimeUnit.SECONDS);
-//        }
+        // heartbeat
+        executor.scheduleAtFixedRate(this::beat, 0, this.heartbeat, TimeUnit.SECONDS);
+        // run all scheduled task
+        for(Service service : pollServices) {
+            if(!service.isPolled()) continue;
+            executor.scheduleAtFixedRate(()-> {
+                try {
+                    Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName(), null);
+                } catch (NotFoundException e) {
+                    e.printStackTrace();
+                }
+            }, 0, service.getPollInternal(), TimeUnit.SECONDS);
+        }
+        logger.info("scheduler started");
+    }
+
+    public void stop() {
+        executor.shutdown();
     }
 
     /**
@@ -68,10 +73,10 @@ public class Scheduler {
      */
     public void beat() {
 
-//        Event e = new Event(EventType.PLATFORM, "heartbeat", null);
-//        Catcher.getEventBus().fire(e);
+        Event e = new Event(EventType.PLATFORM, "heartbeat", null);
+        Catcher.getEventBus().fire(e);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-//        logger.info("heartbeat: {}", formatter.format(e.getTimestamp()));
+        logger.debug("heartbeat: {}", formatter.format(e.getTimestamp()));
     }
 
     public void addPolledService(Service s) {
@@ -81,6 +86,5 @@ public class Scheduler {
     public boolean removePolledService(Service s) {
         return this.pollServices.remove(s);
     }
-
 
 }

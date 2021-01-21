@@ -2,7 +2,9 @@ package com.kkhill.core.thing;
 
 public class ServiceParam {
 
+    /** parameter name will be used to reorder, to satisfied method.invoke(args) **/
     private String name;
+    /** parameter type will be used to deserialize byte[] **/
     private String type;
     private String description;
 

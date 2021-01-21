@@ -43,10 +43,6 @@ public abstract class Thing {
         return this.id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getFriendlyName() {
         return this.name;
     }

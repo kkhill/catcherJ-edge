@@ -2,7 +2,7 @@ package com.kkhill;
 
 import com.kkhill.common.config.PluginConfig;
 import com.kkhill.core.Catcher;
-import com.kkhill.core.exception.IllegalPluginConfig;
+import com.kkhill.core.exception.IllegalThingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -16,65 +16,28 @@ public class Bootstrap {
 
     private static final Logger logger = LoggerFactory.getLogger(Bootstrap.class);
 
-    public static void test() {
-    }
-
     public static void main(String[] args) {
-
-
-        try {
-            start();
-        } catch (FileNotFoundException  e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void start() throws FileNotFoundException {
         // read configuration
         int threadNum = 5;
         int heartbeat = 1;
-        // initialize system resources
+
         Catcher.initialize(threadNum, heartbeat);
-        // register addons and drivers
-        registryAddons();
-        registryDrivers();
-        // run catcher
+        try {
+            LinkedHashMap<String, Object> addons = readAddonConfig();
+            LinkedHashMap<String, Object> drivers = readDriverConfig();
+            Catcher.load(addons, drivers);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         Catcher.start();
 
-        // test code
-        test();
-    }
-
-    private static void registryAddons() throws FileNotFoundException {
-
-        LinkedHashMap<String, Object> addons = readAddonConfig();
-        for(String entry : addons.keySet()) {
-            Object config = addons.get(entry);
-            try{
-                Catcher.getPluginRegistry().registerAddon(entry, config);
-                logger.info(String.format("register addon: %s", entry));
-            } catch (IllegalPluginConfig e) {
-                logger.error(String.format("register addon error: %s", entry));
-                e.printStackTrace();
-            }
-
+        // registry catcher as a thing to manage
+        try {
+            Catcher.getThingMonitor().registerThing(Catcher.getInstance());
+        } catch (IllegalThingException e) {
+            e.printStackTrace();
         }
-
-    }
-
-    private static void registryDrivers() throws FileNotFoundException {
-
-        LinkedHashMap<String, Object> drivers = readDriverConfig();
-        for(String entry : drivers.keySet()) {
-            Object config = drivers.get(entry);
-            try{
-                Catcher.getPluginRegistry().registerDriver(entry, config);
-                logger.info(String.format("register driver: %s", entry));
-            } catch (IllegalPluginConfig e) {
-                logger.error(String.format("register driver error: %s", entry));
-                e.printStackTrace();
-            }
-        }
+        logger.info("bootstrap finished");
     }
 
     private static LinkedHashMap<String, Object> readAddonConfig() throws FileNotFoundException {

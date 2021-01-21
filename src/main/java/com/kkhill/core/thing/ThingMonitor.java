@@ -45,7 +45,7 @@ public class ThingMonitor {
         String id = thing.build();
         things.put(id, thing);
         EventBus.getInstance().fire(new Event(EventType.THING, "registered", id));
-        logger.debug("thing has been registered, name: {}, id: {}", thing.getFriendlyName(), id);
+        logger.info("thing registered, name: {}, id: {}", thing.getFriendlyName(), id);
         return id;
     }
 
@@ -53,7 +53,7 @@ public class ThingMonitor {
 
         things.remove(thingId);
         EventBus.getInstance().fire(new Event(EventType.THING, "removed", thingId));
-        logger.info("thing has been removed, id: {}", thingId);
+        logger.info("thing removed, id: {}", thingId);
     }
 
     public Map<String, Thing> getThings() {
@@ -74,80 +74,67 @@ public class ThingMonitor {
         return thing;
     }
 
-    /**
-     * update and notify state of a thing
-     * do not fire event bus if not changed
-     * usually used by thing implementation
-     * e.g. updateAndNotifyState(this, "on");
-     *
-     * @param id
-     * @throws NotFoundException
-     * @throws IllegalThingException
-     */
-    public void updateStateAndNotify(String id) throws NotFoundException, IllegalThingException {
+    public String[] updateState(String id) throws NotFoundException, IllegalThingException {
 
         State state = getThing(id).getState();
         String oldState = state.getValue();
         String newState = state.updateValue();
-        // do not notify if state is not changed
-        if(oldState.equals(newState)) return;
-
-        Object data = new StateUpdatedEventData(id, oldState, newState);
-        EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, id, data));
         logger.debug("update thing state, id: {}, from {} to {}", id, oldState, newState);
+        return new String[]{oldState, newState};
     }
 
-    /**
-     * update property and notify
-     * do not fire event bus if not changed
-     * usually used by thing implementation
-     * e.g. updateAndNotifyProperty(this, "brightness", 50)
-     *
-     * @param id
-     * @param name
-     * @throws NotFoundException
-     * @throws IllegalAccessException
-     */
-    public void updatePropertyAndNotify(String id, String name) throws NotFoundException, IllegalThingException {
+    public String[] updateStateAndNotify(String id) throws NotFoundException, IllegalThingException {
+
+        String[] s = updateState(id);
+        // do not notify if state is not changed
+        if(!s[0].equals(s[1])) {
+            Object data = new StateUpdatedEventData(id, s[0], s[1]);
+            EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, id, data));
+        }
+        return s;
+    }
+
+
+    public Object[] updateProperty(String id, String name) throws NotFoundException, IllegalThingException {
 
         Property property = getThing(id).getProperties().get(name);
         if(property == null) throw new NotFoundException(String.format("property not found: %s", name));
-
         Object oldValue = property.getValue();
         Object newValue = property.updateValue();
-        // do not notify if value is not changed
-        if(oldValue.equals(newValue)) return;
-
-        Object data = new PropertyUpdatedEventData(id, name, oldValue, newValue);
-        EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, id, data));
-        logger.info("update thing property, id: {}, property: {}, from {} to {}", id, name, oldValue, newValue);
+        logger.debug("update thing property, id: {}, property: {}, from {} to {}", id, name, oldValue, newValue);
+        return new Object[]{oldValue, newValue};
     }
 
-    /**
-     * call service of thing
-     * usually used by other things rather than this.
-     * e.g. callService("some_id_from_UI", "set_brightness", new Object[]{50})
-     *
-     *
-     * @param thingId
-     * @param service
-     * @param args
-     * @throws NotFoundException
-     */
-    public Object callServiceAndNotify(String thingId, String service, Map<String, Object> args) throws NotFoundException {
+    public Object[] updatePropertyAndNotify(String id, String name) throws NotFoundException, IllegalThingException {
+
+        Object[] o = updateProperty(id, name);
+        if(!o[0].equals(o[1])) {
+            Object data = new PropertyUpdatedEventData(id, name, o[0], o[1]);
+            EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, id, data));
+        }
+        return o;
+    }
+
+    public Object callService(String thingId, String service, Map<String, Object> args) throws NotFoundException {
 
         Service s = getThing(thingId).getServices().get(service);
         if (s == null) throw new NotFoundException(String.format("service not found: %s", service));
         Object res = null;
         try {
             res = s.call(args);
+            logger.debug("call thing service, id: {}, service: {}", thingId, service);
         } catch (InvocationTargetException | IllegalAccessException e) {
             logger.error("error with calling thing service");
             e.printStackTrace();
         }
+        return res;
+    }
+
+    public Object callServiceAndNotify(String thingId, String service, Map<String, Object> args) throws NotFoundException {
+
+        Object res = callService(thingId, service, args);
         Object data = new ServiceCalledEventData(thingId, service);
         EventBus.getInstance().fire(new Event(EventType.SERVICE_CALLED, thingId, data));
-        logger.debug("call thing service, id: {}, service: {}", thingId, service);
         return res;
     }
 
@@ -157,7 +144,7 @@ public class ThingMonitor {
         if(!thing.isAvailable()) {
             thing.enable();
             EventBus.getInstance().fire(new Event(EventType.THING, thingId, "enabled"));
-            logger.info("enable thing, id: {}", thingId);
+            logger.debug("enable thing, id: {}", thingId);
         }
     }
 
@@ -167,7 +154,7 @@ public class ThingMonitor {
         if(thing.isAvailable()) {
             thing.disable();
             EventBus.getInstance().fire(new Event(EventType.THING, thingId, "disabled"));
-            logger.info("disable thing, id: {}", thingId);
+            logger.debug("disable thing, id: {}", thingId);
         }
     }
 }

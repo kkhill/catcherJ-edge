@@ -4,7 +4,7 @@ import com.kkhill.Bootstrap;
 import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.drivers.demolight1.thing.Light;
-import com.kkhill.common.thing.ThingType;
+import com.kkhill.common.thing.CommonThing;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -14,18 +14,8 @@ import java.util.Map;
 public class TestCore {
 
     @Test
-    public void testBootstrap() {
-        try {
-            Bootstrap.start();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Test
     public void testDemoDriver() {
-        Light light = new Light(ThingType.LIGHT, "lovely", "a test light", "127", "8000");
+        Light light = new Light(CommonThing.LIGHT, "lovely", "a test light", "127", "8000");
         try {
             Catcher.getThingMonitor().registerThing(light);
             light.open();
@@ -42,7 +32,7 @@ public class TestCore {
     }
 
     public static void testSingleDriver() {
-        Light light = new Light(ThingType.LIGHT, "lovely", "a test light", "127", "8000");
+        Light light = new Light(CommonThing.LIGHT, "lovely", "a test light", "127", "8000");
         try {
             Catcher.getThingMonitor().registerThing(light);
             light.open();

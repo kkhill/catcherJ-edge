@@ -8,7 +8,7 @@ import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.exception.NotFoundException;
 import com.kkhill.core.thing.Thing;
 import com.kkhill.drivers.demolight1.lib.Client;
-import com.kkhill.common.thing.ServiceName;
+import com.kkhill.common.thing.CommonService;
 
 public class Light extends Thing {
 
@@ -32,7 +32,7 @@ public class Light extends Thing {
         }
     }
 
-    @Service(name= ServiceName.CLOSE, description = "close the light")
+    @Service(name= CommonService.CLOSE, description = "close the light")
     public void close() {
         if(this.client.close()) {
             this.state = "off";

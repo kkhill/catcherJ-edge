@@ -1,15 +1,12 @@
 package com.kkhill.addons.websocket.Server;
 
-import com.kkhill.common.thing.StateName;
+import com.kkhill.common.thing.CommonState;
 import com.kkhill.core.annotation.State;
 import com.kkhill.core.thing.AddonThing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -23,10 +20,10 @@ public class CatcherWebSocketServer extends AddonThing {
     private WebSocketServerImpl server;
 
     @State
-    public String state = StateName.ON;
+    public String state = CommonState.ON;
 
     public CatcherWebSocketServer(String host, int port) {
-        super("websocket_server", "a websocket server");
+        super("server", "a websocket server");
         this.host = host;
         this.port = port;
     }

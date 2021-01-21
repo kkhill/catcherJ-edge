@@ -70,12 +70,21 @@ public class Automation implements Addon, EventConsumer {
     /**
      * Clear all stored rules
      * Cancel listening to event bus
-     * @param data config
      * @return true
      */
     @Override
-    public boolean unload(Object data) {
+    public boolean unload() {
         if(this.rules!=null) this.rules.clear();
+        return true;
+    }
+
+    @Override
+    public boolean start() {
+        return true;
+    }
+
+    @Override
+    public boolean stop() {
         return true;
     }
 
@@ -106,4 +115,5 @@ public class Automation implements Addon, EventConsumer {
             }
         }
     }
+
 }

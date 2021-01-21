@@ -13,12 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 
-public class WebSocketAddon implements Addon, EventConsumer {
+public class WebSocket implements Addon, EventConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(WebSocketAddon.class);
+    private final Logger logger = LoggerFactory.getLogger(WebSocket.class);
 
     private CatcherWebSocketServer server;
 
@@ -29,11 +28,7 @@ public class WebSocketAddon implements Addon, EventConsumer {
         LinkedHashMap<String, Object> config = (LinkedHashMap<String, Object>)data;
         try {
             server = new CatcherWebSocketServer((String)config.get("host"), (int)config.get("port"));
-            server.start();
             Catcher.getThingMonitor().registerThing(server);
-        } catch (IOException | InterruptedException e) {
-            logger.error("failed to start websocket server");
-            e.printStackTrace();
         } catch (IllegalThingException e) {
             e.printStackTrace();
         }
@@ -46,7 +41,24 @@ public class WebSocketAddon implements Addon, EventConsumer {
     }
 
     @Override
-    public boolean unload(Object data) {
+    public boolean unload() {
+        return true;
+    }
+
+    @Override
+    public boolean start() {
+        try {
+            server.start();
+            return true;
+        } catch (IOException | InterruptedException e) {
+            logger.error("failed to start websocket server");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean stop() {
         try {
             server.stop();
         } catch (IOException | InterruptedException e) {
@@ -61,7 +73,6 @@ public class WebSocketAddon implements Addon, EventConsumer {
         try {
             byte[] data = new ObjectMapper().writeValueAsBytes(event.getData());
             server.broadcast(data);
-            System.out.println(event.getData());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

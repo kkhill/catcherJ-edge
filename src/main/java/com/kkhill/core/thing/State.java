@@ -1,6 +1,6 @@
 package com.kkhill.core.thing;
 
-import com.kkhill.common.thing.StateName;
+import com.kkhill.common.thing.CommonState;
 import com.kkhill.core.exception.IllegalThingException;
 
 import java.lang.reflect.Field;
@@ -34,7 +34,7 @@ public class State {
         } catch (IllegalAccessException e) {
             throw new IllegalThingException("wrong mapping in state");
         }
-        if(this.value == null) this.value = StateName.UNKNOWN;
+        if(this.value == null) this.value = CommonState.UNKNOWN;
         return this.value;
     }
 
