@@ -3,10 +3,14 @@ package com.kkhill.addons.websocket.Server;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
 public class WebSocketServerImpl extends WebSocketServer {
+
+    private final Logger logger = LoggerFactory.getLogger(WebSocketServerImpl.class);
 
     public WebSocketServerImpl(String host, int port) {
         super(new InetSocketAddress(host, port));
@@ -14,27 +18,22 @@ public class WebSocketServerImpl extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-        webSocket.send("hand shake success");
-        broadcast("new connection: " + clientHandshake
-                .getResourceDescriptor()); //This method sends a message to all clients connected
-        System.out.println(
-                webSocket.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the room!");
+        logger.debug("web socket connection opened: {}", clientHandshake.getResourceDescriptor());
     }
 
     @Override
     public void onClose(WebSocket webSocket, int i, String s, boolean b) {
-        broadcast(webSocket + " has left the room!");
-        System.out.println(webSocket + " has left the room!");
+        logger.debug("web socket connection closed: {}", s);
     }
 
     @Override
     public void onMessage(WebSocket webSocket, String s) {
-        broadcast("ok");
-        System.out.println(webSocket + ": " + s);
+        logger.debug("message received: {}", s);
     }
 
     @Override
     public void onError(WebSocket webSocket, Exception e) {
+        logger.debug("websocket connection error");
         e.printStackTrace();
         if (webSocket != null) {
             // some errors like port binding failed may not be assignable to a specific websocket
@@ -43,7 +42,7 @@ public class WebSocketServerImpl extends WebSocketServer {
 
     @Override
     public void onStart() {
-        System.out.println("Server started!");
-        setConnectionLostTimeout(100);
+        logger.debug("websocket server on start");
+        setConnectionLostTimeout(60);
     }
 }

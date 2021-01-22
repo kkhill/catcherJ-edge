@@ -107,6 +107,11 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.11</version>
         </dependency>
+        <dependency>
+            <groupId>io.leego</groupId>
+            <artifactId>banana</artifactId>
+            <version>2.0.0</version>
+        </dependency>
 
     </dependencies>
 

@@ -76,7 +76,7 @@ public class Scheduler {
         Event e = new Event(EventType.PLATFORM, "heartbeat", null);
         Catcher.getEventBus().fire(e);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-        logger.debug("heartbeat: {}", formatter.format(e.getTimestamp()));
+//        logger.debug("heartbeat: {}", formatter.format(e.getTimestamp()));
     }
 
     public void addPolledService(Service s) {

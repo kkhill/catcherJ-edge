@@ -14,13 +14,11 @@ public class Client {
     }
 
     public boolean open() {
-        System.out.println("open the light with client");
         if(!state) state = true;
         return true;
     }
 
     public boolean close() {
-        System.out.println("close the light with client");
         if(state) state = false;
         return true;
     }

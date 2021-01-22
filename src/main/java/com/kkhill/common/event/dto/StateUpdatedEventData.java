@@ -1,18 +1,18 @@
 package com.kkhill.common.event.dto;
 
 public class StateUpdatedEventData {
-    private String thingId;
+    private String id;
     private String oldState;
     private String newState;
 
-    public StateUpdatedEventData(String thingId, String oldState, String newState) {
-        this.thingId = thingId;
+    public StateUpdatedEventData(String id, String oldState, String newState) {
+        this.id = id;
         this.oldState = oldState;
         this.newState = newState;
     }
 
-    public String getThingId() {
-        return thingId;
+    public String getId() {
+        return id;
     }
 
     public String getOldState() {

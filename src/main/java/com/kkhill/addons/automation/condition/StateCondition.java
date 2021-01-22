@@ -42,7 +42,7 @@ public class StateCondition extends Condition{
     public boolean check(Object data) {
 
         StateUpdatedEventData d = (StateUpdatedEventData)data;
-        if(d.getThingId().equals(this.thing)) {
+        if(d.getId().equals(this.thing)) {
             try {
                 if(Catcher.getThingMonitor().getThing(this.thing).getState().getValue().equals(this.on)) return true;
                 if(d.getOldState().equals(this.from) && d.getNewState().equals(this.to)) return true;

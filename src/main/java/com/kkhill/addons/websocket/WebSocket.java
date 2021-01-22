@@ -49,6 +49,7 @@ public class WebSocket implements Addon, EventConsumer {
     public boolean start() {
         try {
             server.start();
+            logger.info("websocket server started");
             return true;
         } catch (IOException | InterruptedException e) {
             logger.error("failed to start websocket server");
@@ -71,8 +72,9 @@ public class WebSocket implements Addon, EventConsumer {
     @Override
     public void handle(Event event) {
         try {
-            byte[] data = new ObjectMapper().writeValueAsBytes(event.getData());
+            String data = new ObjectMapper().writeValueAsString(event.getData());
             server.broadcast(data);
+            logger.debug("event data send by websocket server: {}", data);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

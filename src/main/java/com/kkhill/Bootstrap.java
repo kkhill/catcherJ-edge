@@ -3,6 +3,7 @@ package com.kkhill;
 import com.kkhill.common.config.PluginConfig;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
+import io.leego.banana.BananaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -38,6 +39,7 @@ public class Bootstrap {
             e.printStackTrace();
         }
         logger.info("bootstrap finished");
+        logger.info(BananaUtils.bananaify("CATCHER"));
     }
 
     private static LinkedHashMap<String, Object> readAddonConfig() throws FileNotFoundException {

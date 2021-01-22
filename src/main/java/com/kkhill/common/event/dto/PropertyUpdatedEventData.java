@@ -1,20 +1,22 @@
 package com.kkhill.common.event.dto;
 
+
+//TODO event topic
 public class PropertyUpdatedEventData {
-    private String thingId;
+    private String id;
     private String property;
     private Object oldValue;
     private Object newValue;
 
-    public PropertyUpdatedEventData(String thingId, String property, Object oldValue, Object newValue) {
-        this.thingId = thingId;
+    public PropertyUpdatedEventData(String id, String property, Object oldValue, Object newValue) {
+        this.id = id;
         this.property = property;
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
 
-    public String getThingId() {
-        return thingId;
+    public String getId() {
+        return id;
     }
 
     public String getProperty() {
