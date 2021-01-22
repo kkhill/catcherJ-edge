@@ -1,7 +1,5 @@
 package com.kkhill.addons.http.resources;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kkhill.common.http.ServiceParamsDTO;
 import com.kkhill.common.thing.ThingUtil;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.NotFoundException;
@@ -9,8 +7,6 @@ import com.kkhill.core.exception.NotFoundException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.DatatypeConverter;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -1,6 +1,4 @@
 
-automation.Automation:
-
 http.Http:
   host: 127.0.0.1
   port: 8000
@@ -11,11 +9,4 @@ websocket.WebSocket:
 
 storage.Storage:
 
-
-#automation:
-#  pkg: automation
-#  entry: Automation
-#
-#api:
-#  pkg: http
-#  entry: HttpAddon
+automation.Automation:

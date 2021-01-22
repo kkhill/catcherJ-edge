@@ -1,7 +1,5 @@
 package com.kkhill.common.event.dto;
 
-
-//TODO event topic
 public class PropertyUpdatedEventData {
     private String id;
     private String property;

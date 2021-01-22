@@ -111,6 +111,6 @@ public class Light extends Thing {
         super(type, name, description);
         this.client = new Client(ip, port);
         // TODO: test rule engine
-        Catcher.getScheduler().getExecutor().schedule(this::open, 10, TimeUnit.SECONDS);
+//        Catcher.getScheduler().getExecutor().schedule(this::open, 10, TimeUnit.SECONDS);
     }
 }

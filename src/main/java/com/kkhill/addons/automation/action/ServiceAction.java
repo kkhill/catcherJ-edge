@@ -29,4 +29,9 @@ public class ServiceAction extends Action {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String toString() {
+        return thing+"."+name;
+    }
 }

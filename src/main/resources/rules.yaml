@@ -10,7 +10,7 @@
     properties:
       - thing: drivers.demolight1.hello
         property: brightness
-        operation: ">="  # > >= < <= in
+        operation: "<="  # > >= < <= in
         value: 50
 
   actions: # service name

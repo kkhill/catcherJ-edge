@@ -52,4 +52,14 @@ public class StateCondition extends Condition{
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        if(on!=null && ! "".equals(on)) {
+            return thing+"."+"state "+"on "+on;
+        } else {
+            return thing+"."+"state from "+from+" to "+to;
+        }
+
+    }
 }

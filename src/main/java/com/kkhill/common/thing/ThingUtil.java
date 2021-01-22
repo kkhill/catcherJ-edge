@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kkhill.core.thing.ServiceParam;
 import com.kkhill.core.thing.Thing;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,6 +62,7 @@ public class ThingUtil {
      */
     public static Object deserializeServiceParams(Object value, String type) {
 
+        // TODO array type
         ObjectMapper objectMapper = new ObjectMapper();
         if("int".equals(type) || "Integer".equals(type)) {
             return objectMapper.convertValue(value, Integer.class);

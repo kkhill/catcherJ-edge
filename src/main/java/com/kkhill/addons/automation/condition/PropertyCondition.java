@@ -47,4 +47,9 @@ public class PropertyCondition<T> extends Condition {
 
         return res;
     }
+
+    @Override
+    public String toString() {
+        return thing+"."+property+" "+operation+" "+value;
+    }
 }
