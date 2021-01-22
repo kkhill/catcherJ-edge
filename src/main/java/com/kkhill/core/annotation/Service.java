@@ -14,5 +14,5 @@ public @interface Service {
     String description() default "unknown";
     boolean poll() default false;
     boolean push() default false;
-    int pollInternal() default com.kkhill.core.thing.Service.DEFAULT_POLL_INTERNAL;
+    int interval() default 10;
 }

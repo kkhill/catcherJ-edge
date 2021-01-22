@@ -74,45 +74,41 @@ public class ThingMonitor {
         return thing;
     }
 
-    public String[] updateState(String id) throws NotFoundException, IllegalThingException {
+    public void updateState(String id) throws NotFoundException, IllegalThingException {
+        getThing(id).getState().updateValue();
+    }
+
+    public void updateStateAndNotify(String id) throws NotFoundException, IllegalThingException {
 
         State state = getThing(id).getState();
         String oldState = state.getValue();
         String newState = state.updateValue();
-        logger.debug("update thing state, id: {}, from {} to {}", id, oldState, newState);
-        return new String[]{oldState, newState};
-    }
-
-    public String[] updateStateAndNotify(String id) throws NotFoundException, IllegalThingException {
-
-        String[] s = updateState(id);
         // do not notify if state is not changed
-        if(!s[0].equals(s[1])) {
-            Object data = new StateUpdatedEventData(id, s[0], s[1]);
+        if(!oldState.equals(newState)) {
+            Object data = new StateUpdatedEventData(id, oldState, newState);
             EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, id, data));
         }
-        return s;
     }
 
 
-    public Object[] updateProperty(String id, String name) throws NotFoundException, IllegalThingException {
+    public void updateProperty(String id, String name) throws NotFoundException, IllegalThingException {
+
+        Property property = getThing(id).getProperties().get(name);
+        if(property == null) throw new NotFoundException(String.format("property not found: %s", name));
+        property.updateValue();
+    }
+
+    public void updatePropertyAndNotify(String id, String name) throws NotFoundException, IllegalThingException {
 
         Property property = getThing(id).getProperties().get(name);
         if(property == null) throw new NotFoundException(String.format("property not found: %s", name));
         Object oldValue = property.getValue();
         Object newValue = property.updateValue();
-        logger.debug("update thing property, id: {}, property: {}, from {} to {}", id, name, oldValue, newValue);
-        return new Object[]{oldValue, newValue};
-    }
-
-    public Object[] updatePropertyAndNotify(String id, String name) throws NotFoundException, IllegalThingException {
-
-        Object[] o = updateProperty(id, name);
-        if(!o[0].equals(o[1])) {
-            Object data = new PropertyUpdatedEventData(id, name, o[0], o[1]);
+        // do not notify if property is not changed
+        if(!oldValue.equals(newValue)) {
+            Object data = new PropertyUpdatedEventData(id, name, oldValue, newValue);
             EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, id, data));
         }
-        return o;
     }
 
     public Object callService(String thingId, String service, Map<String, Object> args) throws NotFoundException {

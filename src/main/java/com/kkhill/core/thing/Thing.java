@@ -21,7 +21,6 @@ public abstract class Thing {
     private String name;
     /** human-readable **/
     private String description;
-    private String plugin;
     /** basic elements of thing, state, property and service **/
     private State state;
     private Map<String, Property> properties;
@@ -123,9 +122,19 @@ public abstract class Thing {
 
         this.properties = new HashMap<>();
         this.services = new HashMap<>();
+        buildId();
+        buildStateAndProperties();
+        buildServices();
+        return this.id;
+    }
+
+    public void buildId() {
+        // TODO: last 2 field of class name
         String[] tmp = this.getClass().getName().split("\\.");
         this.id = tmp[2] + "." + tmp[3] + "." + this.name;
+    }
 
+    public void buildStateAndProperties() throws IllegalThingException {
         // extract state and properties of thing
         Field[] fields = this.getClass().getDeclaredFields();
         int stateNum = 0;
@@ -146,21 +155,23 @@ public abstract class Thing {
             }
         }
         if(stateNum == 0) throw new IllegalThingException("a thing must have one state field");
+    }
 
-        // extract services and polling method of a thing
+    public void buildServices() throws IllegalThingException {
+
         Method[] methods = this.getClass().getDeclaredMethods();
         for(Method method : methods) {
             method.setAccessible(true);
             com.kkhill.core.annotation.Service s = method.getAnnotation(com.kkhill.core.annotation.Service.class);
+            if(s == null) continue;
             // build service
-            if(s != null) {
-                Service service = new Service(s.name(), s.description(), this, method, s.pollInternal());
-                if(s.poll()) {
-                    service.enablePolling();
-                    service.setPollInternal(s.pollInternal());
-                    // add to scheduler
-                    Catcher.getScheduler().addPolledService(service);
-                }
+            if(s.poll()) {
+                if(method.getParameters().length!=0) throw new IllegalThingException("poll service should not have parameters");
+                Service service = new Service(s.name(), s.description(), this, method, s.interval());
+                // add to scheduler
+                Catcher.getScheduler().addPolledService(service);
+                this.addService(service);
+            } else {
                 List<ServiceParam> sps = new ArrayList<>();
                 for(Parameter p : method.getParameters()) {
                     com.kkhill.core.annotation.ServiceParam sp = p.getAnnotation(com.kkhill.core.annotation.ServiceParam.class);
@@ -168,10 +179,9 @@ public abstract class Thing {
                         sps.add(new ServiceParam(sp.name(), p.getType().getSimpleName(), sp.description()));
                     }
                 }
-                service.setParameters(sps);
+                Service service = new Service(s.name(), s.description(), this, method, sps);
                 this.addService(service);
             }
         }
-        return id;
     }
 }

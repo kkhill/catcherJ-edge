@@ -55,11 +55,11 @@ public class Scheduler {
             if(!service.isPolled()) continue;
             executor.scheduleAtFixedRate(()-> {
                 try {
-                    Catcher.getThingMonitor().callServiceAndNotify(service.getThingId(), service.getName(), null);
+                    Catcher.getThingMonitor().callService(service.getThingId(), service.getName(), null);
                 } catch (NotFoundException e) {
                     e.printStackTrace();
                 }
-            }, 0, service.getPollInternal(), TimeUnit.SECONDS);
+            }, 0, service.getPollInterval(), TimeUnit.SECONDS);
         }
         logger.info("scheduler started");
     }

@@ -1,6 +1,7 @@
 package com.kkhill.common.thing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kkhill.core.thing.Service;
 import com.kkhill.core.thing.ServiceParam;
 import com.kkhill.core.thing.Thing;
 
@@ -19,6 +20,7 @@ public class ThingUtil {
         t.put("type", thing.getType());
         t.put("state", thing.getState().getValue());
         t.put("description", thing.getDescription());
+        t.put("available", thing.isAvailable());
 
         // construct properties
         List<Map<String, String>> props = new ArrayList<>();
@@ -34,12 +36,16 @@ public class ThingUtil {
 
         // construct services
         List<Map<String, Object>> services = new ArrayList<>();
-        for(String s : thing.getServices().keySet()) {
+        for(String name : thing.getServices().keySet()) {
+            Service s = thing.getService(name);
+            // do not expose poll service
+            if(s.isPolled()) continue;
             Map<String, Object> service = new HashMap<>();
-            service.put("name", s);
-            service.put("description", thing.getService(s).getDescription());
+            service.put("name", name);
+            service.put("description", s.getDescription());
+            service.put("interval", s.getPollInterval());
             List<Map<String, String>> parameters = new ArrayList<>();
-            for(ServiceParam sp : thing.getService(s).getParameters()) {
+            for(ServiceParam sp : s.getParameters()) {
                 Map<String, String> m = new HashMap<>();
                 m.put("name", sp.getName());
                 m.put("type", sp.getType());

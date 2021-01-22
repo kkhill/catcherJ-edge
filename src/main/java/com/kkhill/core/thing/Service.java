@@ -8,22 +8,19 @@ import java.util.Map;
 
 public class Service {
 
-    public static final int DEFAULT_POLL_INTERNAL = 30;
-
-
     /** human-readable **/
     private String name;
     /** human-readable **/
     private String description;
     /** real executor **/
     private Method method;
-    /** identity who's method **/
+    /** instance to invoke method **/
     private Thing thing;
     /** parameters **/
     private List<ServiceParam> parameters;
     /** poll service **/
     private boolean poll;
-    private int pollInternal = DEFAULT_POLL_INTERNAL;
+    private int interval;
     /** push service **/
     private boolean push;
 
@@ -34,9 +31,15 @@ public class Service {
         this.thing = thing;
     }
 
-    public Service(String name, String description, Thing thing, Method method, int internal) {
+    public Service(String name, String description, Thing thing, Method method, List<ServiceParam> parameters) {
         this(name, description, thing, method);
-        this.pollInternal = internal;
+        this.parameters = parameters;
+    }
+
+    public Service(String name, String description, Thing thing, Method method, int interval) {
+        this(name, description, thing, method);
+        this.interval = interval;
+        this.poll = true;
     }
 
     public String getName() {
@@ -93,12 +96,12 @@ public class Service {
         this.poll = true;
     }
 
-    public int getPollInternal() {
-        return pollInternal;
+    public int getPollInterval() {
+        return interval;
     }
 
-    public void setPollInternal(int internal) {
-        this.pollInternal = internal;
+    public void setPollInterval(int interval) {
+        this.interval = interval;
     }
 
     public void enablePushing() {
