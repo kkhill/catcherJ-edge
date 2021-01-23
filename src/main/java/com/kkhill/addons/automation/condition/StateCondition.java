@@ -6,24 +6,21 @@ import com.kkhill.common.event.dto.StateUpdatedEventData;
 
 public class StateCondition extends Condition{
 
-    private String thing;
     private String from;
     private String to;
     private String on;
 
-    public StateCondition(String thing, String from, String to) {
-        this.thing = thing;
+    public StateCondition(String thing, String from, String to, String description) {
+        super(thing, description);
         this.from = from;
         this.to = to;
+        if(description == null || "".equals(description))
+            this.description = this.toString();
     }
 
-    public StateCondition(String thing, String on) {
-        this.thing = thing;
+    public StateCondition(String thing, String on, String description) {
+        super(thing, description);
         this.on = on;
-    }
-
-    public String getThing() {
-        return thing;
     }
 
     public String getFrom() {
@@ -55,11 +52,10 @@ public class StateCondition extends Condition{
 
     @Override
     public String toString() {
-        if(on!=null && ! "".equals(on)) {
-            return thing+"."+"state "+"on "+on;
+        if(this.on!=null) {
+            return thing+".state on "+on;
         } else {
-            return thing+"."+"state from "+from+" to "+to;
+            return thing+".state from "+from+" to "+to;
         }
-
     }
 }

@@ -6,11 +6,12 @@ import com.kkhill.core.exception.NotFoundException;
 public class ServiceAction extends Action {
 
     private String name;
-    private String thing;
 
-    public ServiceAction(String name, String thing) {
+    public ServiceAction(String name, String thing, String description) {
+        super(thing, description);
+        if(description == null || "".equals(description))
+            this.description = this.toString();
         this.name = name;
-        this.thing = thing;
     }
 
     public String getName() {

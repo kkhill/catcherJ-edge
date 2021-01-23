@@ -2,6 +2,7 @@ package com.kkhill.addons.automation;
 
 import com.kkhill.addons.automation.rule.Rule;
 import com.kkhill.addons.automation.utils.RuleParser;
+import com.kkhill.common.thing.CommonState;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventConsumer;
@@ -109,6 +110,7 @@ public class Automation implements Addon, EventConsumer {
 
         for(Rule rule : this.rules) {
             if(!rule.getEvent().equals(event.getType())) continue;
+            if(rule.state.equals(CommonState.OFF)) continue;
             if(rule.checkConditions(event)) {
                 logger.info("rule conditions satisfied: {}", rule.getFriendlyName());
                 rule.executeActions();

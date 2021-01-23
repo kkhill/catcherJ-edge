@@ -12,7 +12,8 @@ public class RuleElement {
     public static final String PROPERTIES = "properties";
     public static final String PROPERTY = "property";
     public static final String OPERATION = "operation";
-    public static final String IN = "in";
     public static final String ACTIONS = "actions";
     public static final String SERVICES = "services";
+    public static final String DESCRIPTION = "description";
+    public static final String VALUE = "value";
 }

@@ -1,7 +1,7 @@
 
 - name: simple_rule
-  description: if hello is opened, and brightness greater than 50, open world
-  event: state_updated
+  description: 如果打开灯，且亮度小于50， 则打开令一盏灯
+  event: state_updated # state_updated 至少有一个states condition, property_update至少要有一个properties condition
   conditions:
     states:
       - thing: drivers.demolight1.hello
@@ -12,8 +12,10 @@
         property: brightness
         operation: "<="  # > >= < <= in
         value: 50
+        description: 亮度小于50
 
   actions: # service name
     services:
       - thing: drivers.demolight2.world
         name: open
+        description: 打开灯

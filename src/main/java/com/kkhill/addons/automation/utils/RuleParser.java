@@ -35,17 +35,17 @@ public class RuleParser {
     @SuppressWarnings("unchecked")
     public Rule parseRule(LinkedHashMap<String, Object> data) throws IllegalRuleException {
 
-        if(!data.containsKey("name")) throw new IllegalRuleException("no rule name");
-        if(!data.containsKey("description")) throw new IllegalRuleException("no description");
-        if(!data.containsKey("event")) throw new IllegalRuleException("no event");
-        if(!data.containsKey("conditions")) throw new IllegalRuleException("no conditions");
-        if(!data.containsKey("actions")) throw new IllegalRuleException("no actions");
+        if(!data.containsKey(RuleElement.NAME)) throw new IllegalRuleException("no rule name");
+        if(!data.containsKey(RuleElement.DESCRIPTION)) throw new IllegalRuleException("no description");
+        if(!data.containsKey(RuleElement.EVENT)) throw new IllegalRuleException("no event");
+        if(!data.containsKey(RuleElement.CONDITIONS)) throw new IllegalRuleException("no conditions");
+        if(!data.containsKey(RuleElement.ACTIONS)) throw new IllegalRuleException("no actions");
 
-        String name = (String) data.get("name");
-        String event = (String) data.get("event");
-        String description = (String) data.get("description");
-        List<Condition> conditions = parseConditions((LinkedHashMap<String, Object>) data.get("conditions"));
-        List<Action> actions = parseActions((LinkedHashMap<String, Object>) data.get("actions"));
+        String name = (String) data.get(RuleElement.NAME);
+        String event = (String) data.get(RuleElement.EVENT);
+        String description = (String) data.get(RuleElement.DESCRIPTION);
+        List<Condition> conditions = parseConditions((LinkedHashMap<String, Object>) data.get(RuleElement.CONDITIONS));
+        List<Action> actions = parseActions((LinkedHashMap<String, Object>) data.get(RuleElement.ACTIONS));
 
         return new Rule(name, description, event, conditions, actions);
     }
@@ -63,17 +63,19 @@ public class RuleParser {
                 if(RuleElement.STATES.equals(key)) {
                     // state condition item
                     if(cc.containsKey(RuleElement.ON)) {
-                        condition = new StateCondition((String)cc.get("thing"), (String)cc.get(RuleElement.ON));
+                        condition = new StateCondition((String)cc.get(RuleElement.THING), (String)cc.get(RuleElement.ON),
+                                (String)cc.get(RuleElement.DESCRIPTION));
                     } else {
-                        condition = new StateCondition((String)cc.get("thing"), (String)cc.get(RuleElement.FROM), (String)cc.get(RuleElement.TO));
+                        condition = new StateCondition((String)cc.get(RuleElement.THING), (String)cc.get(RuleElement.FROM),
+                                (String)cc.get(RuleElement.TO), (String)cc.get(RuleElement.DESCRIPTION));
                     }
 
                 } else if(RuleElement.PROPERTIES.equals(key)) {
                     // property condition item
                     String op = (String) cc.get(RuleElement.OPERATION);
                     if(op == null) throw new IllegalRuleException("missing property comparable operation");
-                    condition = new PropertyCondition<>((String)cc.get("thing"), (String)cc.get("property"),
-                            op, (Comparable<Object>) cc.get("value"));
+                    condition = new PropertyCondition<>((String)cc.get(RuleElement.THING), (String)cc.get(RuleElement.PROPERTY),
+                            op, (Comparable<Object>) cc.get(RuleElement.VALUE), (String)cc.get(RuleElement.DESCRIPTION));
                 }
                 if(condition != null) conditions.add(condition);
             }
@@ -90,8 +92,9 @@ public class RuleParser {
         for(String key: data.keySet()) {
             List<LinkedHashMap<String, Object>> a =  (List<LinkedHashMap<String, Object>>) data.get(key);
             for(LinkedHashMap<String, Object> aa : a) {
-                if("services".equals(key)) {
-                    Action action = new ServiceAction((String)aa.get("name"), (String)aa.get("thing"));
+                if(RuleElement.SERVICES.equals(key)) {
+                    Action action = new ServiceAction((String)aa.get(RuleElement.NAME), (String)aa.get(RuleElement.THING),
+                            (String)aa.get(RuleElement.DESCRIPTION));
                     actions.add(action);
                 }
 

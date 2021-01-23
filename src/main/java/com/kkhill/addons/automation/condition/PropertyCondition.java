@@ -6,24 +6,21 @@ import com.kkhill.core.thing.Property;
 
 public class PropertyCondition<T> extends Condition {
 
-    private String thing;
-    private String property;
+    private String name;
     private String operation;
     private Comparable<T> value;
 
-    public PropertyCondition(String thing, String property, String operation, Comparable<T> value) {
-        this.thing = thing;
-        this.property = property;
+    public PropertyCondition(String thing, String property, String operation, Comparable<T> value, String description) {
+        super(thing, description);
+        this.name = property;
         this.operation = operation;
         this.value = value;
-    }
-
-    public String getThing() {
-        return thing;
+        if(description == null || "".equals(description))
+            this.description = this.toString();
     }
 
     public String getProperty() {
-        return property;
+        return name;
     }
 
     @Override
@@ -32,7 +29,7 @@ public class PropertyCondition<T> extends Condition {
 
         boolean res = false;
         try {
-            Property<T> property = Catcher.getThingMonitor().getThing(this.thing).getProperty(this.property);
+            Property<T> property = Catcher.getThingMonitor().getThing(this.thing).getProperty(this.name);
             if(
                 (this.operation.equals("==") && this.value.compareTo((T) property.getValue()) == 0) ||
                 (this.operation.equals(">=") && this.value.compareTo((T) property.getValue()) <= 0) ||
@@ -50,6 +47,6 @@ public class PropertyCondition<T> extends Condition {
 
     @Override
     public String toString() {
-        return thing+"."+property+" "+operation+" "+value;
+        return thing+"."+name+" "+operation+" "+value;
     }
 }
