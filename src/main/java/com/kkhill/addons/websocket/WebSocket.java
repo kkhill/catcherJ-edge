@@ -33,9 +33,10 @@ public class WebSocket implements Addon, EventConsumer {
             e.printStackTrace();
         }
 
-        // listen state updated and property updated events to notify websocket client
+        // listen events to notify websocket client
         Catcher.getEventBus().listen(EventType.STATE_UPDATED, this);
         Catcher.getEventBus().listen(EventType.PROPERTY_UPDATED, this);
+        Catcher.getEventBus().listen(EventType.RULE_SATISFIED, this);
 
         return true;
     }
@@ -72,7 +73,7 @@ public class WebSocket implements Addon, EventConsumer {
     @Override
     public void handle(Event event) {
         try {
-            String data = new ObjectMapper().writeValueAsString(event.getData());
+            String data = new ObjectMapper().writeValueAsString(event);
             server.broadcast(data);
             logger.debug("event data send by websocket server: {}", data);
         } catch (JsonProcessingException e) {

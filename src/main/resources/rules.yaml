@@ -19,3 +19,4 @@
       - thing: drivers.demolight2.world
         name: open
         description: 打开灯
+        # TODO: service parameters

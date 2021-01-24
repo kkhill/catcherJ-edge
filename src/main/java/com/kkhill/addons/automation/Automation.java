@@ -113,6 +113,7 @@ public class Automation implements Addon, EventConsumer {
             if(rule.state.equals(CommonState.OFF)) continue;
             if(rule.checkConditions(event)) {
                 logger.info("rule conditions satisfied: {}", rule.getFriendlyName());
+                Catcher.getEventBus().fire(new Event(EventType.RULE_SATISFIED, rule.getId(), rule.getFriendlyName()));
                 rule.executeActions();
             }
         }

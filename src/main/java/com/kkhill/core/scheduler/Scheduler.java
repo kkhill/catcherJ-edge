@@ -73,7 +73,7 @@ public class Scheduler {
      */
     public void beat() {
 
-        Event e = new Event(EventType.PLATFORM, "heartbeat", null);
+        Event e = new Event(EventType.SYSTEM, "heartbeat", null);
 //        Catcher.getEventBus().fire(e);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 //        logger.debug("heartbeat: {}", formatter.format(e.getTimestamp()));
