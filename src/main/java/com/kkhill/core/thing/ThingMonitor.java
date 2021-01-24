@@ -7,6 +7,9 @@ import com.kkhill.core.exception.*;
 import com.kkhill.common.event.dto.PropertyUpdatedEventData;
 import com.kkhill.common.event.dto.ServiceCalledEventData;
 import com.kkhill.common.event.dto.StateUpdatedEventData;
+import com.kkhill.core.thing.element.Property;
+import com.kkhill.core.thing.element.Service;
+import com.kkhill.core.thing.element.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,11 +129,11 @@ public class ThingMonitor {
         return res;
     }
 
-    public Object callServiceAndNotify(String thingId, String service, Map<String, Object> args) throws NotFoundException {
+    public Object callServiceAndNotify(String id, String service, Map<String, Object> args) throws NotFoundException {
 
-        Object res = callService(thingId, service, args);
-        Object data = new ServiceCalledEventData(thingId, service);
-        EventBus.getInstance().fire(new Event(EventType.SERVICE_CALLED, thingId, data));
+        Object res = callService(id, service, args);
+        Object data = new ServiceCalledEventData(id, service);
+        EventBus.getInstance().fire(new Event(EventType.SERVICE_CALLED, id, data));
         return res;
     }
 

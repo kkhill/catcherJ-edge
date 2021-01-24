@@ -1,4 +1,4 @@
-package com.kkhill.core.thing;
+package com.kkhill.core.thing.element;
 
 public class ServiceParam {
 

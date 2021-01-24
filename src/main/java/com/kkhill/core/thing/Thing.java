@@ -2,6 +2,10 @@ package com.kkhill.core.thing;
 
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
+import com.kkhill.core.thing.element.Property;
+import com.kkhill.core.thing.element.Service;
+import com.kkhill.core.thing.element.ServiceParam;
+import com.kkhill.core.thing.element.State;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,7 +19,7 @@ public abstract class Thing {
     private String id;
     /** type can be used to group things **/
     private String type;
-    /** services of unavailable things will not be called **/
+    /** not available means there are some problem with the thing, such like network error, device error, etc. **/
     private boolean available;
     /** human-readable, make sure name is unique in a driver **/
     private String name;

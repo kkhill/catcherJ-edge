@@ -1,8 +1,9 @@
-package com.kkhill.core.thing;
+package com.kkhill.core.thing.element;
+
+import com.kkhill.core.thing.Thing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -73,8 +74,7 @@ public class Service {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    // TODO call service with parameter
-    Object call(Map<String, Object> params) throws InvocationTargetException, IllegalAccessException {
+    public Object call(Map<String, Object> params) throws InvocationTargetException, IllegalAccessException {
 
         // reorder args based on parameter name (parameters) that defined in @Service method
         Object[] args = new Object[parameters.size()];

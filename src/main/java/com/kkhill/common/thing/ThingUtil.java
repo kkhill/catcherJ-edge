@@ -1,8 +1,8 @@
 package com.kkhill.common.thing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kkhill.core.thing.Service;
-import com.kkhill.core.thing.ServiceParam;
+import com.kkhill.core.thing.element.Service;
+import com.kkhill.core.thing.element.ServiceParam;
 import com.kkhill.core.thing.Thing;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public class ThingUtil {
      */
     public static Object deserializeServiceParams(Object value, String type) {
 
-        // TODO array type
+        // TODO array type is not supported
         ObjectMapper objectMapper = new ObjectMapper();
         if("int".equals(type) || "Integer".equals(type)) {
             return objectMapper.convertValue(value, Integer.class);

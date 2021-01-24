@@ -2,7 +2,7 @@ package com.kkhill.addons.automation.condition;
 
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.NotFoundException;
-import com.kkhill.core.thing.Property;
+import com.kkhill.core.thing.element.Property;
 
 public class PropertyCondition<T> extends Condition {
 

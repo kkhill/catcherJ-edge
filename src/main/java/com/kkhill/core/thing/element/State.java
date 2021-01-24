@@ -1,7 +1,8 @@
-package com.kkhill.core.thing;
+package com.kkhill.core.thing.element;
 
 import com.kkhill.common.thing.CommonState;
 import com.kkhill.core.exception.IllegalThingException;
+import com.kkhill.core.thing.Thing;
 
 import java.lang.reflect.Field;
 
