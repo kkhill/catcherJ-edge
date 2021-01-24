@@ -8,7 +8,7 @@ public class RuleElement {
     public static final String THING = "thing";
     public static final String FROM = "from";
     public static final String TO = "to";
-    public static final String ON = "on";
+    public static final String STAY = "stay";
     public static final String PROPERTIES = "properties";
     public static final String PROPERTY = "property";
     public static final String OPERATION = "operation";

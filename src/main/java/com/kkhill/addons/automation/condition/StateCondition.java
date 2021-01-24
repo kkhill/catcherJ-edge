@@ -8,7 +8,7 @@ public class StateCondition extends Condition{
 
     private String from;
     private String to;
-    private String on;
+    private String stay;
 
     public StateCondition(String thing, String from, String to, String description) {
         super(thing, description);
@@ -18,9 +18,9 @@ public class StateCondition extends Condition{
             this.description = this.toString();
     }
 
-    public StateCondition(String thing, String on, String description) {
+    public StateCondition(String thing, String stay, String description) {
         super(thing, description);
-        this.on = on;
+        this.stay = stay;
     }
 
     public String getFrom() {
@@ -32,28 +32,27 @@ public class StateCondition extends Condition{
     }
 
     public String getOn() {
-        return on;
+        return stay;
     }
 
     @Override
     public boolean check(Object data) {
 
         StateUpdatedEventData d = (StateUpdatedEventData)data;
-        if(d.getId().equals(this.thing)) {
-            try {
-                if(Catcher.getThingMonitor().getThing(this.thing).getState().getValue().equals(this.on)) return true;
-                if(d.getOldState().equals(this.from) && d.getNewState().equals(this.to)) return true;
-            } catch (NotFoundException e) {
-                e.printStackTrace();
-            }
+        try {
+            if(Catcher.getThingMonitor().getThing(this.thing).getState().getValue().equals(this.stay)) return true;
+            // TODO: the event must triggered by this thing to check from ... to ...
+            if(d.getOldState().equals(this.from) && d.getNewState().equals(this.to)) return true;
+        } catch (NotFoundException e) {
+            e.printStackTrace();
         }
         return false;
     }
 
     @Override
     public String toString() {
-        if(this.on!=null) {
-            return thing+".state on "+on;
+        if(this.stay!=null) {
+            return thing+".state stay "+stay;
         } else {
             return thing+".state from "+from+" to "+to;
         }

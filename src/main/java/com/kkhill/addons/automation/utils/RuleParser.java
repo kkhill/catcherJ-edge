@@ -62,8 +62,8 @@ public class RuleParser {
                 Condition condition = null;
                 if(RuleElement.STATES.equals(key)) {
                     // state condition item
-                    if(cc.containsKey(RuleElement.ON)) {
-                        condition = new StateCondition((String)cc.get(RuleElement.THING), (String)cc.get(RuleElement.ON),
+                    if(cc.containsKey(RuleElement.STAY)) {
+                        condition = new StateCondition((String)cc.get(RuleElement.THING), (String)cc.get(RuleElement.STAY),
                                 (String)cc.get(RuleElement.DESCRIPTION));
                     } else {
                         condition = new StateCondition((String)cc.get(RuleElement.THING), (String)cc.get(RuleElement.FROM),

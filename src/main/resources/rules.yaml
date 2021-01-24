@@ -2,11 +2,13 @@
 - name: simple_rule
   description: 如果打开灯，且亮度小于50， 则打开令一盏灯
   event: state_updated # state_updated 至少有一个states condition, property_update至少要有一个properties condition
-  conditions:
+  conditions: # 检查thing相关属性
     states:
-      - thing: drivers.demolight1.hello
-        from: "off"
+      - thing: drivers.demolight2.world
+        from: "off"  # from to 检查必须是触发event的thing，否则检查失败
         to: "on"
+#      - thing: drivers.demolight2.world
+#        stay: "off"
     properties:
       - thing: drivers.demolight1.hello
         property: brightness
