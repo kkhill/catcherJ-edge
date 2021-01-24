@@ -15,8 +15,6 @@ public class PropertyCondition<T> extends Condition {
         this.name = property;
         this.operation = operation;
         this.value = value;
-        if(description == null || "".equals(description))
-            this.description = this.toString();
     }
 
     public String getProperty() {

@@ -17,6 +17,12 @@ public abstract class Action {
     }
 
     public String getDescription() {
-        return description;
+        if(description == null || "".equals(description)) return this.toString();
+        else return description;
+    }
+
+    @Override
+    public String toString() {
+        return "unknown action";
     }
 }

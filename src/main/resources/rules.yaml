@@ -4,11 +4,13 @@
   event: state_updated # state_updated 至少有一个states condition, property_update至少要有一个properties condition
   conditions: # 检查thing相关属性
     states:
-      - thing: drivers.demolight2.world
-        from: "off"  # from to 检查必须是触发event的thing，否则检查失败
+      - thing: drivers.demolight1.hello
+        from: "off"
         to: "on"
-#      - thing: drivers.demolight2.world
-#        stay: "off"
+
+      - thing: drivers.demolight2.world
+        stay: "off"
+
     properties:
       - thing: drivers.demolight1.hello
         property: brightness

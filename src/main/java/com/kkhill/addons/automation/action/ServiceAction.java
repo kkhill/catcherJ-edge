@@ -9,8 +9,6 @@ public class ServiceAction extends Action {
 
     public ServiceAction(String name, String thing, String description) {
         super(thing, description);
-        if(description == null || "".equals(description))
-            this.description = this.toString();
         this.name = name;
     }
 
