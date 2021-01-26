@@ -122,7 +122,7 @@ public class ThingMonitor {
         try {
             res = s.call(args);
             logger.debug("call thing service, id: {}, service: {}", thingId, service);
-        } catch (InvocationTargetException | IllegalAccessException e) {
+        } catch (InvocationTargetException | IllegalAccessException | IllegalServiceCallException e) {
             logger.error("error with calling thing service");
             e.printStackTrace();
         }

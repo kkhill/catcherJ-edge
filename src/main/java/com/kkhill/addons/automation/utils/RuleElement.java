@@ -16,4 +16,6 @@ public class RuleElement {
     public static final String SERVICES = "services";
     public static final String DESCRIPTION = "description";
     public static final String VALUE = "value";
+    public static final String PARAMS = "params";
+    public static final String TYPE = "type";
 }

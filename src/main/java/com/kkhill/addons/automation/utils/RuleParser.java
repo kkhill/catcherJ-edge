@@ -7,12 +7,11 @@ import com.kkhill.addons.automation.condition.PropertyCondition;
 import com.kkhill.addons.automation.condition.StateCondition;
 import com.kkhill.addons.automation.rule.IllegalRuleException;
 import com.kkhill.addons.automation.rule.Rule;
+import com.kkhill.common.thing.ThingUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class RuleParser {
 
@@ -93,8 +92,17 @@ public class RuleParser {
             List<LinkedHashMap<String, Object>> a =  (List<LinkedHashMap<String, Object>>) data.get(key);
             for(LinkedHashMap<String, Object> aa : a) {
                 if(RuleElement.SERVICES.equals(key)) {
+                    // parse Service Params
+                    Map<String, Object> params = new HashMap<>();
+                    List<Map<String, Object>> sp = (List<Map<String, Object>>) aa.get(RuleElement.PARAMS);
+                    if(sp!=null&&sp.size()!=0) {
+                        for(Map<String, Object> p : sp) {
+                            params.put((String)p.get("name"),
+                                    ThingUtil.deserializeServiceParams(p.get("value"), (String)p.get("type")));
+                        }
+                    }
                     Action action = new ServiceAction((String)aa.get(RuleElement.NAME), (String)aa.get(RuleElement.THING),
-                            (String)aa.get(RuleElement.DESCRIPTION));
+                    (String)aa.get(RuleElement.DESCRIPTION), params);
                     actions.add(action);
                 }
 

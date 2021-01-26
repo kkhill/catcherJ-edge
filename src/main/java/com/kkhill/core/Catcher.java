@@ -5,7 +5,7 @@ import com.kkhill.core.annotation.Service;
 import com.kkhill.core.annotation.ServiceParam;
 import com.kkhill.core.annotation.State;
 import com.kkhill.core.event.EventBus;
-import com.kkhill.core.exception.IllegalPluginConfig;
+import com.kkhill.core.exception.IllegalPluginConfigException;
 import com.kkhill.core.plugin.PluginRegistry;
 import com.kkhill.core.scheduler.Scheduler;
 import com.kkhill.core.thing.SystemThing;
@@ -84,7 +84,7 @@ public class Catcher extends SystemThing {
         try {
             Catcher.getPluginRegistry().registerAddon(entry, config);
             logger.info(String.format("addon registered: %s", entry));
-        } catch (IllegalPluginConfig e) {
+        } catch (IllegalPluginConfigException e) {
             e.printStackTrace();
             logger.error(String.format("failed to register addon: %s", entry));
         }
@@ -94,7 +94,7 @@ public class Catcher extends SystemThing {
 
         try {
             Catcher.getPluginRegistry().registerDriver(entry, config);
-        } catch (IllegalPluginConfig e) {
+        } catch (IllegalPluginConfigException e) {
             e.printStackTrace();
             logger.error("failed to register driver: {}", entry);
         }

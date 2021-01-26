@@ -24,3 +24,29 @@
         name: open
         description: 打开灯
         # TODO: service parameters
+
+- name: rule2
+  description: 如果hello亮度小于50，且world开着，world亮度变为100
+  event: property_updated # state_updated 至少有一个states condition, property_update至少要有一个properties condition
+  conditions: # 检查thing相关属性
+    states:
+      - thing: drivers.demolight2.world
+        stay: "on"
+
+    properties:
+      - thing: drivers.demolight1.hello
+        property: brightness
+        operation: "<="  # > >= < <= in
+        value: 50
+        description: 亮度小于50
+
+  actions: # service name
+    services:
+      - thing: drivers.demolight2.world
+        name: set_brightness
+        description: 设置亮度为100
+        # TODO: service parameters
+        params:
+          - name: brightness
+            type: int
+            value: 100

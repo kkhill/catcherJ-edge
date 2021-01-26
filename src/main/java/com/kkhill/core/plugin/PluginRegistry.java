@@ -1,6 +1,6 @@
 package com.kkhill.core.plugin;
 
-import com.kkhill.core.exception.IllegalPluginConfig;
+import com.kkhill.core.exception.IllegalPluginConfigException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,14 +23,14 @@ public class PluginRegistry {
 
     public static PluginRegistry getInstance() { return Holder.instance; }
 
-    public void registerDriver(String entry, Object config) throws IllegalPluginConfig {
+    public void registerDriver(String entry, Object config) throws IllegalPluginConfigException {
 
         Driver p = (Driver)loadPlugin(String.format("%s.%s", driverPkgPath, entry));
         p.load(config);
         this.drivers.put(entry, p);
     }
 
-    public void registerAddon(String entry, Object config) throws IllegalPluginConfig {
+    public void registerAddon(String entry, Object config) throws IllegalPluginConfigException {
 
         Addon p = (Addon)loadPlugin(String.format("%s.%s", addonPkgPath, entry));
         p.load(config);
@@ -79,13 +79,13 @@ public class PluginRegistry {
         if(this.drivers.containsKey(entry)) this.drivers.get(entry).unload();
     }
 
-    private Plugin loadPlugin(String name) throws IllegalPluginConfig {
+    private Plugin loadPlugin(String name) throws IllegalPluginConfigException {
 
         try {
             return (Plugin) Class.forName(name).newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
             e.printStackTrace();
-            throw new IllegalPluginConfig(String.format("can not find addon class: %s ", name));
+            throw new IllegalPluginConfigException(String.format("can not find addon class: %s ", name));
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.kkhill.core.thing.element;
 
+import com.kkhill.core.exception.IllegalServiceCallException;
 import com.kkhill.core.thing.Thing;
 
 import java.lang.reflect.InvocationTargetException;
@@ -74,9 +75,11 @@ public class Service {
      * @throws InvocationTargetException
      * @throws IllegalAccessException
      */
-    public Object call(Map<String, Object> params) throws InvocationTargetException, IllegalAccessException {
+    public Object call(Map<String, Object> params) throws InvocationTargetException, IllegalAccessException, IllegalServiceCallException {
 
         // reorder args based on parameter name (parameters) that defined in @Service method
+        if(parameters.size()!=0&&(params==null||params.size()<parameters.size()))
+            throw new IllegalServiceCallException("wrong params to service call");
         Object[] args = new Object[parameters.size()];
         for(int i=0; i<parameters.size(); i++) {
             args[i] = params.get(parameters.get(i).getName());

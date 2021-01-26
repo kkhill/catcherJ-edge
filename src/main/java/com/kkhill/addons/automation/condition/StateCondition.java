@@ -6,7 +6,7 @@ import com.kkhill.common.event.dto.StateUpdatedEventData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StateCondition extends Condition{
+public class StateCondition extends Condition {
 
     private final Logger logger = LoggerFactory.getLogger(StateCondition.class);
 
