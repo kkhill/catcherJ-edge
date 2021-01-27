@@ -5,13 +5,13 @@ import com.kkhill.core.thing.Thing;
 
 import java.lang.reflect.Field;
 
-public class Property<T> {
+public class Property {
 
     /** name is unique **/
     private String name;
     private String description;
     private String unitOfMeasurement;
-    private Comparable<T> value;
+    private Comparable value;
     private Thing thing;
     private Field field;
 
@@ -36,14 +36,14 @@ public class Property<T> {
         return description;
     }
 
-    public Object getValue() {
+    public Comparable getValue() {
         return this.value;
     }
 
     @SuppressWarnings("unchecked")
     public Object updateValue() throws IllegalThingException {
         try {
-            this.value = (Comparable<T>) field.get(this.thing);
+            this.value = (Comparable) field.get(this.thing);
         } catch (IllegalAccessException e) {
             throw new IllegalThingException(String.format(
                     "wrong mapping in property: %s", this.name));

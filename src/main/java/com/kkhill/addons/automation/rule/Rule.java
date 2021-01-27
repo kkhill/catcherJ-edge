@@ -2,11 +2,11 @@ package com.kkhill.addons.automation.rule;
 
 import com.kkhill.addons.automation.action.Action;
 import com.kkhill.addons.automation.condition.Condition;
+import com.kkhill.addons.automation.trigger.Trigger;
 import com.kkhill.common.thing.CommonThing;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.annotation.Property;
 import com.kkhill.core.annotation.Service;
-import com.kkhill.core.event.Event;
 import com.kkhill.common.thing.CommonState;
 import com.kkhill.core.annotation.State;
 import com.kkhill.core.exception.IllegalThingException;
@@ -17,14 +17,15 @@ import java.util.List;
 
 public class Rule extends Thing {
 
+    private Trigger trigger;
     private List<Condition> conditions;
     private List<Action> actions;
 
     @State(description = "state")
     public String state = CommonState.ON;
 
-    @Property(name="event", description="trigger event type")
-    public String event;
+    @Property(name="trigger", description="trigger event type")
+    public String tri;
 
     @Property(name="conditions", description="conditions detail")
     public String con;
@@ -44,14 +45,16 @@ public class Rule extends Thing {
     }
 
     public Rule(String name, String description,
-                String event, List<Condition> conditions, List<Action> actions) {
+                Trigger trigger, List<Condition> conditions, List<Action> actions) {
         super(CommonThing.RULE, name, description);
-        this.event = event;
+        this.trigger = trigger;
         this.conditions = conditions;
         this.actions = actions;
         this.state = CommonState.ON;
 
-        // construct details of conditions and actions
+
+        // construct details of trigger, conditions and actions
+        tri = trigger.getDescription();
         StringBuilder conBuilder = new StringBuilder();
         for(int i=0; i<conditions.size(); i++) {
             if(i==0) conBuilder.append(conditions.get(0).getDescription());
@@ -66,9 +69,13 @@ public class Rule extends Thing {
         act = actBuilder.toString();
     }
 
-    public boolean checkConditions(Event event) {
+    public boolean checkTrigger(String thing, Object from, Object to) {
+        return trigger.check(thing, from, to);
+    }
+
+    public boolean checkConditions() {
         for(Condition condition : this.getConditions()) {
-            if(!condition.check(event.getData())) {
+            if(!condition.check()) {
                 return false;
             }
         }
@@ -81,8 +88,8 @@ public class Rule extends Thing {
         }
     }
 
-    public String getEvent() {
-        return event;
+    public Trigger getTrigger() {
+        return trigger;
     }
 
     public List<Condition> getConditions() {
@@ -92,4 +99,5 @@ public class Rule extends Thing {
     public List<Action> getActions() {
         return actions;
     }
+
 }

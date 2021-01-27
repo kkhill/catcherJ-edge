@@ -1,68 +1,44 @@
 package com.kkhill.addons.automation.condition;
 
-import com.kkhill.common.event.dto.PropertyUpdatedEventData;
+import com.kkhill.addons.automation.utils.RuleUtil;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.NotFoundException;
-import com.kkhill.core.thing.element.Property;
 
-public class PropertyCondition<T> extends Condition {
+public class PropertyCondition extends Condition {
 
-    private String name;
-    private String newOp;
-    private String oldOp;
-    private Comparable<T> oldValue;
-    private Comparable<T> newValue;
+    private String property;
+    private String operation;
+    private Comparable value;
 
-    public PropertyCondition(String thing, String property, String operation, Comparable<T> value, String description) {
+    public PropertyCondition(String thing, String property, String operation,
+                             Comparable value, String description) {
         super(thing, description);
-        this.name = property;
-        this.newOp = operation;
-        this.newValue = value;
-    }
-
-    public PropertyCondition(String thing, String property, String oldOp, Comparable<T> oldValue,
-                             String newOp, Comparable<T> newValue, String description) {
-        super(thing, description);
-        this.name = property;
-        this.oldOp = oldOp;
-        this.oldValue = oldValue;
-        this.newOp = newOp;
-        this.newValue = newValue;
+        this.property = property;
+        this.operation = operation;
+        this.value = value;
     }
 
     public String getProperty() {
-        return name;
+        return property;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public boolean check(Object data) {
-
-        PropertyUpdatedEventData pd = (PropertyUpdatedEventData) data;
-        if(this.oldValue!=null && this.oldOp!=null) {
-            return compare(this.oldOp, this.oldValue, (Comparable<T>) pd.getOldValue())
-                    && compare(this.newOp, this.newValue, (Comparable<T>) pd.getNewValue());
-        } else {
-            return compare(this.newOp, this.newValue, (Comparable<T>) pd.getNewValue());
+    public boolean check() {
+        try {
+            Comparable data = Catcher.getThingMonitor().getThing(thing).getProperty(property).getValue();
+            return RuleUtil.compare(this.operation, this.value, data);
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+            return false;
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private boolean compare(String op, Comparable<T> a, Comparable<T> b) {
-        return (
-                (op.equals("==") && a.compareTo((T) b) == 0) ||
-                (op.equals(">=") && a.compareTo((T) b) <= 0) ||
-                (op.equals(">") && a.compareTo((T) b) < 0) ||
-                (op.equals("<=") && a.compareTo((T) b) >= 0) ||
-                (op.equals("<") && a.compareTo((T) b) > 0)
-        );
     }
 
     @Override
     public String toString() {
-        if(this.oldValue!=null && this.oldOp!=null) {
-            return thing+"."+name+" "+"old value "+oldOp+" "+oldValue+" and new value "+newOp+" "+newValue;
-        }
-        return thing+"."+name+" "+newOp+" "+newValue;
+        return "PropertyCondition{" +
+                "property='" + property + '\'' +
+                ", operation='" + operation + '\'' +
+                ", value=" + value +
+                '}';
     }
 }

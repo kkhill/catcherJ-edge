@@ -24,7 +24,7 @@ public class Light extends Thing {
     public String vendor = "otcaix";
 
     @Property(name= CommonProperty.BRIGHTNESS, description = "brightness")
-    public int brightness = 60;
+    public int brightness = 30;
 
     @Property(name= CommonProperty.TEMPERATURE, description = "temperature")
     public int temperature;

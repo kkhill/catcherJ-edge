@@ -1,8 +1,10 @@
 package com.kkhill.addons.automation;
 
+import com.kkhill.addons.automation.rule.IllegalRuleException;
 import com.kkhill.addons.automation.rule.Rule;
-import com.kkhill.addons.automation.utils.RuleParser;
-import com.kkhill.common.thing.CommonState;
+import com.kkhill.addons.automation.utils.RuleUtil;
+import com.kkhill.common.event.dto.PropertyUpdatedEventData;
+import com.kkhill.common.event.dto.StateUpdatedEventData;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventConsumer;
@@ -47,18 +49,14 @@ public class Automation implements Addon, EventConsumer {
     public boolean load(Object data) {
         try {
             List<LinkedHashMap<String, Object>> rulesData = readRules();
-            this.rules = new RuleParser().parseRules(rulesData);
+            this.rules = RuleUtil.parseRules(rulesData);
             for(Thing rule : rules) Catcher.getThingMonitor().registerThing(rule);
         } catch (FileNotFoundException e) {
             logger.error("can not find rules.yaml");
             e.printStackTrace();
-        } catch (IllegalThingException e) {
+        } catch (IllegalThingException | IllegalRuleException e) {
             e.printStackTrace();
         }
-
-        // registry rule api
-
-
 
         // listen events
         Catcher.getEventBus().listen(EventType.STATE_UPDATED, this);
@@ -109,9 +107,18 @@ public class Automation implements Addon, EventConsumer {
     public void handle(Event event) {
 
         for(Rule rule : this.rules) {
-            if(!rule.getEvent().equals(event.getType())) continue;
-            if(rule.state.equals(CommonState.OFF)) continue;
-            if(rule.checkConditions(event)) {
+            // check trigger
+            boolean trigger = false;
+            if(event.getType().equals(EventType.STATE_UPDATED)) {
+                StateUpdatedEventData data = (StateUpdatedEventData)event.getData();
+                trigger = rule.checkTrigger(data.getId(), data.getOldState(), data.getNewState());
+            } else if(event.getType().equals(EventType.PROPERTY_UPDATED)) {
+                PropertyUpdatedEventData data = (PropertyUpdatedEventData)event.getData();
+                trigger = rule.checkTrigger(data.getId(), data.getOldValue(), data.getNewValue());
+            }
+
+            // check condition
+            if(trigger && rule.checkConditions()) {
                 logger.info("rule conditions satisfied: {}", rule.getFriendlyName());
                 Catcher.getEventBus().fire(new Event(EventType.RULE_SATISFIED, rule.getId(), rule.getFriendlyName()));
                 rule.executeActions();
