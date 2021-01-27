@@ -2,7 +2,7 @@ package com.kkhill.addons.automation;
 
 import com.kkhill.addons.automation.rule.IllegalRuleException;
 import com.kkhill.addons.automation.rule.Rule;
-import com.kkhill.addons.automation.utils.RuleUtil;
+import com.kkhill.addons.automation.utils.Utils;
 import com.kkhill.common.event.dto.PropertyUpdatedEventData;
 import com.kkhill.common.event.dto.StateUpdatedEventData;
 import com.kkhill.core.Catcher;
@@ -49,7 +49,7 @@ public class Automation implements Addon, EventConsumer {
     public boolean load(Object data) {
         try {
             List<LinkedHashMap<String, Object>> rulesData = readRules();
-            this.rules = RuleUtil.parseRules(rulesData);
+            this.rules = Utils.parseRules(rulesData);
             for(Thing rule : rules) Catcher.getThingMonitor().registerThing(rule);
         } catch (FileNotFoundException e) {
             logger.error("can not find rules.yaml");

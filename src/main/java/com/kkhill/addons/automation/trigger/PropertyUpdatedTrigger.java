@@ -1,6 +1,6 @@
 package com.kkhill.addons.automation.trigger;
 
-import com.kkhill.addons.automation.utils.RuleUtil;
+import com.kkhill.addons.automation.utils.Utils;
 import com.kkhill.common.event.EventType;
 
 public class PropertyUpdatedTrigger extends Trigger {
@@ -31,8 +31,8 @@ public class PropertyUpdatedTrigger extends Trigger {
     @Override
     public boolean check(String thing, Object from, Object to) {
         return this.thing.equals(thing) &&
-                RuleUtil.compare(this.oldOp, this.oldValue, (Comparable) from) &&
-                RuleUtil.compare(this.newOp, this.newValue, (Comparable) to);
+                Utils.compare(this.oldOp, this.oldValue, (Comparable) from) &&
+                Utils.compare(this.newOp, this.newValue, (Comparable) to);
     }
 
     @Override

@@ -15,7 +15,7 @@ import com.kkhill.common.thing.ThingUtil;
 
 import java.util.*;
 
-public class RuleUtil {
+public class Utils {
 
     @SuppressWarnings("unchecked")
     public static boolean compare(String op, Comparable a, Comparable b) {

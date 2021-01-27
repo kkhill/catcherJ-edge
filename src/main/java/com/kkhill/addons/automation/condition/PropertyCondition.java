@@ -1,6 +1,6 @@
 package com.kkhill.addons.automation.condition;
 
-import com.kkhill.addons.automation.utils.RuleUtil;
+import com.kkhill.addons.automation.utils.Utils;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.NotFoundException;
 
@@ -26,7 +26,7 @@ public class PropertyCondition extends Condition {
     public boolean check() {
         try {
             Comparable data = Catcher.getThingMonitor().getThing(thing).getProperty(property).getValue();
-            return RuleUtil.compare(this.operation, this.value, data);
+            return Utils.compare(this.operation, this.value, data);
         } catch (NotFoundException e) {
             e.printStackTrace();
             return false;
