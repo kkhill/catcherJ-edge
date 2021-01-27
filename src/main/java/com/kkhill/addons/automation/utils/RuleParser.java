@@ -17,6 +17,30 @@ public class RuleParser {
 
     private final Logger logger = LoggerFactory.getLogger(RuleParser.class);
 
+    class RuleElement {
+        public static final String NAME = "name";
+        public static final String EVENT = "event";
+        public static final String CONDITIONS = "conditions";
+        public static final String STATES = "states";
+        public static final String THING = "thing";
+        public static final String FROM = "from";
+        public static final String TO = "to";
+        public static final String STAY = "stay";
+        public static final String PROPERTIES = "properties";
+        public static final String PROPERTY = "property";
+        public static final String OPERATION = "operation";
+        public static final String ACTIONS = "actions";
+        public static final String SERVICES = "services";
+        public static final String DESCRIPTION = "description";
+        public static final String VALUE = "value";
+        public static final String PARAMS = "params";
+        public static final String TYPE = "type";
+        public static final String OLDVALUE = "oldValue";
+        public static final String NEWVALUE = "newValue";
+        public static final String OLDOPERATION = "oldOperation";
+        public static final String NEWOPERATION = "newOperation";
+    }
+
     public List<Rule> parseRules(List<LinkedHashMap<String, Object>> data) {
         List<Rule> rules = new ArrayList<>();
         for (LinkedHashMap<String, Object> entry : data) {
@@ -71,10 +95,17 @@ public class RuleParser {
 
                 } else if(RuleElement.PROPERTIES.equals(key)) {
                     // property condition item
-                    String op = (String) cc.get(RuleElement.OPERATION);
-                    if(op == null) throw new IllegalRuleException("missing property comparable operation");
-                    condition = new PropertyCondition<>((String)cc.get(RuleElement.THING), (String)cc.get(RuleElement.PROPERTY),
-                            op, (Comparable<Object>) cc.get(RuleElement.VALUE), (String)cc.get(RuleElement.DESCRIPTION));
+                    if(cc.get(RuleElement.OPERATION)!=null) {
+                        condition = new PropertyCondition<>((String)cc.get(RuleElement.THING), (String)cc.get(RuleElement.PROPERTY),
+                                (String)cc.get(RuleElement.OPERATION), (Comparable<Object>) cc.get(RuleElement.VALUE), (String)cc.get(RuleElement.DESCRIPTION));
+                    } else {
+                        condition = new PropertyCondition<>((String)cc.get(RuleElement.THING), (String)cc.get(RuleElement.PROPERTY),
+                                (String)cc.get(RuleElement.OLDOPERATION), (Comparable<Object>) cc.get(RuleElement.OLDVALUE),
+                                (String)cc.get(RuleElement.NEWOPERATION), (Comparable<Object>) cc.get(RuleElement.NEWVALUE),
+                                (String)cc.get(RuleElement.DESCRIPTION)
+                        );
+                    }
+
                 }
                 if(condition != null) conditions.add(condition);
             }
