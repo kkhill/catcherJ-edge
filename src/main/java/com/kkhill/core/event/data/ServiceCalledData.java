@@ -1,10 +1,10 @@
-package com.kkhill.common.event.dto;
+package com.kkhill.core.event.data;
 
-public class ServiceCalledEventData {
+public class ServiceCalledData {
     private String id;
     private String service;
 
-    public ServiceCalledEventData(String id, String service) {
+    public ServiceCalledData(String id, String service) {
         this.id = id;
         this.service = service;
     }

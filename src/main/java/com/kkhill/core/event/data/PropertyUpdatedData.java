@@ -1,12 +1,12 @@
-package com.kkhill.common.event.dto;
+package com.kkhill.core.event.data;
 
-public class PropertyUpdatedEventData {
+public class PropertyUpdatedData {
     private String id;
     private String property;
     private Object oldValue;
     private Object newValue;
 
-    public PropertyUpdatedEventData(String id, String property, Object oldValue, Object newValue) {
+    public PropertyUpdatedData(String id, String property, Object oldValue, Object newValue) {
         this.id = id;
         this.property = property;
         this.oldValue = oldValue;

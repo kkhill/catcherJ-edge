@@ -1,11 +1,11 @@
-package com.kkhill.common.event.dto;
+package com.kkhill.core.event.data;
 
-public class StateUpdatedEventData {
+public class StateUpdatedData {
     private String id;
     private String oldState;
     private String newState;
 
-    public StateUpdatedEventData(String id, String oldState, String newState) {
+    public StateUpdatedData(String id, String oldState, String newState) {
         this.id = id;
         this.oldState = oldState;
         this.newState = newState;

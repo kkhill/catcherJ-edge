@@ -4,9 +4,9 @@ import com.kkhill.common.event.EventType;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventBus;
 import com.kkhill.core.exception.*;
-import com.kkhill.common.event.dto.PropertyUpdatedEventData;
-import com.kkhill.common.event.dto.ServiceCalledEventData;
-import com.kkhill.common.event.dto.StateUpdatedEventData;
+import com.kkhill.core.event.data.PropertyUpdatedData;
+import com.kkhill.core.event.data.ServiceCalledData;
+import com.kkhill.core.event.data.StateUpdatedData;
 import com.kkhill.core.thing.element.Property;
 import com.kkhill.core.thing.element.Service;
 import com.kkhill.core.thing.element.State;
@@ -88,7 +88,7 @@ public class ThingMonitor {
         String newState = state.updateValue();
         // do not notify if state is not changed
         if(!oldState.equals(newState)) {
-            Object data = new StateUpdatedEventData(id, oldState, newState);
+            Object data = new StateUpdatedData(id, oldState, newState);
             EventBus.getInstance().fire(new Event(EventType.STATE_UPDATED, id, data));
         }
     }
@@ -109,7 +109,7 @@ public class ThingMonitor {
         Object newValue = property.updateValue();
         // do not notify if property is not changed
         if(!oldValue.equals(newValue)) {
-            Object data = new PropertyUpdatedEventData(id, name, oldValue, newValue);
+            Object data = new PropertyUpdatedData(id, name, oldValue, newValue);
             EventBus.getInstance().fire(new Event(EventType.PROPERTY_UPDATED, id, data));
         }
     }
@@ -132,7 +132,7 @@ public class ThingMonitor {
     public Object callServiceAndNotify(String id, String service, Map<String, Object> args) throws NotFoundException {
 
         Object res = callService(id, service, args);
-        Object data = new ServiceCalledEventData(id, service);
+        Object data = new ServiceCalledData(id, service);
         EventBus.getInstance().fire(new Event(EventType.SERVICE_CALLED, id, data));
         return res;
     }

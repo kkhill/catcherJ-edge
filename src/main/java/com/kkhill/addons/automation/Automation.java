@@ -3,8 +3,8 @@ package com.kkhill.addons.automation;
 import com.kkhill.addons.automation.rule.IllegalRuleException;
 import com.kkhill.addons.automation.rule.Rule;
 import com.kkhill.addons.automation.utils.Utils;
-import com.kkhill.common.event.dto.PropertyUpdatedEventData;
-import com.kkhill.common.event.dto.StateUpdatedEventData;
+import com.kkhill.core.event.data.PropertyUpdatedData;
+import com.kkhill.core.event.data.StateUpdatedData;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.event.Event;
 import com.kkhill.core.event.EventConsumer;
@@ -110,10 +110,10 @@ public class Automation implements Addon, EventConsumer {
             // check trigger
             boolean trigger = false;
             if(event.getType().equals(EventType.STATE_UPDATED)) {
-                StateUpdatedEventData data = (StateUpdatedEventData)event.getData();
+                StateUpdatedData data = (StateUpdatedData)event.getData();
                 trigger = rule.checkTrigger(data.getId(), data.getOldState(), data.getNewState());
             } else if(event.getType().equals(EventType.PROPERTY_UPDATED)) {
-                PropertyUpdatedEventData data = (PropertyUpdatedEventData)event.getData();
+                PropertyUpdatedData data = (PropertyUpdatedData)event.getData();
                 trigger = rule.checkTrigger(data.getId(), data.getOldValue(), data.getNewValue());
             }
 
