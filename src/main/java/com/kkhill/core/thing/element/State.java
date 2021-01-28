@@ -1,6 +1,6 @@
 package com.kkhill.core.thing.element;
 
-import com.kkhill.common.thing.CommonState;
+import com.kkhill.common.thing.CState;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.thing.Thing;
 
@@ -35,7 +35,7 @@ public class State {
         } catch (IllegalAccessException e) {
             throw new IllegalThingException("wrong mapping in state");
         }
-        if(this.value == null) this.value = CommonState.UNKNOWN;
+        if(this.value == null) this.value = CState.UNKNOWN;
         return this.value;
     }
 

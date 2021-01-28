@@ -1,6 +1,6 @@
 package com.kkhill.core.annotation;
 
-import com.kkhill.common.thing.CommonState;
+import com.kkhill.common.thing.CState;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface State {
-    String description() default CommonState.UNKNOWN;
+    String description() default CState.UNKNOWN;
 }

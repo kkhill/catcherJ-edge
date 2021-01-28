@@ -4,7 +4,7 @@ import com.kkhill.core.annotation.Service;
 import com.kkhill.core.annotation.ServiceParam;
 import com.kkhill.core.annotation.State;
 import com.kkhill.core.thing.AddonThing;
-import com.kkhill.common.thing.CommonState;
+import com.kkhill.common.thing.CState;
 import io.netty.channel.Channel;
 import org.glassfish.jersey.netty.httpserver.NettyHttpContainerProvider;
 import org.glassfish.jersey.server.ResourceConfig;
@@ -24,7 +24,7 @@ public class CatcherHttpServer extends AddonThing {
     private int port;
 
     @State
-    public String state = CommonState.ON;
+    public String state = CState.ON;
 
     public CatcherHttpServer(String host, int port) {
         super("server", "http server");

@@ -1,6 +1,6 @@
 package com.kkhill.common.thing;
 
-public class CommonThing {
+public class CThing {
     public static final String SYSTEM = "system";
     public static final String ADDON = "addon";
     public static final String DRIVER = "driver";

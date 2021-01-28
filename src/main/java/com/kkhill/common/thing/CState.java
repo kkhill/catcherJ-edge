@@ -1,6 +1,6 @@
 package com.kkhill.common.thing;
 
-public class CommonState {
+public class CState {
 
     public static final String OFFLINE = "offline";
     public static final String LOADING = "loading";

@@ -3,11 +3,11 @@ package com.kkhill.addons.automation.rule;
 import com.kkhill.addons.automation.action.Action;
 import com.kkhill.addons.automation.condition.Condition;
 import com.kkhill.addons.automation.trigger.Trigger;
-import com.kkhill.common.thing.CommonThing;
+import com.kkhill.common.thing.CThing;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.annotation.Property;
 import com.kkhill.core.annotation.Service;
-import com.kkhill.common.thing.CommonState;
+import com.kkhill.common.thing.CState;
 import com.kkhill.core.annotation.State;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.exception.NotFoundException;
@@ -22,7 +22,7 @@ public class Rule extends Thing {
     private List<Action> actions;
 
     @State(description = "state")
-    public String state = CommonState.ON;
+    public String state = CState.ON;
 
     @Property(name="trigger", description="trigger event type")
     public String tri;
@@ -35,8 +35,8 @@ public class Rule extends Thing {
 
     @Service(name="toggle", description = "使用/禁止规则")
     public void toggle() {
-        if(this.state.equals(CommonState.ON)) this.state = CommonState.OFF;
-        else this.state = CommonState.ON;
+        if(this.state.equals(CState.ON)) this.state = CState.OFF;
+        else this.state = CState.ON;
         try {
             Catcher.getThingMonitor().updateStateAndNotify(this.getId());
         } catch (NotFoundException | IllegalThingException e) {
@@ -46,11 +46,11 @@ public class Rule extends Thing {
 
     public Rule(String name, String description,
                 Trigger trigger, List<Condition> conditions, List<Action> actions) {
-        super(CommonThing.RULE, name, description);
+        super(CThing.RULE, name, description);
         this.trigger = trigger;
         this.conditions = conditions;
         this.actions = actions;
-        this.state = CommonState.ON;
+        this.state = CState.ON;
 
 
         // construct details of trigger, conditions and actions

@@ -1,9 +1,9 @@
 package com.kkhill.drivers.demolight1.thing;
 
 import com.kkhill.core.annotation.ServiceParam;
-import com.kkhill.common.thing.CommonProperty;
-import com.kkhill.common.thing.CommonService;
-import com.kkhill.common.thing.CommonState;
+import com.kkhill.common.thing.CProperty;
+import com.kkhill.common.thing.CService;
+import com.kkhill.common.thing.CState;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.exception.NotFoundException;
@@ -18,18 +18,18 @@ public class Light extends Thing {
     private Client client;
 
     @State(description = "state")
-    public String state = CommonState.OFF;
+    public String state = CState.OFF;
 
     @Property(name="vendor", description = "vendor name")
     public String vendor = "otcaix";
 
-    @Property(name= CommonProperty.BRIGHTNESS, description = "brightness")
+    @Property(name= CProperty.BRIGHTNESS, description = "brightness")
     public int brightness = 30;
 
-    @Property(name= CommonProperty.TEMPERATURE, description = "temperature")
+    @Property(name= CProperty.TEMPERATURE, description = "temperature")
     public int temperature;
 
-    @Service(name= CommonService.OPEN, description = "open the light")
+    @Service(name= CService.OPEN, description = "open the light")
     public void open() {
         if(this.client.open()) {
             this.state = "on";
@@ -41,7 +41,7 @@ public class Light extends Thing {
         }
     }
 
-    @Service(name= CommonService.CLOSE, description = "close the light")
+    @Service(name= CService.CLOSE, description = "close the light")
     public void close() {
         if(this.client.close()) {
             this.state = "off";
@@ -92,7 +92,7 @@ public class Light extends Thing {
      */
     @Service(name="update", description = "update data", poll = true, interval = 10)
     public void update() {
-        this.state = this.client.state() ? CommonState.ON : CommonState.OFF;
+        this.state = this.client.state() ? CState.ON : CState.OFF;
         this.brightness = this.client.getBrightness();
         this.temperature = this.client.getTemperature();
         try {

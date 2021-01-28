@@ -1,13 +1,13 @@
 package com.kkhill.core.thing;
 
-import com.kkhill.common.thing.CommonThing;
+import com.kkhill.common.thing.CThing;
 
 public abstract class AddonThing extends Thing {
     public AddonThing(String name, String description) {
-        super(CommonThing.ADDON, name, description);
+        super(CThing.ADDON, name, description);
     }
 
     public AddonThing(String name, String description, boolean available) {
-        super(CommonThing.ADDON, name, description, available);
+        super(CThing.ADDON, name, description, available);
     }
 }

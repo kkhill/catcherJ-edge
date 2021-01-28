@@ -1,6 +1,6 @@
 package com.kkhill.addons.websocket.Server;
 
-import com.kkhill.common.thing.CommonState;
+import com.kkhill.common.thing.CState;
 import com.kkhill.core.annotation.State;
 import com.kkhill.core.thing.AddonThing;
 import org.slf4j.Logger;
@@ -18,7 +18,7 @@ public class CatcherWebSocketServer extends AddonThing {
     private WebSocketServerImpl server;
 
     @State
-    public String state = CommonState.ON;
+    public String state = CState.ON;
 
     public CatcherWebSocketServer(String host, int port) {
         super("server", "a websocket server");

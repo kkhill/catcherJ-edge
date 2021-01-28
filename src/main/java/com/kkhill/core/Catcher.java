@@ -1,6 +1,6 @@
 package com.kkhill.core;
 
-import com.kkhill.common.thing.CommonState;
+import com.kkhill.common.thing.CState;
 import com.kkhill.core.annotation.Service;
 import com.kkhill.core.annotation.ServiceParam;
 import com.kkhill.core.annotation.State;
@@ -40,7 +40,7 @@ public class Catcher extends SystemThing {
 
     public static void load(Map<String, Object> addons, Map<String, Object> drivers) {
 
-        state = CommonState.LOADING;
+        state = CState.LOADING;
         // registry addons
         for(String entry : addons.keySet()) {
             registerAddon(entry, addons.get(entry));
@@ -55,17 +55,17 @@ public class Catcher extends SystemThing {
 
     public static void start() {
 
-        state = CommonState.STARTING;
+        state = CState.STARTING;
         // start up addons
         getPluginRegistry().startAllAddons();
         // run scheduler to keep program going
         getScheduler().start();
-        state = CommonState.RUNNING;
+        state = CState.RUNNING;
     }
 
     public static void stop() {
 
-        state = CommonState.STOPPING;
+        state = CState.STOPPING;
         // stop addons
         getPluginRegistry().stopAllAddons();
         // stop scheduler
@@ -74,9 +74,9 @@ public class Catcher extends SystemThing {
 
     public static void unload() {
 
-        state = CommonState.UNLOADING;
+        state = CState.UNLOADING;
         getPluginRegistry().unloadAllPlugins();
-        state = CommonState.OFFLINE;
+        state = CState.OFFLINE;
     }
 
     public static void registerAddon(String entry, Object config) {
@@ -114,7 +114,7 @@ public class Catcher extends SystemThing {
     public static Catcher getInstance() { return Instance.catcher; };
 
     @State
-    public static String state = CommonState.OFFLINE;
+    public static String state = CState.OFFLINE;
 
     @Service(name="register_addon", description="register a addon")
     public void registerAddonS(@ServiceParam(name="entry", description="package.plugin in addon directory") String entry,
