@@ -42,15 +42,14 @@ public class Catcher extends SystemThing {
 
         state = CState.LOADING;
         // registry addons
-        for(String entry : addons.keySet()) {
-            registerAddon(entry, addons.get(entry));
-        }
-        // registry driver
-        for(String entry : drivers.keySet()) {
-            registerDriver(entry, drivers.get(entry));
-        }
+        if(addons!=null)
+            for(String entry : addons.keySet()) registerAddon(entry, addons.get(entry));
 
-        logger.info("plugins loaded: {} addons and {} drivers", addons.size(), drivers.size());
+        // registry driver
+        if(drivers!=null)
+            for(String entry : drivers.keySet()) registerDriver(entry, drivers.get(entry));
+
+        logger.info("plugins loaded");
     }
 
     public static void start() {

@@ -3,7 +3,6 @@ package com.kkhill;
 import com.kkhill.common.config.PluginConfig;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
-import com.kkhill.core.plugin.PluginRegistry;
 import io.leego.banana.BananaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ public class Bootstrap {
             Map<String, Object> addons = new Yaml().load(addonsIn);
             addonsIn.close();
 
-            FileInputStream driversIn = new FileInputStream(new File(PluginConfig.addonConfigPath()));
+            FileInputStream driversIn = new FileInputStream(new File(PluginConfig.driverConfigPath()));
             Map<String, Object> drivers = new Yaml().load(driversIn);
             driversIn.close();
 
