@@ -1,6 +1,5 @@
 package com.kkhill.core.event;
 
-import com.kkhill.Bootstrap;
 import com.kkhill.core.Catcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
