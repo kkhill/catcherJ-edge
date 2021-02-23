@@ -90,13 +90,7 @@ public class Catcher extends SystemThing {
     }
 
     public static void registerDriver(String entry, Object config) {
-
-        try {
-            Catcher.getPluginRegistry().registerDriver(entry, config);
-        } catch (IllegalPluginConfigException e) {
-            e.printStackTrace();
-            logger.error("failed to register driver: {}", entry);
-        }
+        Catcher.getPluginRegistry().registerDriver(entry, config);
     }
 
 
