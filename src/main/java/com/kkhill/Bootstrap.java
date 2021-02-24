@@ -38,10 +38,9 @@ public class Bootstrap {
 
             // load and start
             Catcher.load(addons, drivers);
-            Catcher.start();
-
             // registry catcher as a thing for management
             Catcher.getThingMonitor().registerThing(Catcher.getInstance());
+            Catcher.start();
 
         } catch (IOException | IllegalThingException e) {
             e.printStackTrace();

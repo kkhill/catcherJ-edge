@@ -1,17 +1,22 @@
 package com.kkhill.drivers.coap.lib;
 
+import com.kkhill.core.Catcher;
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapResponse;
 import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.core.coap.Token;
 import org.eclipse.californium.elements.exception.ConnectorException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 public class Client {
+
+    private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
     private String ip;
     private String port;
@@ -25,6 +30,7 @@ public class Client {
         this.port = port;
         this.prefix = String.format("coap://%s:%s", ip, port);
         this.client = new CoapClient();
+        this.client.setTimeout((long) 3);
     }
 
     public String send(String resource, String payload, String type) {
@@ -42,7 +48,7 @@ public class Client {
             if(payload!=null) request.setPayload(payload);
             request.setURI(uri);
             CoapResponse response = client.advanced(request);
-            return response.getResponseText();
+            return response == null ? null : response.getResponseText();
         } catch (URISyntaxException | ConnectorException | IOException e) {
             e.printStackTrace();
         }

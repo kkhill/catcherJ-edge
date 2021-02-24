@@ -12,4 +12,6 @@ public class CState {
     public static final String UNKNOWN = "unknown";
     public static final String ON = "on";
     public static final String OFF = "off";
+    public static final String OPENED = "opened";
+    public static final String CLOSED = "closed";
 }

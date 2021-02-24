@@ -5,6 +5,7 @@ import com.kkhill.core.thing.Thing;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,7 @@ public class Service {
         this(name, description, thing, method);
         this.interval = interval;
         this.poll = true;
+        this.parameters = new ArrayList<>();
     }
 
     public String getName() {

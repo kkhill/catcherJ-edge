@@ -3,6 +3,7 @@ package com.kkhill.drivers.coap.things;
 import com.kkhill.common.thing.CProperty;
 import com.kkhill.common.thing.CService;
 import com.kkhill.common.thing.CState;
+import com.kkhill.common.thing.CThing;
 import com.kkhill.core.Catcher;
 import com.kkhill.core.annotation.Property;
 import com.kkhill.core.annotation.Service;
@@ -29,7 +30,8 @@ public class Light extends Thing {
     @Service(name = CService.OPEN, description = "open the light")
     public void open() {
 
-        this.client.send("state", "turn_on", "PUT");
+        String res = this.client.send("state", "turn_on", "PUT");
+        if(res == null) return;
         this.state = CState.ON;
         this.brightness = 100;
         try {
@@ -44,8 +46,8 @@ public class Light extends Thing {
 
     @Service(name = CService.CLOSE, description = "close the light")
     public void close() {
-
-        this.client.send("state", "turn_off", "PUT");
+        String res = this.client.send("state", "turn_off", "PUT");
+        if(res == null) return;
         this.state = CState.OFF;
         this.brightness = 0;
         try {
@@ -72,15 +74,22 @@ public class Light extends Thing {
      */
     @Service(name = "update", description = "update data", poll = true)
     public void update() {
-        this.state = this.client.send("state", null, "GET");
-        this.brightness = Integer.parseInt(this.client.send(
-                "brightness", null, "GET"));
+        String s = this.client.send("state", null, "GET");
+        this.state = s == null ? CState.OFFLINE : s;
+        String b = this.client.send("brightness", null, "GET");
+        this.brightness = b == null ? 0 : Integer.parseInt(b);
+
+        try {
+            Catcher.getThingMonitor().updateStateAndNotify(this.getId());
+            Catcher.getThingMonitor().updatePropertyAndNotify(this.getId(), "brightness");
+        } catch (NotFoundException | IllegalThingException e) {
+            e.printStackTrace();
+        }
     }
 
     public Light(String type, String name, String description, String ip, String port) {
         super(type, name, description);
         this.client = new Client(ip, port);
-        this.update();
     }
 }
 

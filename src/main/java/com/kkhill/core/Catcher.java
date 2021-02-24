@@ -14,6 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class Catcher extends SystemThing {
 
@@ -46,8 +50,19 @@ public class Catcher extends SystemThing {
             for(String entry : addons.keySet()) registerAddon(entry, addons.get(entry));
 
         // registry driver
-        if(drivers!=null)
-            for(String entry : drivers.keySet()) registerDriver(entry, drivers.get(entry));
+        if(drivers!=null){
+            for(String entry : drivers.keySet()) {
+                if(drivers.get(entry) == null) return;
+                Future future = getScheduler().getExecutor().submit(()->registerDriver(entry, drivers.get(entry)));
+                // timeout if device initialization is blocking
+                try {
+                    future.get(10, TimeUnit.SECONDS);
+                } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                    logger.debug("initialize driver: {} timeout", entry);
+                    e.printStackTrace();
+                }
+            }
+        }
 
         logger.info("plugins loaded");
     }
@@ -82,15 +97,16 @@ public class Catcher extends SystemThing {
 
         try {
             Catcher.getPluginRegistry().registerAddon(entry, config);
-            logger.info(String.format("addon registered: %s", entry));
+            logger.info(String.format("addon loaded: %s", entry));
         } catch (IllegalPluginConfigException e) {
             e.printStackTrace();
-            logger.error(String.format("failed to register addon: %s", entry));
+            logger.error(String.format("failed to load addon: %s", entry));
         }
     }
 
     public static void registerDriver(String entry, Object config) {
         Catcher.getPluginRegistry().registerDriver(entry, config);
+        logger.info(String.format("driver loaded: %s", entry));
     }
 
 

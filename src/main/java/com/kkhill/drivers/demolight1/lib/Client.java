@@ -16,57 +16,26 @@ public class Client {
     private String ip;
     private String port;
     private boolean state;
-    private int brightness = 70;
+    private int brightness;
     private int temperature;
-
-    private CoapClient client;
 
     public Client(String ip, String port) {
         this.ip = ip;
         this.port = port;
-        this.client = new CoapClient();
     }
 
     public boolean open() {
-        try {
-            URI uri = new URI(String.format("coap://%s:%s/state", ip, port));
-            Request request = new Request(CoAP.Code.PUT);
-            request.setToken(new Token(new byte[]{}));
-            request.setPayload("turn_on");
-            request.setURI(uri);
-            client.advanced(request);
-        } catch (URISyntaxException | ConnectorException | IOException e) {
-            e.printStackTrace();
-        }
+        state = true;
         return true;
     }
 
     public boolean close() {
-        try {
-            URI uri = new URI(String.format("coap://%s:%s/state", ip, port));
-            Request request = new Request(CoAP.Code.PUT);
-            request.setToken(new Token(new byte[]{}));
-            request.setPayload("turn_off");
-            request.setURI(uri);
-            client.advanced(request);
-        } catch (URISyntaxException | ConnectorException | IOException e) {
-            e.printStackTrace();
-        }
+        state = false;
         return true;
     }
 
     public boolean state() {
-        try {
-            URI uri = new URI(String.format("coap://%s:%s/state", ip, port));
-            Request request = new Request(CoAP.Code.GET);
-            request.setToken(new Token(new byte[]{}));
-            request.setURI(uri);
-            CoapResponse response = client.advanced(request);
-            return response.getResponseText().equals("on");
-        } catch (URISyntaxException | ConnectorException | IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return state;
     }
 
     public int getBrightness() {
@@ -74,6 +43,7 @@ public class Client {
     }
 
     public boolean setBrightness(int brightness) {
+        System.out.println("wow! brightness had been changed");
         this.brightness = brightness;
         return true;
     }
@@ -91,19 +61,8 @@ public class Client {
     }
 
     public boolean setTemperature(int temperature) {
+        System.out.println("wow! temperature had been changed");
         this.temperature = temperature;
         return true;
-    }
-
-    public static void main(String[] args) {
-        Client client = new Client("127.0.0.1", "6100");
-        boolean res = client.state();
-        System.out.println(res);
-        client.open();
-        res = client.state();
-        System.out.println(res);
-        client.close();
-        res = client.state();
-        System.out.println(res);
     }
 }

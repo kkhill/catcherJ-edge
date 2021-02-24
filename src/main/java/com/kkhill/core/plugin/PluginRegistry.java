@@ -25,16 +25,13 @@ public class PluginRegistry {
     public static PluginRegistry getInstance() { return Holder.instance; }
 
     public void registerDriver(String entry, Object config) {
-        // register drivers asynchronously to avoid blocking
-        Catcher.getScheduler().getExecutor().submit(()->{
-            try {
-                Driver p = (Driver)loadPlugin(String.format("%s.%s", driverPkgPath, entry));
-                p.load(config);
-                this.drivers.put(entry, p);
-            } catch (IllegalPluginConfigException e) {
-                e.printStackTrace();
-            }
-        });
+        try {
+            Driver p = (Driver)loadPlugin(String.format("%s.%s", driverPkgPath, entry));
+            p.load(config);
+            this.drivers.put(entry, p);
+        } catch (IllegalPluginConfigException e) {
+            e.printStackTrace();
+        }
     }
 
     public void registerAddon(String entry, Object config) throws IllegalPluginConfigException {
