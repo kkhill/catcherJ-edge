@@ -5,8 +5,7 @@ import com.kkhill.core.Catcher;
 import com.kkhill.core.exception.IllegalThingException;
 import com.kkhill.core.plugin.Driver;
 import com.kkhill.core.thing.Thing;
-import com.kkhill.drivers.coap.things.Light;
-import com.kkhill.drivers.coap.things.Lock;
+import com.kkhill.drivers.coap.things.*;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,17 @@ public class CoAPDriver extends Driver {
                     thing = new Light(CThing.LIGHT, name, description, ip, String.valueOf(port));
                 } else if(CThing.LOCK.equals(type)) {
                     thing = new Lock(CThing.LOCK, name, description, ip, String.valueOf(port));
+                } else if(CThing.TV.equals(type)) {
+                    thing = new Tv(CThing.TV, name, description, ip, String.valueOf(port));
+                } else if(CThing.VACUUM.equals(type)) {
+                    thing = new Vacuum(CThing.VACUUM, name, description, ip, String.valueOf(port));
+                } else if(CThing.THERMOSTAT.equals(type)) {
+                    thing = new Thermostat(CThing.THERMOSTAT, name, description, ip, String.valueOf(port));
+                } else if(CThing.HEATER.equals(type)) {
+                    thing = new Heater(CThing.HEATER, name, description, ip, String.valueOf(port));
                 }
+
+
                 if(thing != null) {
                     try {
                         Catcher.getThingMonitor().registerThing(thing);

@@ -14,5 +14,5 @@ public class CThing {
     public static final String TV = "tv";
     public static final String VACUUM = "vacuum";
     public static final String THERMOSTAT = "thermostat";
-    public static final String WATER_HEATER = "water_heater";
+    public static final String HEATER = "heater";
 }
