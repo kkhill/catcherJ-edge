@@ -13,7 +13,10 @@ public class EventBus {
 
     private static final Logger logger = LoggerFactory.getLogger(EventBus.class);
 
-    private Map<String, Queue<EventConsumer>> bus;
+    // listen operation could be called by multi-tasks, such as:
+    // 1. plugin loaded. Plugins should be loaded asynchronously, and they listen events
+    // 2. update task defined by drivers could listen and fire event dynamically
+    private final Map<String, Queue<EventConsumer>> bus;
 
     private EventBus() {
         this.bus = new ConcurrentHashMap<>();
@@ -27,15 +30,13 @@ public class EventBus {
         return Holder.instance;
     }
 
-    synchronized public void listen(String type, EventConsumer consumer) {
-
+    public void listen(String type, EventConsumer consumer) {
+        this.bus.putIfAbsent(type, new ConcurrentLinkedQueue<>());
         Queue<EventConsumer> consumers = this.bus.get(type);
-        if(consumers == null) {
-            consumers = new ConcurrentLinkedQueue<>();
-        }
         consumers.add(consumer);
-        this.bus.put(type, consumers);
     }
+
+    // TODO: remove operation could content with listen, be careful
 
     public void fire(Event event) {
 
